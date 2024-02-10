@@ -20,8 +20,8 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         });
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10, right: 2, left: 2),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        margin: const EdgeInsets.only(bottom: 12, right: 2, left: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(boxShadow: const [
           BoxShadow(
             color: Colors.black38,
@@ -40,6 +40,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     'test question?',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
+                  const SizedBox(
+                    height: 3,
+                  ),
                   RichText(
                     text: const TextSpan(
                       text: '1)option1   ',
@@ -51,7 +54,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       children: <TextSpan>[
                         TextSpan(
                           text: '2)option2    ',
+                           
                         ),
+
                         TextSpan(
                           text: '3)option3    ',
                         ),

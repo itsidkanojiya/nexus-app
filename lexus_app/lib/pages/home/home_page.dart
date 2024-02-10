@@ -332,14 +332,19 @@ class _HomeViewState extends State<HomeView> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ViewBookPage()));
+                                            builder: (context) => ViewBookPage(
+                                                  docPath:
+                                                      books[index].coverImage,
+                                                  docName: books[index].author,
+                                                )));
                                     // Handle book item tap
                                   },
                                   child: Container(
-                                    height: 75,
+                                    height: 90,
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 5, vertical: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 11, vertical: 1),
                                     decoration: BoxDecoration(
                                         boxShadow: const [
                                           BoxShadow(
@@ -360,28 +365,28 @@ class _HomeViewState extends State<HomeView> {
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           const SizedBox(
                                             height: 5,
                                           ),
                                           Image.asset(
-                                            'assets/book.png',
+                                            books[index].coverImage,
                                             fit: BoxFit.fill,
                                             height: 60,
                                           ),
-                                          const Padding(
-                                            padding:
-                                                EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                            child: SizedBox(
-                                              width: 60,
-                                              child: Text(
-                                                'Chepter 1',
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
+                                          Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                5, 2, 5, 0),
+                                                width: 50,
+                                            child: Text(
+                                              books[index].title,
+                                              style: const TextStyle(
+                                                fontSize: 11,
                                               ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           )
                                         ],

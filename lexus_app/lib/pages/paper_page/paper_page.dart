@@ -45,51 +45,20 @@ class _PaperPageState extends State<PaperPage>
     super.dispose();
   }
 
-  Future<void> generatePdf(BuildContext context) async {
-    final pdf = pw.Document();
-
-    // Add a page with A4 size dimensions (595.276 x 841.890 points)
-    pdf.addPage(
-      pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        build: (context) {
-          return pw.Center(
-            child: pw.Text('A4 Size Template',
-                style: const pw.TextStyle(fontSize: 20)),
-          );
-        },
-      ),
-    );
-
-    // Save the document
-    final Uint8List pdfBytes = await pdf.save();
-    // You can use pdfBytes to save the PDF to a file or display it in your app.
-
-    // Example: Save PDF to a file
-    // File('example.pdf').writeAsBytes(pdfBytes);
-  }
-
-  Future<Uint8List> makePdf() async {
-    final pdf = pw.Document();
-    final ByteData bytes = await rootBundle.load('assets/book.png');
-    final Uint8List byteList = bytes.buffer.asUint8List();
+  Future<Uint8List> _createPdf(PdfPageFormat format) async {
+    final pdf = pw.Document(version: PdfVersion.pdf_1_4, compress: true);
     pdf.addPage(pw.Page(
-        margin: const pw.EdgeInsets.all(10),
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: format,
         build: (context) {
-          return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [
-                      pw.Header(text: "About Cat", level: 1),
-                      pw.Image(pw.MemoryImage(byteList),
-                          fit: pw.BoxFit.fitHeight, height: 100, width: 100)
-                    ]),
-                pw.Divider(borderStyle: pw.BorderStyle.dashed),
-                pw.Paragraph(text: 'text'),
-              ]);
+          return pw.Container(
+              width: double.infinity,
+              child: pw.Column(children: [
+                pw.Text('Testing First PDF'),
+                pw.Container(
+                  width: 250,
+                  height: 1.5,
+                ),
+              ]));
         }));
     return pdf.save();
   }
@@ -527,15 +496,28 @@ class _PaperPageState extends State<PaperPage>
                   ),
                 ),
                 // //?? Tab No.3 ??//-------------------------------------------------------------------------
-                GestureDetector(
-                  onTap: () {
-                    makePdf();
-                  },
-                  child: const Center(child: Text('generate')),
-                )
-                // PdfPreview(
-                //   build: (context) => makePdf(),
-                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     makePdf();
+                //   },
+                //   child: const Center(child: Text('generate')),
+                // )
+                PdfPreview(
+                  pdfPreviewPageDecoration: const BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black38,
+                        offset: Offset(1, 2), // Shadow position (x, y)
+                        blurRadius: 1.0, // Spread of the shadow
+                        spreadRadius: 1.0, // Offset of the shadow
+                      ),
+                    ],
+                  ),
+                  allowPrinting: true,
+                  allowSharing: true,
+                  build: (context) => _createPdf(PdfPageFormat.a4),
+                ),
               ],
             );
           }),
