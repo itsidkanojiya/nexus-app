@@ -8,7 +8,7 @@ import 'package:lexus_app/theme/style.dart';
 void main() {
   runApp(
     DevicePreview(
-      enabled: kDebugMode,
+      enabled: false,
       builder: (context) {
         return const MyApp();
       },

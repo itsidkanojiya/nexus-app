@@ -42,6 +42,7 @@ dependencies:
   pdf: ^3.10.7
   printing: ^5.11.1
   pdfx: ^2.5.0
+  http: ^1.1.0
 
   
 

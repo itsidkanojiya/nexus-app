@@ -1,14 +1,18 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:lexus_app/api_response/book_response.dart';
 import 'package:lexus_app/pages/chatgpt/chatgpt_page.dart';
 import 'package:lexus_app/pages/downloads/downloads_page.dart';
 import 'package:lexus_app/pages/paper_page/paper_page.dart';
 import 'package:lexus_app/pages/profile/profile_page.dart';
 import 'package:lexus_app/pages/view_page/view_book_page.dart';
+import 'package:lexus_app/services/api_calls.dart';
 
 import 'package:lexus_app/theme/style.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -30,9 +34,16 @@ class _HomeViewState extends State<HomeView> {
     author: 'Author 1',
     coverImage: 'assets/book.png',
   );
+
+  List<Books>? booklist;
   @override
-  void initState() {
+  void initState()  {
     super.initState();
+  }
+
+  asyncInit() async {
+    booklist = await ApiCalls().getBooks();
+    setState(() {});
   }
 
   @override
@@ -333,8 +344,7 @@ class _HomeViewState extends State<HomeView> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ViewBookPage(
-                                                  docPath:
-                                                      books[index].coverImage,
+                                                  docPath: '/assets/pdf/ff.pdf',
                                                   docName: books[index].author,
                                                 )));
                                     // Handle book item tap
@@ -379,7 +389,7 @@ class _HomeViewState extends State<HomeView> {
                                           Container(
                                             padding: const EdgeInsets.fromLTRB(
                                                 5, 2, 5, 0),
-                                                width: 50,
+                                            width: 50,
                                             child: Text(
                                               books[index].title,
                                               style: const TextStyle(
@@ -400,216 +410,102 @@ class _HomeViewState extends State<HomeView> {
                             color: Colors.grey, height: 15, thickness: 2),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 70),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // Number of columns
-                              crossAxisSpacing: 15.0, // Spacing between columns
-                              mainAxisSpacing: 15.0, // Spacing between rows
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              // Item builder function
-                              return //
-                                  GestureDetector(
-                                onTap: () {
-                                  // Handle book item tap
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(bottom: 0),
-                                  // width: MediaQuery.of(context).size.width * 0.43,
-                                  // height: 170,
-                                  decoration: BoxDecoration(
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: Colors.black38,
-                                          offset: Offset(
-                                              1, 2), // Shadow position (x, y)
-                                          blurRadius:
-                                              1.0, // Spread of the shadow
-                                          spreadRadius:
-                                              1.0, // Offset of the shadow
-                                        ),
-                                      ],
-                                      color: Style.secondary,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Image.asset(
-                                            'assets/book.png',
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Divider(
-                                          color: Colors.black,
-                                          height: 10,
-                                        ),
-                                        const Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Row(
+                          child: (booklist?.isEmpty ?? false)
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : GridView.builder(
+                                  itemCount: booklist?.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2, // Number of columns
+                                    crossAxisSpacing:
+                                        15.0, // Spacing between columns
+                                    mainAxisSpacing:
+                                        15.0, // Spacing between rows
+                                  ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    // Item builder function
+                                    return //
+                                        GestureDetector(
+                                      onTap: () {
+                                        // Handle book item tap
+                                      },
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 0),
+                                        // width: MediaQuery.of(context).size.width * 0.43,
+                                        // height: 170,
+                                        decoration: BoxDecoration(
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: Colors.black38,
+                                                offset: Offset(1,
+                                                    2), // Shadow position (x, y)
+                                                blurRadius:
+                                                    1.0, // Spread of the shadow
+                                                spreadRadius:
+                                                    1.0, // Offset of the shadow
+                                              ),
+                                            ],
+                                            color: Style.secondary,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 10),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('Chepter 1'),
-                                                  Text('Auther:-XYZ')
-                                                ],
+                                              Expanded(
+                                                child: Image.asset(
+                                                  'assets/book.png',
+                                                  fit: BoxFit.fill,
+                                                ),
                                               ),
-                                              Icon(Icons
-                                                  .download_for_offline_outlined)
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              const Divider(
+                                                color: Colors.black,
+                                                height: 10,
+                                              ),
+                                               Padding(
+                                                padding: const EdgeInsets.fromLTRB(
+                                                    5, 0, 5, 0),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(booklist?[index].toString() ?? ''),
+                                                        const Text('Auther:-XYZ')
+                                                      ],
+                                                    ),
+                                                    const Icon(Icons
+                                                        .download_for_offline_outlined)
+                                                  ],
+                                                ),
+                                              )
                                             ],
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                            itemCount: 30, // Number of items in the grid
-                          ),
-                        ),
-                        // ListView.builder(
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   shrinkWrap: true,
-                        //   scrollDirection: Axis.vertical,
-                        //   itemCount: 50,
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        //       children: [
-                        //         GestureDetector(
-                        //           onTap: () {
-                        //             // Handle book item tap
-                        //           },
-                        //           child: Container(
-                        //             margin: const EdgeInsets.only(bottom: 15),
-                        //             width: MediaQuery.of(context).size.width *
-                        //                 0.43,
-                        //             height: 170,
-                        //             decoration: BoxDecoration(
-                        //                 color: Style.bg_color,
-                        //                 borderRadius:
-                        //                     BorderRadius.circular(10)),
-                        //             child: Padding(
-                        //               padding: const EdgeInsets.symmetric(
-                        //                   horizontal: 10, vertical: 10),
-                        //               child: Column(
-                        //                 crossAxisAlignment:
-                        //                     CrossAxisAlignment.center,
-                        //                 children: [
-                        //                   Image.asset(
-                        //                     'assets/book.png',
-                        //                     fit: BoxFit.fill,
-                        //                     height: 95,
-                        //                   ),
-                        //                   const Divider(
-                        //                     color: Colors.black,
-                        //                     height: 10,
-                        //                   ),
-                        //                   const Padding(
-                        //                     padding:
-                        //                         EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        //                     child: Row(
-                        //                       mainAxisAlignment:
-                        //                           MainAxisAlignment
-                        //                               .spaceBetween,
-                        //                       children: [
-                        //                         Column(
-                        //                           crossAxisAlignment:
-                        //                               CrossAxisAlignment.start,
-                        //                           children: [
-                        //                             Text('Chepter 1'),
-                        //                             Text('Auther:-XYZ')
-                        //                           ],
-                        //                         ),
-                        //                         Icon(Icons
-                        //                             .download_for_offline_outlined)
-                        //                       ],
-                        //                     ),
-                        //                   )
-                        //                 ],
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //         const SizedBox(
-                        //           width: 30,
-                        //         ),
-                        //         GestureDetector(
-                        //           onTap: () {
-                        //             // Handle book item tap
-                        //           },
-                        //           child: Container(
-                        //             margin: const EdgeInsets.only(bottom: 15),
-                        //             width: MediaQuery.of(context).size.width *
-                        //                 0.43,
-                        //             height: 170,
-                        //             decoration: BoxDecoration(
-                        //                 color: Style.bg_color,
-                        //                 borderRadius:
-                        //                     BorderRadius.circular(10)),
-                        //             child: Padding(
-                        //               padding: const EdgeInsets.all(10),
-                        //               child: Column(
-                        //                 crossAxisAlignment:
-                        //                     CrossAxisAlignment.center,
-                        //                 children: [
-                        //                   Image.asset(
-                        //                     'assets/book.png',
-                        //                     fit: BoxFit.fill,
-                        //                     height: 95,
-                        //                   ),
-                        //                   const Divider(
-                        //                     color: Colors.black,
-                        //                     height: 10,
-                        //                   ),
-                        //                   const Padding(
-                        //                     padding:
-                        //                         EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        //                     child: Row(
-                        //                       mainAxisAlignment:
-                        //                           MainAxisAlignment
-                        //                               .spaceBetween,
-                        //                       children: [
-                        //                         Column(
-                        //                           crossAxisAlignment:
-                        //                               CrossAxisAlignment.start,
-                        //                           children: [
-                        //                             Text('Chepter 1'),
-                        //                             Text('Auther:-XYZ')
-                        //                           ],
-                        //                         ),
-                        //                         Icon(Icons
-                        //                             .download_for_offline_outlined)
-                        //                       ],
-                        //                     ),
-                        //                   )
-                        //                 ],
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         )
-                        //       ],
-                        //     );
-                        //   },
-                        // ),
+                        )
                       ],
                     ),
                   ),
