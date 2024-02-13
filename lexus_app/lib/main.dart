@@ -1,23 +1,23 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lexus_app/pages/home/home_page.dart';
-import 'package:flutter/foundation.dart';
+import 'package:lexus_app/module/home/home_page.dart';
 import 'package:lexus_app/theme/style.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     DevicePreview(
       enabled: false,
       builder: (context) {
-        return const MyApp();
+        return const NexusApp();
       },
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class NexusApp extends StatelessWidget {
+  const NexusApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -29,6 +29,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Style.primary),
           useMaterial3: true,
         ),
-        home: const HomeView());
+        home: HomeView());
   }
 }

@@ -1,4 +1,27 @@
 class BookModel {
+  List<Books>? books;
+
+  BookModel({this.books});
+
+  BookModel.fromJson(Map<String, dynamic> json) {
+    if (json['books'] != null) {
+      books = <Books>[];
+      json['books'].forEach((v) {
+        books!.add(Books.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (books != null) {
+      data['books'] = books!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Books {
   int? id;
   String? name;
   int? std;
@@ -8,11 +31,11 @@ class BookModel {
   String? pdfLink;
   String? coverLink;
   String? createdAt;
-  dynamic updatedAt;
-  dynamic deletedAt;
+  String? updatedAt;
+  String? deletedAt;
   String? boardName;
 
-  BookModel(
+  Books(
       {this.id,
       this.name,
       this.std,
@@ -26,7 +49,7 @@ class BookModel {
       this.deletedAt,
       this.boardName});
 
-  BookModel.fromJson(Map<String, dynamic> json) {
+  Books.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     std = json['std'];
@@ -42,19 +65,19 @@ class BookModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['std'] = this.std;
-    data['board'] = this.board;
-    data['chapter_no'] = this.chapterNo;
-    data['chapter_name'] = this.chapterName;
-    data['pdf_link'] = this.pdfLink;
-    data['cover_link'] = this.coverLink;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
-    data['board_name'] = this.boardName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['std'] = std;
+    data['board'] = board;
+    data['chapter_no'] = chapterNo;
+    data['chapter_name'] = chapterName;
+    data['pdf_link'] = pdfLink;
+    data['cover_link'] = coverLink;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
+    data['board_name'] = boardName;
     return data;
   }
 }
