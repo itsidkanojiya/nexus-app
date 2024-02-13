@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:lexus_app/models/books_model.dart';
 
 
-class Books {
+class BookResponse {
   List<BookModel>? books;
 
-  Books({this.books});
+  BookResponse({this.books});
 
-  Books.fromJson(Map<String, dynamic> json) {
+  BookResponse.fromJson(Map<String, dynamic> json) {
     if (json['books'] != null) {
       books = <BookModel>[];
       json['books'].forEach((v) {

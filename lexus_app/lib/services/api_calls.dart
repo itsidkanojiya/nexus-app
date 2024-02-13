@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ApiCalls {
   List<BookModel> bookList = [];
-  Future<List<Books>?> getBooks() async {
+  Future<List<BookResponse>?> getBooks() async {
     var client = http.Client();
 
     var uri = Uri.parse('https://backend.nexuspublication.com/api/books');

@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
     coverImage: 'assets/book.png',
   );
 
-  List<Books>? booklist;
+  List<BookResponse>? booklist;
   @override
   void initState()  {
     super.initState();
