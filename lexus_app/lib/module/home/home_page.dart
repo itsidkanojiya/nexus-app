@@ -422,10 +422,10 @@ class HomeView extends StatelessWidget {
                                                         Text(controller
                                                                 .bookmodel
                                                                 ?.books?[index]
+                                                                .chapterName
                                                                 .toString() ??
                                                             ''),
-                                                        const Text(
-                                                            'Auther:-XYZ')
+                                                        const Text('Auther:-')
                                                       ],
                                                     ),
                                                     const Icon(Icons
