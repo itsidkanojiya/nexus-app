@@ -5,8 +5,10 @@ import 'package:lexus_app/repository/book_repository.dart';
 class HomeController extends GetxController {
   RxString selected = 'GSEB'.obs;
   BookModel? bookmodel;
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
   var selectedBook = Rx<Books?>(null);
+  RxInt page = 1.obs;
+  
   @override
   void onInit() {
     fetchData();
@@ -15,9 +17,13 @@ class HomeController extends GetxController {
 
   void fetchData() async {
     isLoading(true);
-    bookmodel = await BookRepository().getBooks();
+    print(isLoading.toString());
+    bookmodel = await BookRepository().getBooks(page.value);
 
     isLoading(false);
+    
+    print(isLoading.toString());
+
   }
 
   void setSelected(String value) {

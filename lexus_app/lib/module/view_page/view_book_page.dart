@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lexus_app/module/view_page/view_page_controller.dart';
 
 import 'package:lexus_app/theme/style.dart';
 import 'package:pdfx/pdfx.dart';
+import 'package:http/http.dart' as http;
 
 class ViewBookPage extends StatefulWidget {
   const ViewBookPage({super.key, required this.docPath, required this.docName});
@@ -15,13 +20,15 @@ class ViewBookPage extends StatefulWidget {
 
 class _ViewBookPageState extends State<ViewBookPage> {
   late PdfControllerPinch pdfControllerPinch;
+  ViewBookPageController viewController = Get.put(ViewBookPageController());
   String pageNumber = '0', totalpages = '-';
 
   @override
   void initState() {
     super.initState();
-    pdfControllerPinch =
-        PdfControllerPinch(document: PdfDocument.openAsset(widget.docPath));
+    pdfControllerPinch = PdfControllerPinch(
+        document:
+            PdfDocument.openData(viewController.fetchPdf(widget.docPath)));
   }
 
   @override
@@ -31,22 +38,64 @@ class _ViewBookPageState extends State<ViewBookPage> {
       appBar: AppBar(
         title: const Text("Book Name"),
       ),
-      body: Column(children: [
-        Expanded(
-            child: PdfViewPinch(
-          onPageChanged: (page) {
-            setState(() {
-              pageNumber = page.toString();
-            });
-          },
-          onDocumentLoaded: (page) {
-            setState(() {
-              totalpages = page.pagesCount.toString();
-            });
-          },
-          controller: pdfControllerPinch,
-        )),
-      ]),
+      body: Obx(() {
+        return (viewController.isLoading.value == true)
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  Expanded(
+                      child: PdfViewPinch(
+                    onPageChanged: (page) {
+                      setState(() {
+                        pageNumber = page.toString();
+                      });
+                    },
+                    onDocumentLoaded: (page) {
+                      setState(() {
+                        totalpages = page.pagesCount.toString();
+                      });
+                    },
+                    controller: pdfControllerPinch,
+                  )),
+                ],
+              );
+      }),
+      //  FutureBuilder(
+      //   future: viewController.fetchPdf(widget.docPath),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(
+      //         child: CircularProgressIndicator(),
+      //       );
+      //     } else if (snapshot.hasError) {
+      //       return Center(
+      //         child: Text('Error: ${snapshot.error}'),
+      //       );
+      //     } else {
+      // return Column(
+      //   children: [
+      //     Expanded(
+      //         child: PdfViewPinch(
+      //       onPageChanged: (page) {
+      //         setState(() {
+      //           pageNumber = page.toString();
+      //         });
+      //       },
+      //       onDocumentLoaded: (page) {
+      //         setState(() {
+      //           totalpages = page.pagesCount.toString();
+      //         });
+      //       },
+      //       controller: pdfControllerPinch,
+      //     )),
+      //   ],
+      // );
+      //     }
+      //   },
+      // ),
+
       bottomSheet: Container(
         height: 35,
         color: Style.primary,
