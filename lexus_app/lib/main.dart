@@ -1,8 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lexus_app/module/home/home_page.dart';
-import 'package:lexus_app/theme/style.dart';
+import 'package:lexus_app/module/auth/splash_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,9 +25,10 @@ class NexusApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Lexus App',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Style.primary),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromRGBO(119, 173, 163, 1)),
           useMaterial3: true,
         ),
-        home: HomeView());
+        home: SplashView());
   }
 }

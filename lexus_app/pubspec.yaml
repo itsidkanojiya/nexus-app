@@ -43,7 +43,7 @@ dependencies:
   printing: ^5.11.1
   pdfx: ^2.5.0
   http: ^1.1.0
-
+  get_storage:
   
 
 dev_dependencies:
