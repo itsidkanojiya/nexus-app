@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lexus_app/module/auth/splash_controller.dart';
+import 'package:lexus_app/module/auth/splash/splash_controller.dart';
 import 'package:lexus_app/services/auth_service.dart';
 import 'package:lexus_app/theme/style.dart';
 

@@ -44,6 +44,8 @@ dependencies:
   pdfx: ^2.5.0
   http: ^1.1.0
   get_storage:
+  animate_do: ^3.3.4
+  flutter_easyloading: ^3.0.5
   
 
 dev_dependencies:

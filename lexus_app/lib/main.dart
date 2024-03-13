@@ -1,7 +1,8 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:lexus_app/module/auth/splash_view.dart';
+import 'package:lexus_app/module/auth/splash/splash_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +23,9 @@ class NexusApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+        builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
-        title: 'Lexus App',
+        title: 'Nexus App',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromRGBO(119, 173, 163, 1)),
