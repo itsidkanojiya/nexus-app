@@ -1,6 +1,10 @@
+
+
+
 import 'package:get/get.dart';
-import 'package:lexus_app/models/books_model.dart';
-import 'package:lexus_app/services/pref_services.dart';
+import 'package:nexus_app/models/books_model.dart';
+import 'package:nexus_app/services/pref_services.dart';
+
 
 class FavBooksController extends GetxController{
   SharedPreferencesManager? prefsManager;

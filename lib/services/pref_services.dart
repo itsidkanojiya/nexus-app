@@ -1,5 +1,7 @@
-import 'package:lexus_app/models/books_model.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/books_model.dart';
 
 class SharedPreferencesManager {
   static SharedPreferencesManager? _instance;

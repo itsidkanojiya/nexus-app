@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lexus_app/module/favourite/fav_books_controller.dart';
-import 'package:lexus_app/theme/style.dart';
+import 'package:nexus_app/module/favourite/fav_books_controller.dart';
+import 'package:nexus_app/theme/style.dart';
+
 
 class FavBooksPage extends StatefulWidget {
   const FavBooksPage({super.key});
