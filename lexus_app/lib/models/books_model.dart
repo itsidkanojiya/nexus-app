@@ -80,4 +80,38 @@ class Books {
     data['board_name'] = boardName;
     return data;
   }
+
+  factory Books.fromMap(Map<String, dynamic> map) {
+    return Books(
+      id: map['id'],
+      name: map['name'],
+      std: map['std'],
+      board: map['board'],
+      chapterNo: map['chapter_no'],
+      chapterName: map['chapter_name'],
+      pdfLink: map['pdf_link'],
+      coverLink: map['cover_link'],
+      createdAt: map['created_at'],
+      updatedAt: map['updated_at'],
+      deletedAt: map['deleted_at'],
+      boardName: map['board_name'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'std': std,
+      'board': board,
+      'chapter_no': chapterNo,
+      'chapter_name': chapterName,
+      'pdf_link': pdfLink,
+      'cover_link': coverLink,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'deleted_at': deletedAt,
+      'board_name': boardName,
+    };
+  }
 }

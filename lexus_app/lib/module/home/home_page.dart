@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:lexus_app/module/chatgpt/chatgpt_page.dart';
-import 'package:lexus_app/module/downloads/downloads_page.dart';
+import 'package:lexus_app/module/favourite/fav_books_page.dart';
 import 'package:lexus_app/module/home/home_controller.dart';
 import 'package:lexus_app/module/paper_page/paper_page.dart';
 import 'package:lexus_app/module/profile/profile_page.dart';
@@ -311,10 +312,10 @@ class _HomeViewState extends State<HomeView> {
                                       const Text('Continue Reading...'),
                                       GestureDetector(
                                         onTap: () {
-                                          Get.to(const DownloadsPage());
+                                          Get.to(const FavBooksPage());
                                         },
                                         child: const Text(
-                                          'Go To Downloads >',
+                                          'Go To Favourite Books >',
                                           style: TextStyle(
                                             decoration:
                                                 TextDecoration.underline,
@@ -539,8 +540,19 @@ class _HomeViewState extends State<HomeView> {
                                                           ),
                                                         ),
                                                       ),
-                                                      const Icon(Icons
-                                                          .download_for_offline_outlined)
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          await controller
+                                                              .prefsManager
+                                                              ?.setValue(
+                                                                  'fav_books',
+                                                                  controller
+                                                                      .bookmodel
+                                                                      ?.books?[index]);
+                                                        },
+                                                        child: const Icon(Icons
+                                                            .favorite_outline),
+                                                      )
                                                     ],
                                                   ),
                                                 )
