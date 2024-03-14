@@ -43,8 +43,9 @@ dependencies:
   http: ^1.1.0
   get_storage:
   animate_do: ^3.3.4
-  flutter_easyloading: ^3.0.5
+ 
   syncfusion_flutter_pdfviewer: ^24.2.8
+  flutter_easyloading: ^3.0.5
   
 
 dev_dependencies:

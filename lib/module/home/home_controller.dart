@@ -9,7 +9,7 @@ class HomeController extends GetxController {
   RxBool isLoading = false.obs;
   var selectedBook = Rx<Books?>(null);
   RxInt page = 1.obs;
-SharedPreferencesManager? prefsManager;
+  SharedPreferencesManager? prefsManager;
 
   @override
   void onInit() {
@@ -18,7 +18,7 @@ SharedPreferencesManager? prefsManager;
   }
 
   void fetchData() async {
-     prefsManager = await SharedPreferencesManager.getInstance();
+    // prefsManager = await SharedPreferencesManager.getInstance();
     isLoading(true);
     print(isLoading.toString());
     bookmodel = await BookRepository().getBooks(page.value);
