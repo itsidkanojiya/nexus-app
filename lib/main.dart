@@ -8,14 +8,7 @@ import 'package:nexus_app/module/auth/splash/splash_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  runApp(
-    DevicePreview(
-      enabled: false,
-      builder: (context) {
-        return const NexusApp();
-      },
-    ),
-  );
+  runApp(const NexusApp());
 }
 
 class NexusApp extends StatelessWidget {
