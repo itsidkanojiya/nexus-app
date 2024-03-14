@@ -157,51 +157,6 @@ class _HomeViewState extends State<HomeView> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  // Container(
-                                                  //   width:
-                                                  //       MediaQuery.of(context)
-                                                  //               .size
-                                                  //               .width *
-                                                  //           0.6,
-                                                  //   decoration: BoxDecoration(
-                                                  //     borderRadius:
-                                                  //         BorderRadius.circular(
-                                                  //             12.0),
-                                                  //     color: Style.bg_color,
-                                                  //   ),
-                                                  //   child: DropdownButton<Book>(
-                                                  //     // value: selectedBook,
-                                                  //     padding: const EdgeInsets
-                                                  //         .symmetric(
-                                                  //         horizontal: 12),
-                                                  //     isExpanded: true,
-                                                  //     onChanged: (value) {
-                                                  //       setState(() {
-                                                  //         selectedBook = value;
-                                                  //       });
-                                                  //     },
-                                                  //     elevation: 2,
-                                                  //     hint: const Text(
-                                                  //       'select subject',
-                                                  //       style: TextStyle(
-                                                  //           fontSize: 15),
-                                                  //     ),
-                                                  //     menuMaxHeight: 350,
-                                                  //     underline:
-                                                  //         const SizedBox(),
-                                                  //     items: books.map<
-                                                  //             DropdownMenuItem<
-                                                  //                 Book>>(
-                                                  //         (Book value) {
-                                                  //       return DropdownMenuItem<
-                                                  //           Book>(
-                                                  //         value: value,
-                                                  //         child:
-                                                  //             Text(value.title),
-                                                  //       );
-                                                  //     }).toList(),
-                                                  //   ),
-                                                  // ),
                                                   Container(
                                                     padding: const EdgeInsets
                                                         .fromLTRB(0, 2, 0, 0),

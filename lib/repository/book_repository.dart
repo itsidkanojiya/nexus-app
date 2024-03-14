@@ -29,7 +29,8 @@ class BookRepository extends GetConnect {
 
   Future<BookModel?> getBooks(int page) async {
     try {
-      final response = await http.get(Uri.parse('${Base.api}/books?page=$page'),
+      final response = await http.get(
+          Uri.parse('${Base.api}/books?page=$page&limit=10'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UFT-8',
           });
