@@ -313,7 +313,7 @@ class _HomeViewState extends State<HomeView> {
                                           Get.to(const DownloadsPage());
                                         },
                                         child: const Text(
-                                          'Go To Downloads >',
+                                      'Go To Favourite Books >',
                                           style: TextStyle(
                                             decoration:
                                                 TextDecoration.underline,
@@ -538,8 +538,19 @@ class _HomeViewState extends State<HomeView> {
                                                           ),
                                                         ),
                                                       ),
-                                                      const Icon(Icons
-                                                          .download_for_offline_outlined)
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          await controller
+                                                              .prefsManager
+                                                              ?.setValue(
+                                                                  'fav_books',
+                                                                  controller
+                                                                      .bookmodel
+                                                                      ?.books?[index]);
+                                                        },
+                                                        child: const Icon(Icons
+                                                            .favorite_outline),
+                                                      )
                                                     ],
                                                   ),
                                                 )
