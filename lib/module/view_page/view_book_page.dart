@@ -25,7 +25,7 @@ class _ViewBookPageState extends State<ViewBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Syncfusion Flutter PDF Viewer'),
+        title: Text(widget.docName),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
@@ -40,7 +40,7 @@ class _ViewBookPageState extends State<ViewBookPage> {
         ],
       ),
       body: SfPdfViewer.network(
-        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+        widget.docPath,
         key: _pdfViewerKey,
       ),
     );
