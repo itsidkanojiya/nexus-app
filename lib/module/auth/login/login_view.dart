@@ -141,7 +141,7 @@ class LoginView extends StatelessWidget {
                           const Text("Don't have an account?"),
                           GestureDetector(
                             onTap: () {
-                              Get.to(const SelectUserView());
+                              Get.to(()=>const SelectUserView());
                             },
                             child: const Text(
                               " Sign up",

@@ -64,7 +64,7 @@ class _HomeViewState extends State<HomeView> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Get.to(const ProfilePage());
+                                      Get.to(()=>const ProfilePage());
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -253,7 +253,7 @@ class _HomeViewState extends State<HomeView> {
                                     const Text('Continue Reading...'),
                                     GestureDetector(
                                       onTap: () {
-                                        Get.to(const DownloadsPage());
+                                        Get.to(()=>const DownloadsPage());
                                       },
                                       child: const Text(
                                         'Go To Favourite Books >',
@@ -376,14 +376,14 @@ class _HomeViewState extends State<HomeView> {
                                         15.0, // Spacing between rows
                                   ),
                                   itemCount:
-                                      controller.bookmodel?.books?.length,
+                                      10,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     // Item builder function
                                     return //
                                         GestureDetector(
                                       onTap: () {
-                                        Get.to(ViewBookPage(
+                                        Get.to(()=>ViewBookPage(
                                             docPath: controller.bookmodel
                                                     ?.books?[index].pdfLink ??
                                                 '',
@@ -638,7 +638,7 @@ class _HomeViewState extends State<HomeView> {
                       padding: const EdgeInsets.only(bottom: 15, left: 15),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(const PaperPage());
+                          Get.to(()=>const PaperPage());
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -673,7 +673,7 @@ class _HomeViewState extends State<HomeView> {
               )),
         floatingActionButton: GestureDetector(
           onTap: () {
-            Get.to(const ChatPage());
+            Get.to(()=>const ChatPage());
           },
           child: Container(
             height: 50,

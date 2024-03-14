@@ -80,12 +80,12 @@ class AuthRepository {
       final body = jsonDecode(response.body);
       debugPrint('verifyToken body: $body');
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.to(const HomeView());
+        Get.to(()=>const HomeView());
       } else {
-        Get.to(LoginView());
+        Get.to(()=>LoginView());
       }
     } catch (e) {
-      Get.to(LoginView());
+      Get.to(()=>LoginView());
       debugPrint('Error While verifyToken() ${e.toString()}');
       return Future.error(e);
     }

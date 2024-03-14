@@ -25,7 +25,7 @@ class SelectUserView extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 18.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(SignUpView(type: 'student'));
+                    Get.to(()=>SignUpView(type: 'student'));
                   },
                   child: Container(
                     height: 170,
@@ -59,7 +59,7 @@ class SelectUserView extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 18.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(SignUpView(type: 'teacher'));
+                    Get.to(()=>SignUpView(type: 'teacher'));
                   },
                   child: Container(
                     height: 170,

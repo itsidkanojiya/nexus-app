@@ -19,6 +19,7 @@ class FavBooksController extends GetxController{
   void fetchData() async {
     prefsManager = await SharedPreferencesManager.getInstance();
 favBookList = prefsManager?.getBookList('fav_books') ?? [];
+print('${favBookList.length}____________________________');
 
   }
 }
