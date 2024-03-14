@@ -68,7 +68,7 @@ class AuthRepository {
   }
 
   Future<void> verifyToken() async {
-    print(AuthService.token);
+    // print("add${AuthService.token}");
     try {
       final response = await http.post(Uri.parse('${Base.api}/verify-token'),
           headers: <String, String>{
