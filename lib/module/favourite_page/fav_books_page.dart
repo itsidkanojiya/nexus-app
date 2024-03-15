@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nexus_app/module/favourite/fav_books_controller.dart';
+import 'package:nexus_app/module/favourite_page/fav_books_controller.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class FavBooksPage extends StatefulWidget {

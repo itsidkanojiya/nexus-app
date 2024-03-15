@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:nexus_app/models/books_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
-import 'package:nexus_app/services/pref_services.dart';
+import 'package:nexus_app/services/getStorage_services.dart';
 
 class HomeController extends GetxController {
   RxString selected = 'GSEB'.obs;
@@ -9,7 +11,7 @@ class HomeController extends GetxController {
   RxBool isLoading = false.obs;
   var selectedBook = Rx<Books?>(null);
   RxInt page = 1.obs;
-  SharedPreferencesManager? prefsManager;
+  GetStorageServices? getStorageServices;
 
   @override
   void onInit() {
@@ -19,6 +21,7 @@ class HomeController extends GetxController {
 
   void fetchData() async {
     // prefsManager = await SharedPreferencesManager.getInstance();
+    getStorageServices = GetStorageServices();
     isLoading(true);
     print(isLoading.toString());
     bookmodel = await BookRepository().getBooks(page.value);

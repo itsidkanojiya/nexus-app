@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/chatgpt/chatgpt_page.dart';
-import 'package:nexus_app/module/downloads/downloads_page.dart';
+
+import 'package:nexus_app/module/favourite_page/fav_books_page.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
 import 'package:nexus_app/module/paper_page/paper_page.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
@@ -64,7 +65,7 @@ class _HomeViewState extends State<HomeView> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Get.to(()=>const ProfilePage());
+                                      Get.to(() => const ProfilePage());
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -208,7 +209,7 @@ class _HomeViewState extends State<HomeView> {
                                     const Text('Continue Reading...'),
                                     GestureDetector(
                                       onTap: () {
-                                        Get.to(()=>const DownloadsPage());
+                                        Get.to(() => const FavBooksPage());
                                       },
                                       child: const Text(
                                         'Go To Favourite Books >',
@@ -330,15 +331,14 @@ class _HomeViewState extends State<HomeView> {
                                     mainAxisSpacing:
                                         15.0, // Spacing between rows
                                   ),
-                                  itemCount:
-                                      10,
+                                  itemCount: 10,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     // Item builder function
                                     return //
                                         GestureDetector(
                                       onTap: () {
-                                        Get.to(()=>ViewBookPage(
+                                        Get.to(() => ViewBookPage(
                                             docPath: controller.bookmodel
                                                     ?.books?[index].pdfLink ??
                                                 '',
@@ -434,13 +434,20 @@ class _HomeViewState extends State<HomeView> {
                                                     GestureDetector(
                                                       onTap: () async {
                                                         await controller
-                                                            .prefsManager
-                                                            ?.setValue(
-                                                                'fav_books',
+                                                            .getStorageServices
+                                                            ?.setBook(
+                                                                "fav_book",
                                                                 controller
-                                                                        .bookmodel
-                                                                        ?.books?[
+                                                                        .bookmodel!
+                                                                        .books![
                                                                     index]);
+                                                        print(controller
+                                                                .getStorageServices
+                                                                ?.getBookList(
+                                                                    'fav_books') ??
+                                                            ['NotWorking']
+                                                                .toString());
+                                                        print('working');
                                                       },
                                                       child: const Icon(Icons
                                                           .favorite_outline),
@@ -593,7 +600,7 @@ class _HomeViewState extends State<HomeView> {
                       padding: const EdgeInsets.only(bottom: 15, left: 15),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(()=>const PaperPage());
+                          Get.to(() => const PaperPage());
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -628,7 +635,7 @@ class _HomeViewState extends State<HomeView> {
               )),
         floatingActionButton: GestureDetector(
           onTap: () {
-            Get.to(()=>const ChatPage());
+            Get.to(() => const ChatPage());
           },
           child: Container(
             height: 50,
