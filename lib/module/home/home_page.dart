@@ -172,14 +172,6 @@ class _HomeViewState extends State<HomeView> {
                                                               12.0),
                                                       // color: Colors.white,
                                                     ),
-                                                    child: const Text(
-                                                      '12 Results Found',
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.clip,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -199,28 +191,21 @@ class _HomeViewState extends State<HomeView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(5, 0, 5, 2),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text('Continue Reading...'),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => const FavBooksPage());
-                                      },
-                                      child: const Text(
-                                        'Go To Favourite Books >',
-                                        style: TextStyle(
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: Style.primary,
-                                          color: Style.primary,
-                                        ),
-                                      ),
-                                    ),
+                                    Text('Continue Reading...'),
 
+                                    Text(
+                                      '12 Results Found',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.clip,
+                                      textAlign: TextAlign.center,
+                                    ),
                                     // IconButton(
                                     //     style: ButtonStyle(
                                     //       backgroundColor:
@@ -331,6 +316,7 @@ class _HomeViewState extends State<HomeView> {
                                     mainAxisSpacing:
                                         15.0, // Spacing between rows
                                   ),
+                                  
                                   itemCount: 10,
                                   itemBuilder:
                                       (BuildContext context, int index) {
@@ -431,27 +417,6 @@ class _HomeViewState extends State<HomeView> {
                                                         ),
                                                       ),
                                                     ),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        await controller
-                                                            .getStorageServices
-                                                            ?.setBook(
-                                                                "fav_book",
-                                                                controller
-                                                                        .bookmodel!
-                                                                        .books![
-                                                                    index]);
-                                                        print(controller
-                                                                .getStorageServices
-                                                                ?.getBookList(
-                                                                    'fav_books') ??
-                                                            ['NotWorking']
-                                                                .toString());
-                                                        print('working');
-                                                      },
-                                                      child: const Icon(Icons
-                                                          .favorite_outline),
-                                                    )
                                                   ],
                                                 ),
                                               )

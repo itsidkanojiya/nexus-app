@@ -6,12 +6,12 @@ class GetStorageServices {
   final GetStorage _getStorage = GetStorage();
 
   Future<void> setBook(String key, Books book) async {
-    // Map<String, dynamic> bookMap = book.toMap();
-    // String bookString = bookMap.toString();
-    List<Books>? books = _getStorage.read(key);
-    books?.add(book);
-    await _getStorage.write(key, books);
-    print(book.chapterName.toString());
+    Map<String, dynamic> bookMap = book.toMap();
+    String bookString = bookMap.toString();
+    // List<Books>? books = _getStorage.read(key);
+    // books?.add(book);
+    await _getStorage.write(key, bookString);
+    print(bookString);
   }
 
   List<Books> getBookList(String key) {

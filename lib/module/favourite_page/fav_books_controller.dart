@@ -13,7 +13,7 @@ class FavBooksController extends GetxController {
   }
 
   void fetchData() async {
-    favBookList = getStorage?.getBookList('fav_books') ?? [];
+    favBookList = getStorage?.getBookList('fav_book') ?? [];
     print('${favBookList.length}____________________________');
   }
 }

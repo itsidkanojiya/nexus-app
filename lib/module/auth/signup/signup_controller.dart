@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nexus_app/models/boards_mode.dart';
 import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 
@@ -7,6 +8,7 @@ class SignUpController extends GetxController {
   var selectedStandard = '1'.obs;
   SubjectModel? subjectModel;
   var selectedSubject = Rx<Subjects?>(null);
+  Boards? boardModel;
   RxBool isLoading = false.obs;
   var name = TextEditingController();
   var email = TextEditingController();
@@ -16,6 +18,8 @@ class SignUpController extends GetxController {
   var password = TextEditingController();
   var number = TextEditingController();
   var subject = TextEditingController();
+  late TabController _tabController;
+
   final List<String> standardLevels = [
     '1',
     '2',
@@ -32,11 +36,14 @@ class SignUpController extends GetxController {
   ];
   @override
   void onInit() {
+     
     fetchData();
     super.onInit();
   }
 
   void fetchData() async {
     subjectModel = await BookRepository().getSubject();
+    boardModel = await BookRepository().getBoards();
+    print('${boardModel?.boards?.length ?? '!!!!!!!'}##########');
   }
 }
