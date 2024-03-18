@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:nexus_app/custome_widgets/question_widget.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
@@ -11,14 +8,14 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-class PaperPage extends StatefulWidget {
-  const PaperPage({super.key});
+class CreatePaper extends StatefulWidget {
+  const CreatePaper({super.key});
 
   @override
-  State<PaperPage> createState() => _PaperPageState();
+  State<CreatePaper> createState() => _CreatePaperState();
 }
 
-class _PaperPageState extends State<PaperPage>
+class _CreatePaperState extends State<CreatePaper>
     with SingleTickerProviderStateMixin {
   TextEditingController schoolNameController = TextEditingController();
   TextEditingController schoolAddressController = TextEditingController();

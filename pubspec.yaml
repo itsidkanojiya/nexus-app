@@ -46,6 +46,8 @@ dependencies:
  
   syncfusion_flutter_pdfviewer: ^24.2.8
   flutter_easyloading: ^3.0.5
+  flutter_speed_dial: ^7.0.0
+  easy_stepper: ^0.8.3
   
 
 dev_dependencies:
