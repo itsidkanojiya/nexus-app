@@ -1,9 +1,9 @@
-class Boards {
+class BoardModel {
   List<Board>? boards;
 
-  Boards({this.boards});
+  BoardModel({this.boards});
 
-  Boards.fromJson(Map<String, dynamic> json) {
+  BoardModel.fromJson(Map<String, dynamic> json) {
     if (json['boards'] != null) {
       boards = <Board>[];
       json['boards'].forEach((v) {
