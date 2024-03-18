@@ -22,16 +22,24 @@ class _SignUpViewState extends State<SignUpView>
   var controller = Get.put(SignUpController());
   late TabController _tabController;
 
+  void _handleTabChange() {
+    // Access the current index of the TabController
+    controller.currentIndex = _tabController.index.obs;
+    // Do something with the current index
+    print('Current index:${controller.currentIndex}');
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_handleTabChange);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-
+    _tabController.removeListener(_handleTabChange);
     super.dispose();
   }
 
@@ -250,23 +258,79 @@ class _SignUpViewState extends State<SignUpView>
               }),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
           child: GridView.builder(
+              shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Number of columns
-                crossAxisSpacing: 15.0, // Spacing between columns
+                crossAxisSpacing: 20.0, // Spacing between columns
                 mainAxisSpacing: 15.0, // Spacing between rows
               ),
+              // itemCount: controller.boardModel?.boards?.length,
+              itemCount: controller.standardLevels.length,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: 50,
-                  width: 50,
-                  color: Colors.amber,
+                return GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 170,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Style.bg_color),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Container(
+                          //   height: 100,
+                          //   decoration: BoxDecoration(
+                          //     image: DecorationImage(
+                          //         image: NetworkImage(controller.boardModel
+                          //                 ?.boards?[index].coverLink ??
+                          //             '')),
+                          //   ),
+                          // ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            controller.standardLevels[index] ?? '-',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ]),
+                  ),
                 );
               }),
         ),
-        const Column(
-          children: [Text('Otp Verification Screen')],
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 30, 20, 5),
+              child: Center(
+                  child: Text(
+                'Verification',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              )),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(23, 8, 20, 3),
+              child: Text(
+                'Please Enter The OTP Sent To Your Device.',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+            ),
+            textfieldWidget(
+                hinttext: 'Enter OTP Here',
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a standard';
+                  }
+                  return null;
+                },
+                controller: controller.otp),
+          ],
         )
       ],
     );
@@ -331,7 +395,9 @@ class _SignUpViewState extends State<SignUpView>
                   await AuthRepository().signup(map);
                 }
               } else {
-                _tabController.animateTo(_tabController.index+1);
+                _tabController.animateTo(_tabController.index + 1);
+
+                _tabController.addListener(_handleTabChange);
               }
             },
             child: Padding(
@@ -345,7 +411,7 @@ class _SignUpViewState extends State<SignUpView>
                       Color.fromARGB(255, 237, 202, 145),
                     ])),
                 child: Center(
-                    child: (_tabController.index == 1)
+                    child: (controller.currentIndex?.value == 3)
                         ? const Text(
                             "Sign up",
                             style: TextStyle(
@@ -441,12 +507,12 @@ class textfieldWidget extends StatelessWidget {
 //                         decoration:
 //                             const InputDecoration.collapsed(
 //                                 hintText: ''),
-//                         validator: (value) {
-//                           if (value == null) {
-//                             return 'Please select a standard';
-//                           }
-//                           return null;
-//                         },
+                        // validator: (value) {
+                        //   if (value == null) {
+                        //     return 'Please select a standard';
+                        //   }
+                        //   return null;
+                        // },
 //                         value: controller
 //                             .selectedStandard.value,
 //                         onChanged: (String? newStandard) {

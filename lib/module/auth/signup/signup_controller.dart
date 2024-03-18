@@ -10,6 +10,7 @@ class SignUpController extends GetxController {
   var selectedSubject = Rx<Subjects?>(null);
   Boards? boardModel;
   RxBool isLoading = false.obs;
+  RxInt? currentIndex;
   var name = TextEditingController();
   var email = TextEditingController();
   var user_type = TextEditingController();
@@ -18,6 +19,7 @@ class SignUpController extends GetxController {
   var password = TextEditingController();
   var number = TextEditingController();
   var subject = TextEditingController();
+  var otp = TextEditingController();
   late TabController _tabController;
 
   final List<String> standardLevels = [

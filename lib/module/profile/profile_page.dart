@@ -15,7 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Scaffold(
       backgroundColor: Style.bg_color,
       appBar: AppBar(
-        backgroundColor: Style.primary,
+        backgroundColor: Style.bg_color,
         actions: [
           IconButton(
               onPressed: () {},
