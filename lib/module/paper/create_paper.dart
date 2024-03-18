@@ -23,6 +23,7 @@ class _CreatePaperState extends State<CreatePaper>
   TextEditingController paperTimingController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController divisionController = TextEditingController();
+  int activeStep = 2;
 
   String? selectedBoard = '';
   DateTime? dateSelected;

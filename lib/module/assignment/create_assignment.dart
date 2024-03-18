@@ -1,52 +1,505 @@
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:nexus_app/custome_widgets/text_field_widget.dart';
+import 'package:nexus_app/models/boards_mode.dart';
+import 'package:nexus_app/module/assignment/create_assignment_controller.dart';
+import 'package:nexus_app/theme/style.dart';
 
 class CreateAssignment extends StatelessWidget {
   CreateAssignment({super.key});
-  int activeStep = 2;
-  int activeStep2 = 2;
+  int activeStep = 0;
+  ImagePicker picker = ImagePicker();
+  var controller = Get.isRegistered<CreateAssignmentControlller>()
+      ? Get.find<CreateAssignmentControlller>()
+      : Get.put(CreateAssignmentControlller());
+  TimeOfDay selectedTime = TimeOfDay.now();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            EasyStepper(
-                activeStep: activeStep,
-                lineStyle: LineStyle(
-                  lineLength: 100,
-                  lineThickness: 6,
-                  lineSpace: 4,
-                  lineType: LineType.normal,
-                  defaultLineColor: Colors.purple.shade300,
-                  //   progress: progress,
-                  // progressColor: Colors.purple.shade700,
+    return Builder(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              EasyStepper(
+                  activeStep: activeStep,
+                  lineStyle: const LineStyle(
+                    lineLength: 100,
+                    lineThickness: 6,
+                    lineSpace: 4,
+                    lineType: LineType.normal,
+                    defaultLineColor: Style.primary,
+                    //   progress: progress,
+                    // progressColor: Colors.purple.shade700,
+                  ),
+                  borderThickness: 10,
+                  internalPadding: 15,
+                  loadingAnimation: 'assets/loading_circle.json',
+                  steps: const [
+                    EasyStep(
+                      icon: Icon(CupertinoIcons.info),
+                      title: 'Info',
+                      lineText: 'Add Paper Info',
+                    ),
+                    EasyStep(
+                      icon: Icon(Icons.question_mark_outlined),
+                      title: 'Question',
+                      lineText: 'Select Question',
+                    ),
+                    EasyStep(
+                      icon: Icon(CupertinoIcons.eye),
+                      title: 'View',
+                      lineText: 'View Paper',
+                    ),
+                  ]),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(2, 10, 0, 3.0),
+                        child: Text(
+                          'School Name',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      ),
+                      AppTextField(
+                        hintText: 'School Name',
+                        controller: controller.schoolNameController,
+                        textsize: 12,
+                        boxheight: 50,
+                        maxLine: 1,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(2, 12, 0, 3.0),
+                        child: Text(
+                          'School Address',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      ),
+                      AppTextField(
+                        hintText: 'School Adress',
+                        controller: controller.schoolAddressController,
+                        textsize: 12,
+                        minLine: 2,
+                        maxLine: 15,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(2, 12, 0, 3.0),
+                        child: Text(
+                          'Upload School Logo',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      ),
+                      Obx(() => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border:
+                                    Border.all(color: Colors.grey, width: 1.8),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: controller.aadharImage.value == null
+                                    ? InkWell(
+                                        onTap: () {
+                                          Get.bottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            enableDrag: false,
+                                            Container(
+                                              height: 120,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey),
+                                                color: Colors.white,
+                                              ),
+                                              child: Wrap(
+                                                children: <Widget>[
+                                                  ListTile(
+                                                      leading: const Icon(
+                                                          Icons.photo_library),
+                                                      title:
+                                                          const Text('Gallery'),
+                                                      onTap: () async {
+                                                        controller.aadharImage
+                                                                .value =
+                                                            await picker.pickImage(
+                                                                source:
+                                                                    ImageSource
+                                                                        .gallery);
+                                                        Get.back();
+                                                      }),
+                                                  ListTile(
+                                                    leading: const Icon(
+                                                        Icons.photo_camera),
+                                                    title: const Text('Camera'),
+                                                    onTap: () async {
+                                                      controller.aadharImage
+                                                              .value =
+                                                          await picker.pickImage(
+                                                              source:
+                                                                  ImageSource
+                                                                      .camera);
+                                                      Get.back();
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.cloud_upload_outlined,
+                                                color: Colors.grey, size: 40),
+                                            Text(
+                                              "Upload",
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : InkWell(
+                                        onTap: () {
+                                          Get.bottomSheet(
+                                            barrierColor: Colors.red[50],
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            enableDrag: false,
+                                            Container(
+                                              height: 120,
+                                              color: Colors.grey,
+                                              child: Wrap(
+                                                children: <Widget>[
+                                                  ListTile(
+                                                      leading: const Icon(
+                                                          Icons.photo_library),
+                                                      title:
+                                                          const Text('Gallery'),
+                                                      onTap: () async {
+                                                        controller.aadharImage
+                                                                .value =
+                                                            await picker.pickImage(
+                                                                source:
+                                                                    ImageSource
+                                                                        .gallery);
+                                                        Get.back();
+                                                      }),
+                                                  ListTile(
+                                                    leading: const Icon(
+                                                        Icons.photo_camera),
+                                                    title: const Text('Camera'),
+                                                    onTap: () async {
+                                                      controller.aadharImage
+                                                              .value =
+                                                          await picker.pickImage(
+                                                              source:
+                                                                  ImageSource
+                                                                      .camera);
+                                                      Get.back();
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: Image.network(
+                                                    "${controller.aadharImage.value!}",
+                                                    fit: BoxFit.fill,
+                                                    height: 80,
+                                                    width: 80)),
+                                            const Positioned(
+                                                right: 0,
+                                                top: 10,
+                                                child: Icon(
+                                                    Icons.camera_alt_outlined,
+                                                    color: Colors.blue,
+                                                    size: 20))
+                                          ],
+                                        ),
+                                      )),
+                          )),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(2, 10, 0, 3.0),
+                        child: Text(
+                          'Grade',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      ),
+                      AppTextField(
+                        hintText: 'Ex: 2nd(Eng.Med.)',
+                        controller: controller.gradeController,
+                        textsize: 12,
+                        boxheight: 50,
+                        maxLine: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 10, 0, 3.0),
+                        child: RichText(
+                            text: const TextSpan(
+                                text: 'Paper timing',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15),
+                                children: <TextSpan>[
+                              TextSpan(
+                                  text: ' (add with Hours or minutes)',
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15),
+                                  children: <TextSpan>[])
+                            ])),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          TimeOfDay pickedTime = (await showTimePicker(
+                            context: context,
+                            initialTime: controller.timeOfDay,
+                          ))!;
+                          if (pickedTime != controller.timeOfDay) {
+                            controller.timeOfDay = pickedTime;
+                          }
+                          // setState(() {});
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border:
+                                    Border.all(color: Colors.grey, width: 1.8),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: (controller.dateSelected == null)
+                                ? Row(
+                                    children: [
+                                      Text(
+                                        controller.timeOfDayToString(
+                                            controller.timeOfDay),
+                                        // dateSelected ?? '',
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.5),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Text(
+                                      //   DateFormate('dd/MM/yyyy')
+                                      //       .format(dateSelected ??
+                                      //           DateTime.now())
+                                      //       .toString(),
+                                      //   style: const TextStyle(
+                                      //       color: Colors.black,
+                                      //       fontWeight: FontWeight.w600,
+                                      //       fontSize: 12.5),
+                                      // ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            // setState(() {
+                                            //   dateSelected = null;
+                                            // });
+                                          },
+                                          child: const Icon(Icons.close))
+                                    ],
+                                  )),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(2, 12, 0, 3.0),
+                        child: Text(
+                          'Date',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          controller.dateSelected = await showDatePicker(
+                            context: context,
+                            lastDate: DateTime(2050, 9, 7, 17, 30),
+                            firstDate: DateTime.now(),
+                            initialDate: DateTime.now(),
+                            // onDatePickerModeChange: (value) {
+                            //   setState(() {
+                            //     dateSelected = value.toString();
+                            //     dateSelected = '1';
+                            //   });
+                            // },
+                          );
+
+                          // setState(() {});
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border:
+                                    Border.all(color: Colors.grey, width: 1.8),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: (controller.dateSelected == null)
+                                ? const Row(
+                                    children: [
+                                      Text(
+                                        'dd/mm/yyyy',
+                                        // dateSelected ?? '',
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.5),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Text(
+                                      //   DateFormate('dd/MM/yyyy')
+                                      //       .format(dateSelected ??
+                                      //           DateTime.now())
+                                      //       .toString(),
+                                      //   style: const TextStyle(
+                                      //       color: Colors.black,
+                                      //       fontWeight: FontWeight.w600,
+                                      //       fontSize: 12.5),
+                                      // ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            // setState(() {
+                                            //   dateSelected = null;
+                                            // });
+                                          },
+                                          child: const Icon(Icons.close))
+                                    ],
+                                  )),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(2, 12, 0, 3.0),
+                        child: Text(
+                          'Select Board',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey, width: 1.8),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Obx(() => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: DropdownButtonFormField<Board>(
+                                decoration: const InputDecoration.collapsed(
+                                    hintText: ''),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Please select a board';
+                                  }
+                                  return null;
+                                },
+                                hint: const Text('Select a board'),
+                                value: controller.selectedBoard.value,
+                                onChanged: (Board? newValue) {
+                                  controller.selectedBoard.value = newValue;
+                                },
+                                items:
+                                    controller.boardModel?.boards?.map((board) {
+                                          return DropdownMenuItem<Board>(
+                                            value: board,
+                                            child: Text(board.name ?? ''),
+                                          );
+                                        }).toList() ??
+                                        [],
+                              ),
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 80,
+                      ),
+                    ],
+                  ),
                 ),
-                borderThickness: 10,
-                internalPadding: 15,
-                loadingAnimation: 'assets/loading_circle.json',
-                steps: const [
-                  EasyStep(
-                    icon: Icon(CupertinoIcons.info),
-                    title: 'Info',
-                    lineText: 'Add Paper Info',
+              ),
+              GestureDetector(
+                onTap: () {
+                  //  tabController.index = 1;
+                },
+                child: Container(
+                  margin:
+                      const EdgeInsets.only(bottom: 25, right: 22, left: 15),
+                  height: 50,
+                  // width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                      color: Style.primary,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Center(
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                          color: Colors.white, // Set the text color
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600 // Set the font size
+                          ),
+                    ),
                   ),
-                  EasyStep(
-                    icon: Icon(Icons.question_mark_outlined),
-                    title: 'Question',
-                    lineText: 'Select Question',
-                  ),
-                  EasyStep(
-                    icon: Icon(CupertinoIcons.eye),
-                    title: 'View',
-                    lineText: 'View Paper',
-                  ),
-                ])
-          ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -8,7 +8,7 @@ class SignUpController extends GetxController {
   var selectedStandard = '1'.obs;
   SubjectModel? subjectModel;
   var selectedSubject = Rx<Subjects?>(null);
-  Boards? boardModel;
+  BoardModel? boardModel;
   RxBool isLoading = false.obs;
   RxInt? currentIndex;
   var name = TextEditingController();
@@ -38,7 +38,6 @@ class SignUpController extends GetxController {
   ];
   @override
   void onInit() {
-     
     fetchData();
     super.onInit();
   }

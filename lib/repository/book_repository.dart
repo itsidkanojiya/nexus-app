@@ -51,7 +51,7 @@ class BookRepository extends GetConnect {
     return null;
   }
 
-  Future<Boards?> getBoards() async {
+  Future<BoardModel?> getBoards() async {
     try {
       final response = await http
           .get(Uri.parse('${Base.api}/board'), headers: <String, String>{
@@ -62,7 +62,7 @@ class BookRepository extends GetConnect {
       debugPrint('getBoards body: $body');
 
       if (response.statusCode == 200) {
-        return Boards.fromJson(body);
+        return BoardModel.fromJson(body);
       }
     } catch (e) {
       debugPrint('Error While getBoards() ${e.toString()}');
