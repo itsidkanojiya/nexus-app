@@ -96,6 +96,7 @@ class AppTextField extends StatelessWidget {
         constraints: BoxConstraints(
             maxWidth: maxwidth ?? 500, maxHeight: boxheight ?? double.infinity),
         child: TextFormField(
+          
           minLines: minLine,
           enabled: enabled,
           onChanged: onChanged,

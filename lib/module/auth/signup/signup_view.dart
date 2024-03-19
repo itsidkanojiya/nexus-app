@@ -75,7 +75,7 @@ class _SignUpViewState extends State<SignUpView>
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(value ?? "");
                         if (value!.isEmpty) {
-                          return 'Please enter your chapter number';
+                          return 'Please enter your email';
                         }
                         return null;
                       },
@@ -486,54 +486,54 @@ class textfieldWidget extends StatelessWidget {
 //           const SizedBox(
 //             height: 5,
 //           ),
-//           Obx(() => Padding(
-//                 padding: const EdgeInsets.symmetric(
-//                   horizontal: 20.0,
-//                 ),
-//                 child: Container(
-//                   width: 80,
-//                   height: 40,
-//                   decoration: BoxDecoration(
-//                       borderRadius:
-//                           BorderRadius.circular(10),
-//                       color: Style.textfield_color),
-//                   child: Padding(
-//                     padding: const EdgeInsets.symmetric(
-//                         horizontal: 10),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(8.0),
-//                       child:
-//                           DropdownButtonFormField<String>(
-//                         decoration:
-//                             const InputDecoration.collapsed(
-//                                 hintText: ''),
-                        // validator: (value) {
-                        //   if (value == null) {
-                        //     return 'Please select a standard';
-                        //   }
-                        //   return null;
-                        // },
-//                         value: controller
-//                             .selectedStandard.value,
-//                         onChanged: (String? newStandard) {
-//                           if (newStandard != null) {
-//                             controller.selectedStandard
-//                                 .value = newStandard;
-//                           }
-//                         },
-//                         items: controller.standardLevels
-//                             .map<DropdownMenuItem<String>>(
-//                                 (String value) {
-//                           return DropdownMenuItem<String>(
-//                             value: value,
-//                             child: Text(value),
-//                           );
-//                         }).toList(),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               )),
+          // Obx(() => Padding(
+          //       padding: const EdgeInsets.symmetric(
+          //         horizontal: 20.0,
+          //       ),
+          //       child: Container(
+          //         width: 80,
+          //         height: 40,
+          //         decoration: BoxDecoration(
+          //             borderRadius:
+          //                 BorderRadius.circular(10),
+          //             color: Style.textfield_color),
+          //         child: Padding(
+          //           padding: const EdgeInsets.symmetric(
+          //               horizontal: 10),
+          //           child: Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child:
+          //                 DropdownButtonFormField<String>(
+          //               decoration:
+          //                   const InputDecoration.collapsed(
+          //                       hintText: ''),
+          //               validator: (value) {
+          //                 if (value == null) {
+          //                   return 'Please select a standard';
+          //                 }
+          //                 return null;
+          //               },
+          //               value: controller
+          //                   .selectedStandard.value,
+          //               onChanged: (String? newStandard) {
+          //                 if (newStandard != null) {
+          //                   controller.selectedStandard
+          //                       .value = newStandard;
+          //                 }
+          //               },
+          //               items: controller.standardLevels
+          //                   .map<DropdownMenuItem<String>>(
+          //                       (String value) {
+          //                 return DropdownMenuItem<String>(
+          //                   value: value,
+          //                   child: Text(value),
+          //                 );
+          //               }).toList(),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     )),
 //         ],
 //       )
 //     : const SizedBox(),

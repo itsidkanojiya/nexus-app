@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:nexus_app/module/edit_profile/edit_profile_page.dart';
+
 import 'package:nexus_app/theme/style.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -38,10 +42,10 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             decoration: const BoxDecoration(
               // color: Color(0xff820000),
-              color: Style.primary,
+              color: Style.secondary,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black54,
+                  color: Colors.black26,
                   offset: Offset(0.0, 1.0), // Shadow position (x, y)
                   blurRadius: 3.0, // Spread of the shadow
                   spreadRadius: 1.0, // Offset of the shadow
@@ -56,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   text: const TextSpan(
                     text: 'Name \n',
                     style: TextStyle(
-                        color: Style.secondary,
+                        color: Colors.black,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500),
                     children: <TextSpan>[
@@ -64,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         text: 'email@gmail.com\n',
                         style: TextStyle(
                           height: 1.5,
-                          color: Style.secondary,
+                          color: Colors.black,
                           fontSize: 16.0,
                         ),
                       ),
@@ -72,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         text: 'School Name\n',
                         style: TextStyle(
                           height: 1.5,
-                          color: Style.secondary,
+                          color: Colors.black,
                           fontSize: 15.0,
                         ),
                       ),
@@ -80,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         text: 'Standard:- 12th',
                         style: TextStyle(
                           height: 1.5,
-                          color: Style.secondary,
+                          color: Colors.black,
                           fontSize: 15.0,
                         ),
                       ),
@@ -89,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white24),
+                      shape: BoxShape.circle, color: Colors.black38),
                   height: 100,
                   width: 100,
                 ),
@@ -109,40 +113,45 @@ class _ProfilePageState extends State<ProfilePage> {
             indent: 15,
             color: Colors.grey,
           ),
-          Container(
-              height: 50,
-              margin:
-                  const EdgeInsets.only(top: 5, bottom: 0, right: 15, left: 15),
-              padding:
-                  const EdgeInsets.only(top: 0, bottom: 0, right: 15, left: 15),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey, width: 2),
-                  borderRadius: BorderRadius.circular(8)),
-              // Set the width of the container
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const EditProfilePage());
+            },
+            child: Container(
+                height: 50,
+                margin: const EdgeInsets.only(
+                    top: 5, bottom: 0, right: 15, left: 15),
+                padding: const EdgeInsets.only(
+                    top: 0, bottom: 0, right: 15, left: 15),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 2),
+                    borderRadius: BorderRadius.circular(8)),
+                // Set the width of the container
 
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.person_4_outlined,
-                    color: Style.primary,
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Text('Edit Profile',
-                        style: TextStyle(
-                            color: Style.primary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    color: Style.primary,
-                  ),
-                ],
-              )),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.person_4_outlined,
+                      color: Style.primary,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: Text('Edit Profile',
+                          style: TextStyle(
+                              color: Style.primary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_outlined,
+                      color: Style.primary,
+                    ),
+                  ],
+                )),
+          ),
           const Padding(
             padding: EdgeInsets.fromLTRB(20, 20, 15, 0),
             child: Text('About Us',
