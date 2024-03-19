@@ -1,14 +1,12 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:flutter/cupertino.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/chatgpt/chatgpt_page.dart';
-
-import 'package:nexus_app/module/favourite_page/fav_books_page.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
 import 'package:nexus_app/module/paper/create_paper.dart';
-
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/module/view_page/view_book_page.dart';
 import 'package:nexus_app/theme/style.dart';
@@ -25,7 +23,15 @@ class _HomeViewState extends State<HomeView> {
       ? Get.find<HomeController>()
       : Get.put(HomeController());
   bool isSearch = false;
-
+  final List<String> imageUrls = [
+    "assets/book1.png",
+    "assets/book2.png",
+    "assets/book3.png",
+    "assets/book4.png",
+    "assets/book5.png",
+    "assets/book6.png"
+    // Add more image URLs as needed
+  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -606,6 +612,9 @@ class _HomeViewState extends State<HomeView> {
                                             .subjectmodel?.subjects?.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
+                                          final randomImageUrl = imageUrls[
+                                              Random()
+                                                  .nextInt(imageUrls.length)];
                                           return GestureDetector(
                                             onTap: () {
                                               controller.getBooks(controller
@@ -615,22 +624,23 @@ class _HomeViewState extends State<HomeView> {
                                                   '');
                                             },
                                             child: Container(
-                                              decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.rectangle,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
                                                   color: Style.secondary),
                                               child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    // Container(
-                                                    //   height: 60,
-                                                    //   decoration:
-                                                    //       const BoxDecoration(
-                                                    //     image: DecorationImage(
-                                                    //         image: NetworkImage(
-                                                    //             '')),
-                                                    //   ),
-                                                    // ),
+                                                    Container(
+                                                      height: 60,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: AssetImage(
+                                                                randomImageUrl)),
+                                                      ),
+                                                    ),
                                                     const SizedBox(
                                                       height: 10,
                                                     ),
