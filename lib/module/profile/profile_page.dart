@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nexus_app/module/auth/login/login_view.dart';
 import 'package:nexus_app/module/edit_profile/edit_profile_page.dart';
-
 import 'package:nexus_app/theme/style.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,7 +21,9 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Style.bg_color,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.offAll(LoginView());
+              },
               icon: const Icon(
                 Icons.logout_outlined,
                 size: 25,

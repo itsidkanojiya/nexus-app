@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
 import 'package:nexus_app/models/boards_mode.dart';
 import 'package:nexus_app/module/assignment/create_assignment_controller.dart';
@@ -237,11 +240,13 @@ class CreateAssignment extends StatelessWidget {
                                             ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(100),
-                                                child: Image.network(
-                                                    "${controller.aadharImage.value!}",
-                                                    fit: BoxFit.fill,
-                                                    height: 80,
-                                                    width: 80)),
+                                                child: Image.file(
+                                                  File(controller
+                                                      .aadharImage.value!.path),
+                                                  fit: BoxFit.fill,
+                                                  height: 80,
+                                                  width: 80,
+                                                )),
                                             const Positioned(
                                                 right: 0,
                                                 top: 10,
@@ -263,12 +268,43 @@ class CreateAssignment extends StatelessWidget {
                               fontSize: 15),
                         ),
                       ),
-                      AppTextField(
-                        hintText: 'Ex: 2nd(Eng.Med.)',
-                        controller: controller.gradeController,
-                        textsize: 12,
-                        boxheight: 50,
-                        maxLine: 1,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey, width: 1.8),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Obx(() => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: DropdownButtonFormField<String>(
+                                decoration: const InputDecoration.collapsed(
+                                    hintText: ''),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Please select a standard';
+                                  }
+                                  return null;
+                                },
+                                value: controller.selectedStandard.value,
+                                onChanged: (String? newStandard) {
+                                  if (newStandard != null) {
+                                    controller.selectedStandard.value =
+                                        newStandard;
+                                  }
+                                },
+                                items: controller.standardLevels
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            )),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(2, 10, 0, 3.0),
@@ -293,10 +329,10 @@ class CreateAssignment extends StatelessWidget {
                         onTap: () async {
                           TimeOfDay pickedTime = (await showTimePicker(
                             context: context,
-                            initialTime: controller.timeOfDay,
+                            initialTime: controller.timeOfDay.value,
                           ))!;
-                          if (pickedTime != controller.timeOfDay) {
-                            controller.timeOfDay = pickedTime;
+                          if (pickedTime != controller.timeOfDay.value) {
+                            controller.timeOfDay.value = pickedTime;
                           }
                           // setState(() {});
                         },
@@ -309,17 +345,19 @@ class CreateAssignment extends StatelessWidget {
                                 border:
                                     Border.all(color: Colors.grey, width: 1.8),
                                 borderRadius: BorderRadius.circular(10)),
-                            child: (controller.dateSelected == null)
+                            child: (controller.timeOfDay == null)
                                 ? Row(
                                     children: [
-                                      Text(
-                                        controller.timeOfDayToString(
-                                            controller.timeOfDay),
-                                        // dateSelected ?? '',
-                                        style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12.5),
+                                      Obx(
+                                        () => Text(
+                                          controller.timeOfDayToString(
+                                              controller.timeOfDay.value),
+                                          // dateSelected ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12.5),
+                                        ),
                                       ),
                                     ],
                                   )
@@ -327,23 +365,17 @@ class CreateAssignment extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Text(
-                                      //   DateFormate('dd/MM/yyyy')
-                                      //       .format(dateSelected ??
-                                      //           DateTime.now())
-                                      //       .toString(),
-                                      //   style: const TextStyle(
-                                      //       color: Colors.black,
-                                      //       fontWeight: FontWeight.w600,
-                                      //       fontSize: 12.5),
-                                      // ),
-                                      GestureDetector(
-                                          onTap: () {
-                                            // setState(() {
-                                            //   dateSelected = null;
-                                            // });
-                                          },
-                                          child: const Icon(Icons.close))
+                                      Obx(
+                                        () => Text(
+                                          controller.timeOfDayToString(
+                                              controller.timeOfDay.value),
+                                          // dateSelected ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12.5),
+                                        ),
+                                      ),
                                     ],
                                   )),
                       ),
@@ -358,23 +390,19 @@ class CreateAssignment extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          controller.dateSelected = await showDatePicker(
-                            context: context,
-                            lastDate: DateTime(2050, 9, 7, 17, 30),
-                            firstDate: DateTime.now(),
-                            initialDate: DateTime.now(),
-                            // onDatePickerModeChange: (value) {
-                            //   setState(() {
-                            //     dateSelected = value.toString();
-                            //     dateSelected = '1';
-                            //   });
-                            // },
-                          );
+                          onTap: () async {
+                            controller.dateSelected.value =
+                                await showDatePicker(
+                                      context: context,
+                                      lastDate: DateTime(2050, 9, 7, 17, 30),
+                                      firstDate: DateTime.now(),
+                                      initialDate: DateTime.now(),
+                                    ) ??
+                                    DateTime.now();
 
-                          // setState(() {});
-                        },
-                        child: Container(
+                            // setState(() {});
+                          },
+                          child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             height: 50,
                             width: MediaQuery.of(context).size.width * 0.9,
@@ -383,7 +411,7 @@ class CreateAssignment extends StatelessWidget {
                                 border:
                                     Border.all(color: Colors.grey, width: 1.8),
                                 borderRadius: BorderRadius.circular(10)),
-                            child: (controller.dateSelected == null)
+                            child: Obx(() => (controller.dateSelected == null)
                                 ? const Row(
                                     children: [
                                       Text(
@@ -400,26 +428,20 @@ class CreateAssignment extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Text(
-                                      //   DateFormate('dd/MM/yyyy')
-                                      //       .format(dateSelected ??
-                                      //           DateTime.now())
-                                      //       .toString(),
-                                      //   style: const TextStyle(
-                                      //       color: Colors.black,
-                                      //       fontWeight: FontWeight.w600,
-                                      //       fontSize: 12.5),
-                                      // ),
-                                      GestureDetector(
-                                          onTap: () {
-                                            // setState(() {
-                                            //   dateSelected = null;
-                                            // });
-                                          },
-                                          child: const Icon(Icons.close))
+                                      Text(
+                                        DateFormat('dd/MM/yyyy')
+                                            .format(
+                                                controller.dateSelected.value ??
+                                                    DateTime.now())
+                                            .toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.5),
+                                      ),
                                     ],
                                   )),
-                      ),
+                          )),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(2, 12, 0, 3.0),
                         child: Text(

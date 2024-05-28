@@ -13,11 +13,27 @@ class CreateAssignmentControlller extends GetxController {
   TextEditingController divisionController = TextEditingController();
 
   var selectedBoard = Rx<Board?>(null);
-  DateTime? dateSelected;
-  TimeOfDay timeOfDay = const TimeOfDay(hour: 1, minute: 10);
+  Rx<DateTime> dateSelected = DateTime.now().obs;
+  Rx<TimeOfDay> timeOfDay = const TimeOfDay(hour: 0, minute: 00).obs;
   BoardModel? boardModel;
   RxBool isLoading = false.obs;
   Rxn<XFile> aadharImage = Rxn<XFile>(null);
+  var selectedStandard = '1'.obs;
+  @override
+  final List<String> standardLevels = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+  ];
   @override
   void onInit() {
     fetchData();

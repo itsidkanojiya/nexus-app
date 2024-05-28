@@ -28,10 +28,10 @@ class BookRepository extends GetConnect {
     return null;
   }
 
-  Future<BookModel?> getBooks(int page) async {
+  Future<BookModel?> getBooks(String subject) async {
     try {
       final response = await http.get(
-          Uri.parse('${Base.api}/books?page=$page&limit=10'),
+          Uri.parse('${Base.api}/books?subject=$subject'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UFT-8',
           });
@@ -71,5 +71,4 @@ class BookRepository extends GetConnect {
 
     return null;
   }
-  
 }

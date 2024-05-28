@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:nexus_app/models/books_model.dart';
 import 'package:nexus_app/models/subject_model.dart';
@@ -11,9 +9,9 @@ class HomeController extends GetxController {
   BookModel? bookmodel;
   SubjectModel? subjectmodel;
   RxBool isLoading = false.obs;
-  RxBool isSubSelected = false.obs;
+  RxBool isBookLoading = false.obs;
   var selectedBook = Rx<Books?>(null);
-  RxInt page = 1.obs;
+
   GetStorageServices? getStorageServices;
 
   @override
@@ -36,10 +34,10 @@ class HomeController extends GetxController {
   }
 
   void getBooks(String subjet) async {
-    isLoading(true);
-    bookmodel = await BookRepository().getBooks(page.value);
-    isLoading(false);
-    isSubSelected(true);
+    isBookLoading(true);
+    bookmodel = await BookRepository().getBooks(subjet);
+    isBookLoading(false);
+
     print(isLoading.toString());
   }
 

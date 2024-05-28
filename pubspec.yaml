@@ -49,6 +49,8 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   easy_stepper: ^0.8.3
   image_picker: ^1.0.7
+  google_fonts: ^6.2.1
+  intl: ^0.18.1
   
 
 dev_dependencies:
