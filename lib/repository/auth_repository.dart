@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:nexus_app/models/user_model.dart';
 import 'package:nexus_app/module/auth/login/login_view.dart';
 import 'package:nexus_app/module/home/home_page.dart';
 import 'package:nexus_app/services/auth_service.dart';
@@ -21,20 +22,22 @@ class AuthRepository {
       final body = jsonDecode(response.body);
       debugPrint('signIn body: $body');
       if (response.statusCode == 200 || response.statusCode == 201) {
-        var map = {'jwt': body['token']};
+        UserModel user = UserModel.fromJson(body);
         Loader().onSuccess(msg: 'Login successfully');
-        await AuthService.storage.write('token', map);
-        print(AuthService.token);
-        Get.offAll(const HomeView());
-        return 'sucsess';
+        await AuthService.saveUserToStorage(user);
+
+        print("${AuthService.userModel.value?.token}");
+
+        Get.offAll(() =>
+            const HomeView()); // Correct usage of Get.offAll with a function
+        return 'success';
       } else {
         Loader().onError(msg: body['message'].toString());
-
         return body['message'].toString();
       }
     } catch (e) {
-      Loader().onError(msg: 'something went wrong');
-      debugPrint('Error While sigIn() ${e.toString()}');
+      Loader().onError(msg: 'Something went wrong');
+      debugPrint('Error While signIn() ${e.toString()}');
       return Future.error(e);
     }
   }
@@ -73,19 +76,19 @@ class AuthRepository {
       final response = await http.post(Uri.parse('${Base.api}/verify-token'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UFT-8',
-            HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
+            HttpHeaders.authorizationHeader:
+                "Bearer ${AuthService.userModel.value?.token}"
           });
 
-      print(AuthService.token);
       final body = jsonDecode(response.body);
       debugPrint('verifyToken body: $body');
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.to(()=>const HomeView());
+        Get.to(() => const HomeView());
       } else {
-        Get.to(()=>LoginView());
+        Get.to(() => LoginView());
       }
     } catch (e) {
-      Get.to(()=>LoginView());
+      Get.to(() => LoginView());
       debugPrint('Error While verifyToken() ${e.toString()}');
       return Future.error(e);
     }

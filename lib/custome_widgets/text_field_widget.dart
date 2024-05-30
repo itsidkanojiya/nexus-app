@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class AppTextField extends StatelessWidget {
   AppTextField(
-      {Key? key,
+      {super.key,
       this.removeBorder = false,
       this.hintText,
       this.maxLine,
@@ -44,8 +44,7 @@ class AppTextField extends StatelessWidget {
       this.suffixIcon,
       this.hintColor,
       this.enabled,
-      this.onTap})
-      : super(key: key);
+      this.onTap});
   final bool removeBorder;
   final String? hintText;
   final int? maxLength;
@@ -96,7 +95,6 @@ class AppTextField extends StatelessWidget {
         constraints: BoxConstraints(
             maxWidth: maxwidth ?? 500, maxHeight: boxheight ?? double.infinity),
         child: TextFormField(
-          
           minLines: minLine,
           enabled: enabled,
           onChanged: onChanged,

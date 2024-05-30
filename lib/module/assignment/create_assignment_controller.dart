@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_mode.dart';
 import 'package:nexus_app/repository/book_repository.dart';
+import 'package:nexus_app/repository/paper_repository.dart';
 
 class CreateAssignmentControlller extends GetxController {
   TextEditingController schoolNameController = TextEditingController();
   TextEditingController schoolAddressController = TextEditingController();
   TextEditingController gradeController = TextEditingController();
-  TextEditingController paperTimingController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
   TextEditingController divisionController = TextEditingController();
-
   var selectedBoard = Rx<Board?>(null);
   Rx<DateTime> dateSelected = DateTime.now().obs;
-  Rx<TimeOfDay> timeOfDay = const TimeOfDay(hour: 0, minute: 00).obs;
+  Rx<TimeOfDay> selectedTime = const TimeOfDay(hour: 0, minute: 00).obs;
   BoardModel? boardModel;
   RxBool isLoading = false.obs;
-  Rxn<XFile> aadharImage = Rxn<XFile>(null);
+  RxBool isNameEmpty = false.obs;
+  RxBool isAddEmpty = false.obs;
+  RxBool isBoardEmpty = false.obs;
+  Rxn<XFile> schoolLogo = Rxn<XFile>(null);
+
   var selectedStandard = '1'.obs;
   @override
   final List<String> standardLevels = [
@@ -50,5 +53,34 @@ class CreateAssignmentControlller extends GetxController {
     isLoading(true);
     boardModel = await BookRepository().getBoards();
     isLoading(false);
+  }
+
+  void addPaperDetails(BuildContext context) async {
+    final timeFormat = DateFormat('h:mm'); // For example, 3:00
+    final dateFormat = DateFormat('yyyy-MM-dd'); // For example, 2024-05-31
+    DateTime convertTimeOfDayToDateTime(TimeOfDay time) {
+      final now = DateTime.now();
+      return DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    }
+
+    // Format the timing and date
+    String formattedTime =
+        timeFormat.format(convertTimeOfDayToDateTime(selectedTime.value));
+    String formattedDate = dateFormat.format(dateSelected.value);
+    var map = {
+      "school_name": schoolNameController.text,
+      "std": selectedStandard.value,
+      "timing": formattedTime,
+      "date": formattedDate,
+      "division": divisionController.text,
+      "day": DateFormat('EEEE').format(dateSelected.value),
+      "address": schoolAddressController.text,
+      "board": selectedBoard.value?.name.toString(),
+      "subject": 'test',
+      "uid": 12,
+      'division': '1'
+    };
+    print(map);
+    await PaperRepository().addPaperDetails(map, schoolLogo.value!.path);
   }
 }

@@ -28,28 +28,46 @@ class PaperRepository {
     return null;
   }
 
-  Future<bool> addPaperDetails(Map<String, dynamic> map) async {
+  Future<bool> addPaperDetails(
+      Map<String, dynamic> map, String logoPath) async {
     try {
-      final response = await http.post(
-        Uri.parse('${Base.api}/add-paper-details'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
-        },
-        body: jsonEncode(map),
-      );
+      var headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader:
+            "Bearer ${AuthService.userModel.value?.token}"
+      };
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${Base.api}/add-paper-details'));
 
-      final body = jsonDecode(response.body);
+      request.files.add(await http.MultipartFile.fromPath(
+        'logo',
+        logoPath,
+      ));
+
+      request.headers.addAll(headers);
+
+      var stringMap = map.map((key, value) => MapEntry(key, value.toString()));
+
+      // Add other form data to fields
+      stringMap.forEach((key, value) {
+        request.fields[key] = value;
+      });
+
+      http.StreamedResponse response = await request.send();
+      var res = await response.stream.bytesToString();
+      final body = jsonDecode(res);
       debugPrint('addPaperDetails body: $body');
       if (response.statusCode == 201) {
         return true;
       }
     } catch (e) {
-      debugPrint('Error While editQuestion() ${e.toString()}');
+      Get.rawSnackbar(message: 'addPaperDetails Added failed!');
+      debugPrint('Error While addPaperDetails() ${e.toString()}');
       return false;
     }
     Get.rawSnackbar(
-        message: 'Question edited failed!', backgroundColor: Colors.redAccent);
+        message: 'addPaperDetails Added failed!',
+        backgroundColor: Colors.redAccent);
     return false;
   }
 }
