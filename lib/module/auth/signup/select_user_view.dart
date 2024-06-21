@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/auth/signup/signup_view.dart';
+import 'package:nexus_app/services/auth_service.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class SelectUserView extends StatelessWidget {
@@ -25,7 +26,8 @@ class SelectUserView extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 18.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(()=>SignUpView(type: 'student'));
+                    AuthService.userType.value = 'student';
+                    Get.to(() => SignUpView());
                   },
                   child: Container(
                     height: 170,
@@ -59,7 +61,8 @@ class SelectUserView extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 18.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(()=>SignUpView(type: 'teacher'));
+                    AuthService.userType.value = 'teacher';
+                    Get.to(() => SignUpView());
                   },
                   child: Container(
                     height: 170,

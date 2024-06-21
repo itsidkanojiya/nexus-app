@@ -7,24 +7,25 @@ class QuestionModel {
   String? answer;
   String? solution;
   String? createdAt;
-  Null updatedAt;
-  Null deletedAt;
+  String? updatedAt;
+  String? deletedAt;
   String? type;
-  Null options;
+  List<String>? options;
 
-  QuestionModel(
-      {this.id,
-      this.board,
-      this.subject,
-      this.std,
-      this.question,
-      this.answer,
-      this.solution,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.type,
-      this.options});
+  QuestionModel({
+    this.id,
+    this.board,
+    this.subject,
+    this.std,
+    this.question,
+    this.answer,
+    this.solution,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.type,
+    this.options,
+  });
 
   QuestionModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,7 +39,8 @@ class QuestionModel {
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
     type = json['type'];
-    options = json['options'];
+    options =
+        json['options'] != null ? List<String>.from(json['options']) : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -19,7 +19,7 @@ class LoginController extends GetxController {
 
     await AuthRepository().signIn(map);
 
-    emailText.clear();
-    passwordText.clear();
+    // emailText.clear();
+    // passwordText.clear();
   }
 }

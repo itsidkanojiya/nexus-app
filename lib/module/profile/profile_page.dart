@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/auth/login/login_view.dart';
 import 'package:nexus_app/module/edit_profile/edit_profile_page.dart';
+import 'package:nexus_app/services/auth_service.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -58,13 +59,13 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RichText(
-                  text: const TextSpan(
-                    text: 'Name \n',
-                    style: TextStyle(
+                  text: TextSpan(
+                    text: '${AuthService.userId}\n',
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500),
-                    children: <TextSpan>[
+                    children: const <TextSpan>[
                       TextSpan(
                         text: 'email@gmail.com\n',
                         style: TextStyle(

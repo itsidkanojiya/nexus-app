@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_model.dart';
+import 'package:nexus_app/models/question_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
 
-class CreateAssignmentControlller extends GetxController {
+class CreatePaperController extends GetxController {
   Rx<int> activeStep = 0.obs;
+  var questions = <QuestionModel>[];
   TextEditingController schoolNameController = TextEditingController();
   TextEditingController schoolAddressController = TextEditingController();
   TextEditingController gradeController = TextEditingController();
@@ -23,6 +25,7 @@ class CreateAssignmentControlller extends GetxController {
   Rxn<XFile> schoolLogo = Rxn<XFile>(null);
 
   var selectedStandard = '1'.obs;
+  var selectedType = 'MCQ'.obs;
   @override
   final List<String> standardLevels = [
     '1',
@@ -37,6 +40,14 @@ class CreateAssignmentControlller extends GetxController {
     '10',
     '11',
     '12',
+  ];
+  final List<String> questionType = [
+    'MCQ',
+    'Fill in the blanks',
+    'True & false',
+    'One two line questions',
+    'Short question',
+    'Long question'
   ];
   @override
   void onInit() {
@@ -53,6 +64,7 @@ class CreateAssignmentControlller extends GetxController {
   void fetchData() async {
     isLoading(true);
     boardModel = await BookRepository().getBoards();
+    questions = await PaperRepository().getQuestions();
     isLoading(false);
   }
 

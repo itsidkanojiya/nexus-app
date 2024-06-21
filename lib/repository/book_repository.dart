@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:nexus_app/models/boards_mode.dart';
+import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/models/books_model.dart';
 import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/utils/Base.dart';

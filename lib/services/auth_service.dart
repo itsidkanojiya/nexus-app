@@ -10,11 +10,20 @@ class AuthService extends GetxService {
   static RxInt subTeacherIndex = 0.obs;
   static RxInt analysisIndex = 0.obs;
   static RxInt subQuetionIndex = 0.obs;
+  static RxString userType = 'student'.obs;
   static final storage = GetStorage();
-  static String? get token =>
-      storage.read('token') != null ? storage.read('token')['jwt'] : null;
-  static Future<void> saveUserToStorage(UserModel user) async {
-    userModel.value = user;
-    await storage.write('userModel', jsonEncode(user.toJson()));
+
+  // Get the token directly as it is stored
+  static String? get token => storage.read('token');
+  static int? get id => storage.read('id');
+
+  // Retrieve the user ID
+  static int? get userId {
+    final storedUser = storage.read('userModel');
+    if (storedUser != null) {
+      final userMap = jsonDecode(storedUser);
+      return UserModel.fromJson(userMap).user?.id;
+    }
+    return null;
   }
 }

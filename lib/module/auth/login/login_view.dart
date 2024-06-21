@@ -1,12 +1,13 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nexus_app/custome_widgets/custom_button_widget.dart';
 import 'package:nexus_app/module/auth/login/login_controller.dart';
 import 'package:nexus_app/module/auth/signup/select_user_view.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class LoginView extends StatelessWidget {
-  LoginView({Key? key}) : super(key: key);
+  LoginView({super.key});
   var controller = Get.put(LoginController());
   final formKey = GlobalKey<FormState>();
   @override
@@ -141,7 +142,7 @@ class LoginView extends StatelessWidget {
                           const Text("Don't have an account?"),
                           GestureDetector(
                             onTap: () {
-                              Get.to(()=>const SelectUserView());
+                              Get.to(() => const SelectUserView());
                             },
                             child: const Text(
                               " Sign up",
@@ -153,32 +154,13 @@ class LoginView extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      FadeInUp(
-                          duration: const Duration(milliseconds: 1900),
-                          child: GestureDetector(
-                            onTap: () {
-                              if (formKey.currentState!.validate()) {
-                                controller.login();
-                              }
-                            },
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: const LinearGradient(colors: [
-                                    Style.bg_color,
-                                    Color.fromARGB(255, 237, 202, 145),
-                                  ])),
-                              child: const Center(
-                                child: Text(
-                                  "Login",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )),
+                      CustomButton(
+                          onTap: () {
+                            if (formKey.currentState!.validate()) {
+                              controller.login();
+                            }
+                          },
+                          text: "Login"),
                       const SizedBox(
                         height: 70,
                       ),

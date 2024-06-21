@@ -1,31 +1,40 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nexus_app/models/question_model.dart';
 import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/utils/Base.dart';
 
 class PaperRepository {
-  Future<QuestionModel?> getMcq() async {
+  Future<List<QuestionModel>> getQuestions() async {
     try {
-      final response = await http.get(Uri.parse('${Base.api}/get-questions'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UFT-8',
-          });
+      final response = await http.get(
+        Uri.parse('${Base.api}/get-questions'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
+        },
+      );
 
       final body = jsonDecode(response.body);
-      debugPrint('getMcq body: $body');
+      debugPrint('getQuestions body: $body');
       if (response.statusCode == 200) {
-        return QuestionModel.fromJson(body);
+        // Parse the list of questions
+        List<QuestionModel> questions = (body as List)
+            .map((questionJson) => QuestionModel.fromJson(questionJson))
+            .toList();
+        return questions;
+      } else {
+        return [];
       }
     } catch (e) {
-      debugPrint('Error While getMcq() ${e.toString()}');
-      return Future.error(e);
+      debugPrint('Error While getQuestions() ${e.toString()}');
+      return [];
     }
-    return null;
   }
 
   Future<bool> addPaperDetails(
@@ -33,8 +42,7 @@ class PaperRepository {
     try {
       var headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader:
-            "Bearer ${AuthService.userModel.value?.token}"
+        HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
       };
       var request = http.MultipartRequest(
           'POST', Uri.parse('${Base.api}/add-paper-details'));
@@ -61,13 +69,11 @@ class PaperRepository {
         return true;
       }
     } catch (e) {
-      Get.rawSnackbar(message: 'addPaperDetails Added failed!');
+      Loader().onError(msg: 'Something went wrong');
       debugPrint('Error While addPaperDetails() ${e.toString()}');
       return false;
     }
-    Get.rawSnackbar(
-        message: 'addPaperDetails Added failed!',
-        backgroundColor: Colors.redAccent);
+
     return false;
   }
 }

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/assignment/create_assignment.dart';
-import 'package:nexus_app/module/chatgpt/chatgpt_page.dart';
 import 'package:nexus_app/module/home/book_view.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
 import 'package:nexus_app/module/paper/create_paper.dart';
@@ -243,30 +242,6 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                         ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 15, left: 15),
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => const ChatPage());
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xff74AA9C),
-                            ),
-                            child: const Icon(
-                              Icons.wechat_rounded,
-                              size: 30,
-                              color: Style.secondary,
-                            ),
-                          ),
-                        ),
                       ),
                     ),
                   ],
