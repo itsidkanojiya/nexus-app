@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
 import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/module/assignment/create_assignment_controller.dart';
+import 'package:nexus_app/services/auth_service.dart';
 import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/theme/style.dart';
 
@@ -389,7 +390,7 @@ class FirstView extends StatelessWidget {
                             children: [
                               Obx(
                                 () => Text(
-                                  controller.timeOfDayToString(
+                                  AppService().timeOfDayToString(
                                       controller.selectedTime.value),
                                   // dateSelected ?? '',
                                   style: const TextStyle(
@@ -405,7 +406,7 @@ class FirstView extends StatelessWidget {
                             children: [
                               Obx(
                                 () => Text(
-                                  controller.timeOfDayToString(
+                                  AppService().timeOfDayToString(
                                       controller.selectedTime.value),
                                   // dateSelected ?? '',
                                   style: const TextStyle(

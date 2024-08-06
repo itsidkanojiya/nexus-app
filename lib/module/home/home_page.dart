@@ -5,10 +5,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:nexus_app/module/assignment/create_assignment.dart';
 import 'package:nexus_app/module/home/book_view.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
-import 'package:nexus_app/module/paper/create_paper.dart';
+import 'package:nexus_app/module/paper/create%20paper/add%20details/add_paper_details.dart';
+import 'package:nexus_app/module/paper/view%20paper/view_paper.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/theme/style.dart';
 
@@ -160,109 +160,131 @@ class _HomeViewState extends State<HomeView> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : Stack(
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Stack(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 25, 15, 0),
-                                child: GridView.builder(
-                                    shrinkWrap: true,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Number of columns
-                                      crossAxisSpacing:
-                                          20.0, // Spacing between columns
-                                      mainAxisSpacing:
-                                          15.0, // Spacing between rows
-                                    ),
-                                    // itemCount: controller.boardModel?.boards?.length,
-                                    itemCount: controller
-                                        .subjectmodel?.subjects?.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      final randomImageUrl = imageUrls[
-                                          Random().nextInt(imageUrls.length)];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Get.to(BookView(
-                                            Subject: controller.subjectmodel
-                                                    ?.subjects?[index].name
-                                                    .toString() ??
-                                                '',
-                                          ));
-                                          // controller.getBooks(controller
-                                          //         .subjectmodel
-                                          //         ?.subjects?[index]
-                                          //         .name ??
-                                          //     '');
-                                        },
-                                        child: Container(
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      // Padding(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         horizontal: 15, vertical: 20),
+                      //     child: SizedBox(
+                      //       height: 120,
+                      //       child: ListView.builder(
+                      //         scrollDirection: Axis.horizontal,
+                      //         itemBuilder: (context, index) {
+                      //           return Padding(
+                      //             padding: const EdgeInsets.all(8.0),
+                      //             child: Container(
+                      //               height: 90,
+                      //               width: 90,
+                      //               decoration: BoxDecoration(
+                      //                   image: const DecorationImage(
+                      //                       fit: BoxFit.fitWidth,
+                      //                       image: AssetImage(
+                      //                           'assets/assignment1.png')),
+                      //                   color: Style.secondary,
+                      //                   borderRadius:
+                      //                       BorderRadius.circular(10)),
+                      //             ),
+                      //           );
+                      //         },
+                      //       ),
+                      //     )),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 15),
+                      //   child: Text(
+                      //     'Subject',
+                      //     style: GoogleFonts.poppins(
+                      //         fontSize: 20, fontWeight: FontWeight.w600),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                        child: GridView.builder(
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, // Number of columns
+                              crossAxisSpacing: 20.0, // Spacing between columns
+                              mainAxisSpacing: 15.0, // Spacing between rows
+                            ),
+                            // itemCount: controller.boardModel?.boards?.length,
+                            itemCount:
+                                controller.subjectmodel?.subjects?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final randomImageUrl =
+                                  imageUrls[Random().nextInt(imageUrls.length)];
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(BookView(
+                                    Subject: controller
+                                            .subjectmodel?.subjects?[index].name
+                                            .toString() ??
+                                        '',
+                                  ));
+                                  // controller.getBooks(controller
+                                  //         .subjectmodel
+                                  //         ?.subjects?[index]
+                                  //         .name ??
+                                  //     '');
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Style.secondary),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: 60,
                                           decoration: BoxDecoration(
-                                              shape: BoxShape.rectangle,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Style.secondary),
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: AssetImage(
-                                                            randomImageUrl)),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  controller
-                                                          .subjectmodel
-                                                          ?.subjects?[index]
-                                                          .name ??
-                                                      '-',
-                                                  style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
-                                              ]),
+                                            image: DecorationImage(
+                                                image:
+                                                    AssetImage(randomImageUrl)),
+                                          ),
                                         ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ],
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          controller.subjectmodel
+                                                  ?.subjects?[index].name ??
+                                              '-',
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ]),
+                                ),
+                              );
+                            }),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )),
           floatingActionButton: SpeedDial(
             animatedIcon: AnimatedIcons.view_list,
             children: [
               SpeedDialChild(
                 onTap: () {
-                  Get.to(CreateAssignment());
+                  Get.to(() => AddPaperDetailsScreen());
                 },
                 label: 'Create Paper',
                 child: Image.asset('assets/paper.png'),
               ),
               SpeedDialChild(
+                onTap: () {
+                  Get.to(() => ViewPaperScreen());
+                },
                 label: 'View Paper',
                 child: Image.asset('assets/viewpaper.png'),
               ),
               SpeedDialChild(
                 onTap: () {
-                  Get.to(const CreatePaper());
+                  //Get.to(const add());
                 },
                 label: 'Create Assignment',
                 child: Image.asset('assets/assignment1.png'),

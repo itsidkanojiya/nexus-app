@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nexus_app/module/chatgpt/chatgpt_page.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
-import 'package:nexus_app/module/paper/create_paper.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/module/view_page/view_book_page.dart';
 import 'package:nexus_app/theme/style.dart';
@@ -258,7 +257,7 @@ class _BookViewState extends State<BookView> {
                       padding: const EdgeInsets.only(bottom: 15, left: 15),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(() => const CreatePaper());
+                          //Get.to(() => const CreatePaper());
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),

@@ -125,7 +125,7 @@ class SignUpController extends GetxController {
       "name": name.text,
       "email": email.text,
       "number": number.text,
-      "user_type": AuthService.userType.value,
+      "user_type": AppService.userType.value,
       "std": selectedStandard.value,
       "school": school.text,
       "password": password.text,
@@ -135,13 +135,13 @@ class SignUpController extends GetxController {
       "name": name.text,
       "email": email.text,
       "number": number.text,
-      "user_type": AuthService.userType.value,
+      "user_type": AppService.userType.value,
       "std": selectedStandard.value,
       "school": school.text,
       "password": password.text,
     };
     print(map);
-    if (AuthService.userType.value == 'teacher') {
+    if (AppService.userType.value == 'teacher') {
       return AuthRepository().signup(map);
     }
     return AuthRepository().signup(map2);
@@ -149,7 +149,7 @@ class SignUpController extends GetxController {
 
   Future<bool> verifyOtp() async {
     var map = {
-      "email": AuthService.id,
+      "email": AppService.id,
       "otp": otp.text,
     };
     return AuthRepository().verifyOtp(map);

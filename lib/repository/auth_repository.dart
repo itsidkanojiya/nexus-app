@@ -25,14 +25,16 @@ class AuthRepository {
         if (body['is_number_verified'] == 1) {
           Loader().onSuccess(msg: 'Login successfully');
 
-          await AuthService.storage
+          await AppService.storage
               .write('token', body['token']); // Correctly store the token
-
+          await AppService.storage
+              .write('id', body['user']['id']); // Correctly store the id
+          print("add${AppService.id}");
           Get.offAll(() => const HomeView());
         } else {
-          await AuthService.storage
+          await AppService.storage
               .write('id', body['id']); // Correctly store the id
-          print("add${AuthService.id}");
+          print("add${AppService.id}");
           Loader().onSuccess(msg: 'OTP Sent');
           Get.offAll(() => OtpScreen());
         }
@@ -59,7 +61,7 @@ class AuthRepository {
       debugPrint('signIn body: $body');
       if (response.statusCode == 200 || response.statusCode == 201) {
         Loader().onSuccess(msg: 'OTP send successfully');
-        await AuthService.storage
+        await AppService.storage
             .write('id', body['id']); // Correctly store the id
 
         return true;
@@ -105,12 +107,12 @@ class AuthRepository {
   }
 
   Future<void> verifyToken() async {
-    // print("add${AuthService.token}");
+    //   print("add${AuthService.token}");
     try {
       final response = await http.post(Uri.parse('${Base.api}/verify-token'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UFT-8',
-            HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${AppService.token}"
           });
 
       final body = jsonDecode(response.body);
@@ -132,10 +134,10 @@ class AuthRepository {
     try {
       final response =
           await http.post(Uri.parse('${Base.api}/resend-otp'), body: {
-        "id": AuthService.id.toString()
+        "id": AppService.id.toString()
       }, headers: <String, String>{
         'Content-Type': 'application/json; charset=UFT-8',
-        HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
+        HttpHeaders.authorizationHeader: "Bearer ${AppService.token}"
       });
 
       final body = jsonDecode(response.body);
@@ -158,14 +160,14 @@ class AuthRepository {
       final response = await http.post(Uri.parse('${Base.api}/verify-otp'),
           body: map,
           headers: <String, String>{
-            HttpHeaders.authorizationHeader: "Bearer ${AuthService.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${AppService.token}"
           });
 
       final body = jsonDecode(response.body);
       debugPrint('verifyOtp body: $body');
       if (response.statusCode == 200) {
         Loader().onSuccess(msg: body['message']);
-        await AuthService.storage
+        await AppService.storage
             .write('token', body['token']); // Correctly store the token
 
         Get.offAll(() => const HomeView());

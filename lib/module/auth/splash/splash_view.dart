@@ -6,9 +6,9 @@ import 'package:nexus_app/theme/style.dart';
 
 class SplashView extends StatelessWidget {
   SplashView({Key? key}) : super(key: key);
-  var authController = Get.isRegistered<AuthService>()
-      ? Get.find<AuthService>()
-      : Get.put(AuthService());
+  var authController = Get.isRegistered<AppService>()
+      ? Get.find<AppService>()
+      : Get.put(AppService());
   var controller = Get.put(SplashController());
   @override
   Widget build(BuildContext context) {

@@ -29,7 +29,7 @@ class OtpController extends GetxController {
 
   Future<bool> verifyOtp() async {
     var map = {
-      "email": AuthService.id.toString(),
+      "email": AppService.id.toString(),
       "otp": otp.text,
     };
     return AuthRepository().verifyOtp(map);

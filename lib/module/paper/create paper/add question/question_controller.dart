@@ -1,10 +1,20 @@
 import 'package:get/get.dart';
+import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/models/question_model.dart';
+import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:nexus_app/services/auth_service.dart';
 
-class QuestionController extends GetxController {
+class AddQuestionController extends GetxController {
   var questions = <QuestionModel>[].obs;
-  var selectedQuestionType = 'MCQ'.obs;
+  RxBool isLoading = false.obs;
+  var questionTypeMarks = <String, int>{}.obs;
+  var paperData =
+      PaperHistoryModel().obs; // Use PaperHistoryModel instead of History
+
+  final allQuestions = <QuestionModel>[];
+  var selectedQuestionType = 'All'.obs;
   var questionTypes = [
+    'All',
     'MCQ',
     'Fill in the blanks',
     'True & false',
@@ -13,9 +23,22 @@ class QuestionController extends GetxController {
     'Long question'
   ];
 
+  @override
+  void onInit() {
+    fetchData();
+    super.onInit();
+  }
+
+  void fetchData() async {
+    isLoading(true);
+    questions.value = await PaperRepository().getQuestions();
+    isLoading(false);
+    allQuestions.addAll(questions.value);
+    initializeSelections();
+  }
+
   var questionSelection = <QuestionModel, bool>{}.obs;
   var answerVisibility = <QuestionModel, bool>{}.obs;
-  final allQuestions = <QuestionModel>[];
 
   final Map<String, String> typeDisplayNames = {
     'mcq': 'MCQ',
@@ -24,6 +47,7 @@ class QuestionController extends GetxController {
     'one_two_line': 'One two line questions',
     'short': 'Short question',
     'long': 'Long question',
+    'all': 'All',
   };
 
   void updateQuestions(List<QuestionModel> allQuestions) {
@@ -39,9 +63,18 @@ class QuestionController extends GetxController {
     }
   }
 
+  void setQuestionTypeMarks(String type, int marks) {
+    // Reverse lookup the key from the display name
+    String? questionTypeKey = typeDisplayNames.keys
+        .firstWhere((k) => typeDisplayNames[k] == type, orElse: () => '');
+    questionTypeMarks[questionTypeKey] = marks;
+  }
+
   void changeQuestionType(String newType) {
     selectedQuestionType.value = newType;
     switch (newType) {
+      case 'All':
+        questions.value = allQuestions.toList();
       case 'MCQ':
         questions.value = allQuestions.where((q) => q.type == 'mcq').toList();
         break;
@@ -110,5 +143,49 @@ class QuestionController extends GetxController {
       }
     });
     return displayCount;
+  }
+
+  Map<String, dynamic> generateSelectedQuestionsJson() {
+    Map<String, dynamic> selectedQuestions = {
+      "questions": [],
+      "id": AppService.paper_id.toString(),
+    };
+
+    Map<String, List<int>> groupedQuestions = {};
+
+    for (var question in questionSelection.keys) {
+      if (questionSelection[question] == true) {
+        String type = question.type ?? 'unknown';
+        if (!groupedQuestions.containsKey(type)) {
+          groupedQuestions[type] = [];
+        }
+        groupedQuestions[type]!
+            .add(question.id ?? 0); // Assuming question has an 'id' field
+      }
+    }
+
+    groupedQuestions.forEach((type, ids) {
+      selectedQuestions["questions"].add({
+        type: {
+          "question": ids,
+          "marks": questionTypeMarks[type] ?? 0, // Get the marks for the type
+        }
+      });
+    });
+
+    return selectedQuestions;
+  }
+
+  Future<bool> addQuestions() async {
+    return await PaperRepository().addQuestion(generateSelectedQuestionsJson());
+  }
+
+  void fetchPaperData(int paperId) async {
+    try {
+      var paperData =
+          await PaperRepository().getPaper(paperId); // Fetch PaperHistoryModel
+    } catch (e) {
+      print('Failed to load paper: $e');
+    }
   }
 }

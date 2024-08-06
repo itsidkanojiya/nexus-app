@@ -3,13 +3,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_model.dart';
-import 'package:nexus_app/models/question_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:nexus_app/services/auth_service.dart';
 
-class CreatePaperController extends GetxController {
+class AddPaperDetailsController extends GetxController {
   Rx<int> activeStep = 0.obs;
-  var questions = <QuestionModel>[];
   TextEditingController schoolNameController = TextEditingController();
   TextEditingController schoolAddressController = TextEditingController();
   TextEditingController gradeController = TextEditingController();
@@ -55,16 +54,10 @@ class CreatePaperController extends GetxController {
     super.onInit();
   }
 
-  String timeOfDayToString(TimeOfDay time) {
-    String hour = time.hour.toString().padLeft(2, '0');
-    String minute = time.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
-  }
-
   void fetchData() async {
     isLoading(true);
+
     boardModel = await BookRepository().getBoards();
-    questions = await PaperRepository().getQuestions();
     isLoading(false);
   }
 
@@ -85,40 +78,14 @@ class CreatePaperController extends GetxController {
       "std": selectedStandard.value,
       "timing": formattedTime,
       "date": formattedDate,
-      "division": divisionController.text,
+      "division": 1,
       "day": DateFormat('EEEE').format(dateSelected.value),
       "address": schoolAddressController.text,
       "board": selectedBoard.value?.name.toString(),
       "subject": 'test',
-      "uid": 12,
-      'division': '1'
+      "uid": AppService.id,
     };
     print(map);
     return await PaperRepository().addPaperDetails(map, schoolLogo.value!.path);
-  }
-
-  ///Second Screen Controller
-  var selectedQuestionType = 'MCQ'.obs;
-  var searchQuery = ''.obs;
-  var marks = 0.obs;
-
-  final List<String> questionTypes = [
-    'MCQ',
-    'Short',
-    'Long',
-    'One Two Liner',
-    'True False'
-  ];
-
-  void setQuestionType(String type) {
-    selectedQuestionType.value = type;
-  }
-
-  void setSearchQuery(String query) {
-    searchQuery.value = query;
-  }
-
-  void setMarks(int value) {
-    marks.value = value;
   }
 }

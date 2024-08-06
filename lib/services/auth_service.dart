@@ -1,10 +1,10 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:nexus_app/models/user_model.dart';
 
-class AuthService extends GetxService {
+class AppService extends GetxService {
   static Rx<UserModel?> userModel = Rx<UserModel?>(null);
   static RxInt indexValue = 0.obs;
   static RxInt subTeacherIndex = 0.obs;
@@ -16,14 +16,27 @@ class AuthService extends GetxService {
   // Get the token directly as it is stored
   static String? get token => storage.read('token');
   static int? get id => storage.read('id');
+  static int? get paper_id => storage.read('paper_id');
 
-  // Retrieve the user ID
-  static int? get userId {
-    final storedUser = storage.read('userModel');
-    if (storedUser != null) {
-      final userMap = jsonDecode(storedUser);
-      return UserModel.fromJson(userMap).user?.id;
+  String timeOfDayToString(TimeOfDay time) {
+    String hour = time.hour.toString().padLeft(2, '0');
+    String minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  TimeOfDay stringToTimeOfDay(String time) {
+    final format = DateFormat.jm(); //"6:00 AM"
+    return TimeOfDay.fromDateTime(format.parse(time));
+  }
+
+  DateTime stringToDate(String dateString) {
+    try {
+      // Adjust the format according to your date string format
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      return formatter.parse(dateString);
+    } catch (e) {
+      print('Error parsing date: $e');
+      return DateTime.now(); // Return current date if parsing fails
     }
-    return null;
   }
 }

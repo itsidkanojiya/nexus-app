@@ -60,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: '${AuthService.userId}\n',
+                    text: '${AppService.token}\n',
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20.0,

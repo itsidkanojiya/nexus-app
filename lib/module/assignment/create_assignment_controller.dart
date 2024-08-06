@@ -44,12 +44,6 @@ class CreateAssignmentControlller extends GetxController {
     super.onInit();
   }
 
-  String timeOfDayToString(TimeOfDay time) {
-    String hour = time.hour.toString().padLeft(2, '0');
-    String minute = time.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
-  }
-
   void fetchData() async {
     isLoading(true);
     boardModel = await BookRepository().getBoards();
@@ -68,18 +62,18 @@ class CreateAssignmentControlller extends GetxController {
     String formattedTime =
         timeFormat.format(convertTimeOfDayToDateTime(selectedTime.value));
     String formattedDate = dateFormat.format(dateSelected.value);
+    //   "division": divisionController.text,
     var map = {
       "school_name": schoolNameController.text,
       "std": selectedStandard.value,
       "timing": formattedTime,
       "date": formattedDate,
-      "division": divisionController.text,
       "day": DateFormat('EEEE').format(dateSelected.value),
       "address": schoolAddressController.text,
       "board": selectedBoard.value?.name.toString(),
       "subject": 'test',
       "uid": 12,
-      'division': '1'
+      "division": "djk",
     };
     print(map);
     return await PaperRepository().addPaperDetails(map, schoolLogo.value!.path);

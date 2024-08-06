@@ -176,7 +176,7 @@ class SignUpView extends StatelessWidget {
                 ),
               ),
             ),
-            if (AuthService.userType.value == 'teacher')
+            if (AppService.userType.value == 'teacher')
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
