@@ -21,24 +21,18 @@ class HomeController extends GetxController {
   }
 
   void fetchData() async {
-    // prefsManager = await SharedPreferencesManager.getInstance();
     getStorageServices = GetStorageServices();
     isLoading(true);
-    print(isLoading.toString());
 
     subjectmodel = await BookRepository().getSubject();
 
     isLoading(false);
-
-    print(isLoading.toString());
   }
 
-  void getBooks(String subjet) async {
+  void getBooks(String subject) async {
     isBookLoading(true);
-    bookmodel = await BookRepository().getBooks(subjet);
+    bookmodel = await BookRepository().getBooks(subject);
     isBookLoading(false);
-
-    print(isLoading.toString());
   }
 
   void setSelected(String value) {
@@ -49,6 +43,5 @@ class HomeController extends GetxController {
     'GSEB',
     'NCERT',
     'MSHB',
-    // Add more options as needed
   ];
 }

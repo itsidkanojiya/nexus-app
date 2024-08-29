@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nexus_app/module/chatgpt/chatgpt_page.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/module/view_page/view_book_page.dart';
@@ -251,63 +250,8 @@ class _BookViewState extends State<BookView> {
                       },
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 15, left: 15),
-                      child: GestureDetector(
-                        onTap: () {
-                          //Get.to(() => const CreatePaper());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.0),
-                            color: const Color(0xff74AA9C),
-                          ),
-                          child: const Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add_to_photos_rounded,
-                                size: 24,
-                                color: Style.secondary,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                'Create Paper',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               )),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            Get.to(() => const ChatPage());
-          },
-          child: Container(
-            height: 50,
-            width: 50,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xff74AA9C),
-            ),
-            child: const Icon(
-              Icons.wechat_rounded,
-              size: 30,
-              color: Style.secondary,
-            ),
-          ),
-        ),
       ),
     );
   }

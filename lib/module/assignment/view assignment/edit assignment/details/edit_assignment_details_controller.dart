@@ -8,7 +8,7 @@ import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
 import 'package:nexus_app/services/app_service.dart';
 
-class EditPaperDetailsController extends GetxController {
+class EditAssignmentDetailsController extends GetxController {
   Rx<int> activeStep = 0.obs;
   TextEditingController schoolNameController = TextEditingController();
   TextEditingController schoolAddressController = TextEditingController();
@@ -95,7 +95,7 @@ class EditPaperDetailsController extends GetxController {
     );
   }
 
-  Future<bool> editPaperDetails(BuildContext context) async {
+  Future<bool> editAssignmentDetails(BuildContext context) async {
     final timeFormat = DateFormat('h:mm'); // For example, 3:00
     final dateFormat = DateFormat('yyyy-MM-dd'); // For example, 2024-05-31
 

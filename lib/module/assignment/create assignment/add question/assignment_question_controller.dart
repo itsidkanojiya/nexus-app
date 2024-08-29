@@ -1,14 +1,15 @@
 import 'package:get/get.dart';
 import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/models/question_model.dart';
+import 'package:nexus_app/repository/assignment_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
 import 'package:nexus_app/services/app_service.dart';
 
-class AddQuestionController extends GetxController {
+class AddAssignmentQuestionController extends GetxController {
   var questions = <QuestionModel>[].obs;
   RxBool isLoading = false.obs;
   var questionTypeMarks = <String, int>{}.obs;
-  var paperData =
+  var assignmentData =
       HistoryModel().obs; // Use PaperHistoryModel instead of History
 
   final allQuestions = <QuestionModel>[];
@@ -148,7 +149,7 @@ class AddQuestionController extends GetxController {
   Map<String, dynamic> generateSelectedQuestionsJson() {
     Map<String, dynamic> selectedQuestions = {
       "questions": [],
-      "id": AppService.paper_id.toString(),
+      "id": AppService.assignment_id.toString(),
     };
 
     Map<String, List<int>> groupedQuestions = {};
@@ -180,13 +181,14 @@ class AddQuestionController extends GetxController {
     return await PaperRepository().addQuestion(generateSelectedQuestionsJson());
   }
 
-  void fetchPaperData(int paperId) async {
+  void fetchAssignmentData(int assignmentId) async {
     try {
-      paperData.value = await PaperRepository().getPaper(paperId) ??
-          HistoryModel(); // Fetch PaperHistoryModel
-      print('${paperData.value.history?[0].address}');
+      assignmentData.value =
+          await AssignmentRepository().getAssignment(assignmentId) ??
+              HistoryModel(); // Fetch PaperHistoryModel
+      print('${assignmentData.value.history?[0].address}');
     } catch (e) {
-      print('Failed to load paper: $e');
+      print('Failed to load assignment: $e');
     }
   }
 }

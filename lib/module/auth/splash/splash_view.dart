@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/auth/splash/splash_controller.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class SplashView extends StatelessWidget {
-  SplashView({Key? key}) : super(key: key);
+  SplashView({super.key});
   var authController = Get.isRegistered<AppService>()
       ? Get.find<AppService>()
       : Get.put(AppService());

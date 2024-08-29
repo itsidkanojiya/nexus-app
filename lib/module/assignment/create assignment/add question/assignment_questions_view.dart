@@ -3,18 +3,18 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nexus_app/models/paper_history.dart';
-import 'package:nexus_app/module/paper/create%20paper/add%20question/add_mark_paper.dart';
-import 'package:nexus_app/module/paper/create%20paper/pdf%20generate/pdf_generator.dart';
+import 'package:nexus_app/module/assignment/create%20assignment/pdf%20generate/assignment_pdf_generator.dart';
 import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/style.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import 'question_controller.dart';
+import 'assignment_question_controller.dart';
 
-class AddQuestionView extends StatelessWidget {
-  final AddQuestionController controller = Get.put(AddQuestionController());
+class AddAssignmetQuestionView extends StatelessWidget {
+  final AddAssignmentQuestionController controller =
+      Get.put(AddAssignmentQuestionController());
 
-  AddQuestionView({
+  AddAssignmetQuestionView({
     super.key,
   });
 
@@ -82,7 +82,7 @@ class AddQuestionView extends StatelessWidget {
                   int selectedCount = controller.getSelectedQuestionCount();
                   return GestureDetector(
                     onTap: () {
-                      Get.to(() => AddMarksPage());
+                      //     Get.to(() => AddMarksPage());
                     },
                     child: CircleAvatar(
                       radius: 20,
@@ -303,13 +303,14 @@ class AddQuestionView extends StatelessWidget {
                             controller.generateSelectedQuestionsJson();
                         print(selectedQuestionsJson);
 
-                        // Add questions and fetch updated paper data
+                        // Add questions and fetch updated assignmet data
                         controller.addQuestions();
-                        controller.fetchPaperData(AppService.paper_id ?? 0);
+                        controller
+                            .fetchAssignmentData(AppService.assignment_id ?? 0);
 
                         // Generate PDF
-                        final pdf = await PDFGenerator(
-                                controller.paperData.value.history?[0] ??
+                        final pdf = await AssignmentPDFGenerator(
+                                controller.assignmentData.value.history?[0] ??
                                     History())
                             .generatePDF();
                         final bytes = await pdf.save();

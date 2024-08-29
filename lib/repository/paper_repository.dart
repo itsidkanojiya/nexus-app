@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/models/question_model.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/utils/Base.dart';
 
@@ -38,7 +38,7 @@ class PaperRepository {
     }
   }
 
-  Future<PaperHistoryModel?> getPaper(int id) async {
+  Future<HistoryModel?> getPaper(int id) async {
     try {
       final response = await http.get(
           Uri.parse('${Base.api}/get-paper-history?paper_id=$id'),
@@ -50,7 +50,7 @@ class PaperRepository {
       final body = jsonDecode(response.body);
       debugPrint('getPaper body: $body');
       if (response.statusCode == 200) {
-        return PaperHistoryModel.fromJson(body);
+        return HistoryModel.fromJson(body);
       }
     } catch (e) {
       debugPrint('Error While getPaper() ${e.toString()}');
@@ -59,7 +59,7 @@ class PaperRepository {
     return null;
   }
 
-  Future<PaperHistoryModel?> getPaperHistory() async {
+  Future<HistoryModel?> getPaperHistory() async {
     try {
       final response = await http.get(
           Uri.parse('${Base.api}/get-paper-history'),
@@ -71,7 +71,7 @@ class PaperRepository {
       final body = jsonDecode(response.body);
       //   debugPrint('getPaperHistory body: $body');
       if (response.statusCode == 200) {
-        return PaperHistoryModel.fromJson(body);
+        return HistoryModel.fromJson(body);
       }
     } catch (e) {
       debugPrint('Error While getPaperHistory() ${e.toString()}');

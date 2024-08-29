@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/repository/auth_repository.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/services/app_service.dart';
 
 class OtpController extends GetxController {
   var isResendButtonEnabled = false.obs;

@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  persistent_bottom_nav_bar: ^5.0.2
+  persistent_bottom_nav_bar: ^6.2.1
   get: ^4.6.6 
 
 

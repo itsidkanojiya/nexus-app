@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/services/app_service.dart';
 
 class AddPaperDetailsController extends GetxController {
   Rx<int> activeStep = 0.obs;

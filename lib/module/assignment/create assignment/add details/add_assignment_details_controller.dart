@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_model.dart';
+import 'package:nexus_app/repository/assignment_repository.dart';
 import 'package:nexus_app/repository/book_repository.dart';
-import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:nexus_app/services/app_service.dart';
 
-class CreateAssignmentControlller extends GetxController {
+class AddAssignmentDetailsController extends GetxController {
   Rx<int> activeStep = 0.obs;
   TextEditingController schoolNameController = TextEditingController();
   TextEditingController schoolAddressController = TextEditingController();
@@ -23,6 +24,7 @@ class CreateAssignmentControlller extends GetxController {
   Rxn<XFile> schoolLogo = Rxn<XFile>(null);
 
   var selectedStandard = '1'.obs;
+  var selectedType = 'MCQ'.obs;
   @override
   final List<String> standardLevels = [
     '1',
@@ -38,6 +40,14 @@ class CreateAssignmentControlller extends GetxController {
     '11',
     '12',
   ];
+  final List<String> questionType = [
+    'MCQ',
+    'Fill in the blanks',
+    'True & false',
+    'One two line questions',
+    'Short question',
+    'Long question'
+  ];
   @override
   void onInit() {
     fetchData();
@@ -46,11 +56,12 @@ class CreateAssignmentControlller extends GetxController {
 
   void fetchData() async {
     isLoading(true);
+
     boardModel = await BookRepository().getBoards();
     isLoading(false);
   }
 
-  Future<bool> addPaperDetails(BuildContext context) async {
+  Future<bool> addAssignmentDetails(BuildContext context) async {
     final timeFormat = DateFormat('h:mm'); // For example, 3:00
     final dateFormat = DateFormat('yyyy-MM-dd'); // For example, 2024-05-31
     DateTime convertTimeOfDayToDateTime(TimeOfDay time) {
@@ -62,45 +73,20 @@ class CreateAssignmentControlller extends GetxController {
     String formattedTime =
         timeFormat.format(convertTimeOfDayToDateTime(selectedTime.value));
     String formattedDate = dateFormat.format(dateSelected.value);
-    //   "division": divisionController.text,
     var map = {
       "school_name": schoolNameController.text,
       "std": selectedStandard.value,
       "timing": formattedTime,
       "date": formattedDate,
+      "division": 1,
       "day": DateFormat('EEEE').format(dateSelected.value),
       "address": schoolAddressController.text,
       "board": selectedBoard.value?.name.toString(),
       "subject": 'test',
-      "uid": 12,
-      "division": "djk",
+      "uid": AppService.id,
     };
     print(map);
-    return await PaperRepository().addPaperDetails(map, schoolLogo.value!.path);
-  }
-
-  ///Second Screen Controller
-  var selectedQuestionType = 'MCQ'.obs;
-  var searchQuery = ''.obs;
-  var marks = 0.obs;
-
-  final List<String> questionTypes = [
-    'MCQ',
-    'Short',
-    'Long',
-    'One Two Liner',
-    'True False'
-  ];
-
-  void setQuestionType(String type) {
-    selectedQuestionType.value = type;
-  }
-
-  void setSearchQuery(String query) {
-    searchQuery.value = query;
-  }
-
-  void setMarks(int value) {
-    marks.value = value;
+    return await AssignmentRepository()
+        .addAssignmentDetails(map, schoolLogo.value!.path);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/auth/signup/signup_view.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class SelectUserView extends StatelessWidget {

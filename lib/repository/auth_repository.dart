@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:nexus_app/module/auth/login/login_view.dart';
 import 'package:nexus_app/module/auth/login/otp_screen.dart';
 import 'package:nexus_app/module/home/home_page.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/module/home/navigation_view.dart';
+import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/utils/Base.dart';
 
@@ -30,7 +31,7 @@ class AuthRepository {
           await AppService.storage
               .write('id', body['user']['id']); // Correctly store the id
           print("add${AppService.id}");
-          Get.offAll(() => const HomeView());
+          Get.offAll(() => const NavigationView());
         } else {
           await AppService.storage
               .write('id', body['id']); // Correctly store the id
@@ -118,7 +119,7 @@ class AuthRepository {
       final body = jsonDecode(response.body);
       debugPrint('verifyToken body: $body');
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.to(() => const HomeView());
+        Get.to(() => const NavigationView());
       } else {
         Get.to(() => LoginView());
       }

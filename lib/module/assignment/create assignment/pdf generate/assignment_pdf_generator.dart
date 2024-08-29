@@ -6,11 +6,12 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-class PDFGenerator {
+class AssignmentPDFGenerator {
   final History paperHistory;
   final bool showAnswers;
   final tickEmoji = String.fromCharCode(0x2705);
-  PDFGenerator(this.paperHistory, {this.showAnswers = false});
+
+  AssignmentPDFGenerator(this.paperHistory, {this.showAnswers = false});
 
   Future<pw.Document> generatePDF() async {
     final pdf = pw.Document();
@@ -30,18 +31,15 @@ class PDFGenerator {
       }
     }
 
-    // Define sections and their titles
     final sections = {
-      'mcq': 'Multiple Choice Questions (MCQs).Tick the correct options.',
+      'mcq': 'Multiple Choice Questions (MCQs). Tick the correct options.',
       'blanks': 'Fill in the blanks in each sentence with an appropriate word.',
       'long': 'Long Answer Questions.',
       'true_false': 'Write (T) for True and (F) for False.',
       'onetwo': 'Answer the following questions in one or two sentences.',
       'short': 'Short Answer Questions.',
-      // Add more sections as needed
     };
 
-    // Start building PDF
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
@@ -49,7 +47,6 @@ class PDFGenerator {
         build: (pw.Context context) {
           int alphabetIndex = 0;
           return [
-            // Header with logo and details
             pw.Row(
               children: [
                 if (logo != null) pw.Image(logo, width: 60, height: 60),
@@ -75,7 +72,6 @@ class PDFGenerator {
             ),
             pw.SizedBox(height: 20),
             pw.Divider(),
-            // Display paper details
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -121,12 +117,10 @@ class PDFGenerator {
               ],
             ),
             pw.SizedBox(height: 20),
-            // Iterate through sections and questions
             ...sections.entries.map((entry) {
               final type = entry.key;
               final title = entry.value;
 
-              // Safely access questions based on type
               List<McqQuestion> sectionQuestions = [];
               if (type == 'mcq' && paperHistory.questions!.mcq != null) {
                 sectionQuestions = paperHistory.questions!.mcq!.questions ?? [];
@@ -152,13 +146,11 @@ class PDFGenerator {
                     paperHistory.questions!.short!.questions ?? [];
               }
 
-              final alphabet =
-                  '${String.fromCharCode(65 + alphabetIndex)})'; // 'A' + index and add closing parenthesis
+              final alphabet = '${String.fromCharCode(65 + alphabetIndex)})';
               alphabetIndex++;
 
               if (sectionQuestions.isEmpty) {
-                return pw.SizedBox
-                    .shrink(); // Do not display the section if there are no questions
+                return pw.SizedBox.shrink();
               }
 
               return pw.Column(
@@ -240,7 +232,6 @@ class PDFGenerator {
                                     ))
                                 .toList(),
                           ),
-                          // Conditionally include answers
                           if (showAnswers && question.answer != null)
                             pw.Padding(
                               padding: const pw.EdgeInsets.only(top: 5),
@@ -254,6 +245,19 @@ class PDFGenerator {
                               ),
                             ),
                         ],
+                        // Add answer lines based on question type
+                        if (type == 'onetwo') ...[
+                          pw.SizedBox(height: 10),
+                          _drawLines(2),
+                        ],
+                        if (type == 'short') ...[
+                          pw.SizedBox(height: 10),
+                          _drawLines(4),
+                        ],
+                        if (type == 'long') ...[
+                          pw.SizedBox(height: 10),
+                          _drawLines(6),
+                        ],
                       ],
                     );
                   }),
@@ -266,6 +270,20 @@ class PDFGenerator {
       ),
     );
 
-    return pdf; // Return pw.Document directly
+    return pdf;
+  }
+
+  // Helper method to draw answer lines
+  pw.Widget _drawLines(int numLines) {
+    return pw.Column(
+      children: List.generate(numLines, (_) {
+        return pw.Column(
+          children: [
+            pw.Divider(),
+            pw.SizedBox(height: 5),
+          ],
+        );
+      }),
+    );
   }
 }

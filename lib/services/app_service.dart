@@ -17,6 +17,7 @@ class AppService extends GetxService {
   static String? get token => storage.read('token');
   static int? get id => storage.read('id');
   static int? get paper_id => storage.read('paper_id');
+  static int? get assignment_id => storage.read('assignment_id');
 
   String timeOfDayToString(TimeOfDay time) {
     String hour = time.hour.toString().padLeft(2, '0');

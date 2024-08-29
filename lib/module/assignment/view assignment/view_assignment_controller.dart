@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/module/paper/create%20paper/pdf%20generate/pdf_generator.dart';
-import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:nexus_app/repository/assignment_repository.dart';
 
-class ViewPaperoller extends GetxController {
-  HistoryModel? paperHistoryModel;
+class ViewAssignmentController extends GetxController {
+  HistoryModel? assignmentHistoryModel;
   var isLoading = false.obs;
 
   var paperData = History().obs;
@@ -35,13 +35,14 @@ class ViewPaperoller extends GetxController {
 
   void fetchPaperHistory() async {
     isLoading(true);
-    paperHistoryModel = await PaperRepository().getPaperHistory();
+    assignmentHistoryModel =
+        await AssignmentRepository().getAssignmentHistory();
     isLoading(false);
   }
 
   void fetchPaperData(int paperId) async {
     try {
-      var data = paperHistoryModel?.history?.firstWhere(
+      var data = assignmentHistoryModel?.history?.firstWhere(
           (element) => element.id == paperId,
           orElse: () => History()); // Fetch a single History or null
       paperData(data); // Assign History to paperData

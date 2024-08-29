@@ -1,9 +1,9 @@
-class PaperHistoryModel {
+class HistoryModel {
   List<History>? history;
 
-  PaperHistoryModel({this.history});
+  HistoryModel({this.history});
 
-  PaperHistoryModel.fromJson(Map<String, dynamic> json) {
+  HistoryModel.fromJson(Map<String, dynamic> json) {
     if (json['history'] != null) {
       history = <History>[];
       json['history'].forEach((v) {

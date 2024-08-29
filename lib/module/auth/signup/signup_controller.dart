@@ -4,7 +4,7 @@ import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/auth_repository.dart';
 import 'package:nexus_app/repository/book_repository.dart';
-import 'package:nexus_app/services/auth_service.dart';
+import 'package:nexus_app/services/app_service.dart';
 
 class SignUpController extends GetxController {
   SubjectModel? subjectModel;

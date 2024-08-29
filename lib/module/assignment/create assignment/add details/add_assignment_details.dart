@@ -6,26 +6,26 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
 import 'package:nexus_app/models/boards_model.dart';
-import 'package:nexus_app/module/paper/create%20paper/add%20details/add_paper_details_controller.dart';
-import 'package:nexus_app/module/paper/create%20paper/add%20question/questions_view.dart';
+import 'package:nexus_app/module/assignment/create%20assignment/add%20details/add_assignment_details_controller.dart';
+import 'package:nexus_app/module/assignment/create%20assignment/add%20question/assignment_questions_view.dart';
 import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/theme/style.dart';
 
-class AddPaperDetailsScreen extends StatelessWidget {
-  AddPaperDetailsScreen({
+class AddAssignmentDetailsScreen extends StatelessWidget {
+  AddAssignmentDetailsScreen({
     super.key,
   });
   final formKey = GlobalKey<FormState>();
   ImagePicker picker = ImagePicker();
-  var controller = Get.isRegistered<AddPaperDetailsController>()
-      ? Get.find<AddPaperDetailsController>()
-      : Get.put(AddPaperDetailsController());
+  var controller = Get.isRegistered<AddAssignmentDetailsController>()
+      ? Get.find<AddAssignmentDetailsController>()
+      : Get.put(AddAssignmentDetailsController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Paper Details"),
+        title: const Text("Add Assignment Details"),
       ),
       body: Form(
         key: formKey,
@@ -260,7 +260,7 @@ class AddPaperDetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(2, 10, 0, 3.0),
                   child: RichText(
                       text: const TextSpan(
-                          text: 'Paper timing',
+                          text: 'Assignment timing',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -437,9 +437,10 @@ class AddPaperDetailsScreen extends StatelessWidget {
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
                       if (controller.schoolLogo.value?.path != null) {
-                        bool next = await controller.addPaperDetails(context);
+                        bool next =
+                            await controller.addAssignmentDetails(context);
                         if (next == true) {
-                          Get.offAll(AddQuestionView());
+                          Get.offAll(AddAssignmetQuestionView());
                         }
                       }
                       Loader().onError(msg: 'Please add school logo');
