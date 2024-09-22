@@ -186,7 +186,7 @@ class AddAssignmentQuestionController extends GetxController {
       assignmentData.value =
           await AssignmentRepository().getAssignment(assignmentId) ??
               HistoryModel(); // Fetch PaperHistoryModel
-      print('${assignmentData.value.history?[0].address}');
+      print('${assignmentData.value.history?[0].date}');
     } catch (e) {
       print('Failed to load assignment: $e');
     }

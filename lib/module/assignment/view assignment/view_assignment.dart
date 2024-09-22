@@ -251,44 +251,182 @@ class _ViewAssignmentScreenState extends State<ViewAssignmentScreen> {
                                                                         .paperData
                                                                         .value)
                                                                 .generatePDF();
-                                                        final bytes =
+                                                        controller.pdfBytes
+                                                                .value =
                                                             await pdf.save();
                                                         Get.back();
                                                         // Navigate to PDF preview screen using Get.to
                                                         Get.to(
-                                                          Scaffold(
-                                                            appBar: AppBar(
-                                                              title: Obx(
-                                                                  () =>
-                                                                      SizedBox(
-                                                                        height:
-                                                                            25,
-                                                                        width:
-                                                                            40,
+                                                          SafeArea(
+                                                            child: Scaffold(
+                                                              appBar: AppBar(
+                                                                toolbarHeight:
+                                                                    isSearch
+                                                                        ? 150
+                                                                        : 80,
+                                                                leading:
+                                                                    const SizedBox(),
+                                                                flexibleSpace:
+                                                                    Column(
+                                                                        children: [
+                                                                      Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .fromLTRB(
+                                                                            12,
+                                                                            0,
+                                                                            12,
+                                                                            0),
                                                                         child:
-                                                                            FittedBox(
+                                                                            Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            // GestureDetector(
+                                                                            //   onTap: () {
+                                                                            //     Get.to(() => const ProfilePage());
+                                                                            //   },
+                                                                            //   child: Padding(
+                                                                            //     padding: const EdgeInsets.only(left: 0, top: 2),
+                                                                            //     child: CircleAvatar(
+                                                                            //       radius: 22,
+                                                                            //       backgroundImage: const NetworkImage(
+                                                                            //         'https://images.unsplash.com/photo-1547721064-da6cfb341d50',
+                                                                            //       ),
+                                                                            //       backgroundColor: Colors.grey[300],
+                                                                            //     ),
+                                                                            //   ),
+                                                                            // ),
+                                                                            SizedBox(
+                                                                              height: 80,
+                                                                              child: Center(
+                                                                                  child: Text(
+                                                                                'Assignment',
+                                                                                style: GoogleFonts.aBeeZee(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                              )),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.end,
+                                                                          children: [
+                                                                            (isSearch == true)
+                                                                                ? Padding(
+                                                                                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(12.0),
+                                                                                            color: Colors.white,
+                                                                                          ),
+                                                                                          child: const TextField(
+                                                                                            decoration: InputDecoration(
+                                                                                              hintText: 'Search',
+                                                                                              prefixIcon: Icon(Icons.search),
+                                                                                              border: InputBorder.none,
+                                                                                              contentPadding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 10.0),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        const SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                            Container(
+                                                                                              padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+                                                                                              width: MediaQuery.of(context).size.width * 0.28,
+                                                                                              decoration: BoxDecoration(
+                                                                                                borderRadius: BorderRadius.circular(12.0),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  )
+                                                                                : const SizedBox(),
+                                                                          ]),
+                                                                    ]),
+                                                                elevation: 9.0,
+                                                                shadowColor:
+                                                                    Colors
+                                                                        .black,
+                                                                shape:
+                                                                    const RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .vertical(
+                                                                    bottom: Radius
+                                                                        .circular(
+                                                                            20),
+                                                                  ),
+                                                                ),
+                                                                backgroundColor:
+                                                                    Style
+                                                                        .secondary,
+                                                              ),
+                                                              body: Obx(() =>
+                                                                  Stack(
+                                                                      children: [
+                                                                        SfPdfViewer
+                                                                            .memory(
+                                                                          controller
+                                                                              .pdfBytes
+                                                                              .value,
+                                                                        ),
+                                                                        Positioned(
+                                                                          bottom:
+                                                                              10,
                                                                           child:
-                                                                              Switch(
-                                                                            value:
-                                                                                controller.showAnswers.value,
-                                                                            onChanged:
-                                                                                (bool value) {
-                                                                              controller.showAnswers.value = value;
-                                                                              // Regenerate the PDF with the new showAnswers value
-                                                                              controller.generateAndShowPDF();
-                                                                            },
+                                                                              SizedBox(
+                                                                            width:
+                                                                                MediaQuery.of(context).size.width, // Full width of the screen
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                              children: [
+                                                                                ElevatedButton(
+                                                                                  child: const Row(
+                                                                                    children: [
+                                                                                      Icon(Icons.download),
+                                                                                      SizedBox(
+                                                                                        width: 3,
+                                                                                      ),
+                                                                                      Text('Download')
+                                                                                    ],
+                                                                                  ),
+                                                                                  onPressed: () {
+                                                                                    controller.downloadPDF();
+                                                                                  },
+                                                                                ),
+                                                                                ElevatedButton(
+                                                                                  child: const Row(
+                                                                                    children: [
+                                                                                      Icon(Icons.remove_red_eye_sharp),
+                                                                                      SizedBox(
+                                                                                        width: 3,
+                                                                                      ),
+                                                                                      Text('Show Answer')
+                                                                                    ],
+                                                                                  ),
+                                                                                  onPressed: () {
+                                                                                    controller.showAnswers.value = !controller.showAnswers.value;
+                                                                                    controller.generateAndShowPDF();
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      )),
-                                                              actions: const [],
+                                                                      ])),
                                                             ),
-                                                            body: Obx(() =>
-                                                                SfPdfViewer
-                                                                    .memory(
-                                                                  controller
-                                                                      .pdfBytes
-                                                                      .value,
-                                                                )),
                                                           ),
                                                         );
                                                       },

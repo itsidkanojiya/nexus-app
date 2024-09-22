@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'question_controller.dart';
 
 class AddMarksPage extends StatelessWidget {
-  final AddQuestionController controller = Get.find<AddQuestionController>();
+  var controller = Get.isRegistered<AddQuestionController>()
+      ? Get.find<AddQuestionController>()
+      : Get.put(AddQuestionController());
 
   AddMarksPage({super.key});
 

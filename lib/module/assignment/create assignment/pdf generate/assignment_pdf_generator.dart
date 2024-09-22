@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:nexus_app/models/paper_history.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -83,7 +82,7 @@ class AssignmentPDFGenerator {
                       style: pw.TextStyle(font: titleFont, fontSize: 12),
                     ),
                     pw.Text(
-                      'DATE: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(paperHistory.date!))}',
+                      "DATE: ${paperHistory.date ?? ''} ",
                       style: pw.TextStyle(font: titleFont, fontSize: 12),
                     ),
                   ],

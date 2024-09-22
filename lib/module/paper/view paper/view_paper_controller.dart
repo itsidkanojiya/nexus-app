@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/module/paper/create%20paper/pdf%20generate/pdf_generator.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:printing/printing.dart';
 
 class ViewPaperoller extends GetxController {
   HistoryModel? paperHistoryModel;
@@ -24,6 +25,25 @@ class ViewPaperoller extends GetxController {
   // Call this method to generate the initial PDF
   void generateInitialPDF() {
     generateAndShowPDF();
+  }
+
+  Future<void> downloadPDF() async {
+    // Ensure the PDF is generated first
+    if (pdfBytes.value.isNotEmpty) {
+      try {
+        // Use GetX or any other storage mechanism to download the file.
+        final pdfName = "paper_${paperData.value.id}.pdf"; // Naming the PDF
+        final result =
+            await Printing.sharePdf(bytes: pdfBytes.value, filename: pdfName);
+
+        // Handle download success/failure, if required.
+        print("Failed to download PDF.");
+      } catch (e) {
+        print("Error downloading PDF: $e");
+      }
+    } else {
+      print("No PDF to download. Generate it first.");
+    }
   }
 
   @override

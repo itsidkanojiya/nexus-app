@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
-import 'package:nexus_app/models/subject_model.dart';
-import 'package:nexus_app/module/edit_profile/edit_profile_controller.dart';
+import 'package:nexus_app/module/profile/edit_profile/edit_profile_controller.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -141,11 +138,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   )),
               GestureDetector(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(5,0,5,0),
+                  margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                   width: double.infinity,
                   height: 55,
                   decoration: BoxDecoration(
@@ -154,7 +149,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: const Center(
                       child: Text(
                     'Update',
-                    style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w600),
                   )),
                 ),
               )

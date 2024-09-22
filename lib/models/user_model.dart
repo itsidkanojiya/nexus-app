@@ -31,47 +31,50 @@ class User {
   int? std;
   String? school;
   String? subject;
-  Null emailVerifiedAt;
+  dynamic emailVerifiedAt; // Can be either null or DateTime
   int? isVerified;
   int? isNumberVerified;
-  int? otp;
+  dynamic otp; // Can be null
   String? createdAt;
   String? updatedAt;
-  Null deletedAt;
+  dynamic deletedAt; // Can be null
 
-  User(
-      {this.id,
-      this.name,
-      this.email,
-      this.number,
-      this.userType,
-      this.std,
-      this.school,
-      this.subject,
-      this.emailVerifiedAt,
-      this.isVerified,
-      this.isNumberVerified,
-      this.otp,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt});
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.number,
+    this.userType,
+    this.std,
+    this.school,
+    this.subject,
+    this.emailVerifiedAt,
+    this.isVerified,
+    this.isNumberVerified,
+    this.otp,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+  });
 
+  // Modify the fromJson method to handle the 'user' key
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    email = json['email'];
-    number = json['number'];
-    userType = json['user_type'];
-    std = json['std'];
-    school = json['school'];
-    subject = json['subject'];
-    emailVerifiedAt = json['email_verified_at'];
-    isVerified = json['is_verified'];
-    isNumberVerified = json['is_number_verified'];
-    otp = json['otp'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    var userData = json['user']; // Access the nested 'user' key
+    id = userData['id'];
+    name = userData['name'];
+    email = userData['email'];
+    number = userData['number'];
+    userType = userData['user_type'];
+    std = userData['std'];
+    school = userData['school'];
+    subject = userData['subject'];
+    emailVerifiedAt = userData['email_verified_at'];
+    isVerified = userData['is_verified'];
+    isNumberVerified = userData['is_number_verified'];
+    otp = userData['otp'];
+    createdAt = userData['created_at'];
+    updatedAt = userData['updated_at'];
+    deletedAt = userData['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {

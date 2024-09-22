@@ -184,4 +184,38 @@ class AuthRepository {
       return false;
     }
   }
+
+  Future<bool> changePassword(Map<String, dynamic> map) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer ${AppService.token}"
+      };
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${Base.api}/chanege-password'));
+
+      request.headers.addAll(headers);
+
+      var stringMap = map.map((key, value) => MapEntry(key, value.toString()));
+
+      // Add other form data to fields
+      stringMap.forEach((key, value) {
+        request.fields[key] = value;
+      });
+
+      http.StreamedResponse response = await request.send();
+      var res = await response.stream.bytesToString();
+      final body = jsonDecode(res);
+      debugPrint('changePassword body: $body');
+      if (response.statusCode == 201) {
+        return true;
+      }
+    } catch (e) {
+      Loader().onError(msg: 'Something went wrong');
+      debugPrint('Error While changePassword() ${e.toString()}');
+      return false;
+    }
+
+    return false;
+  }
 }

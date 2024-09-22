@@ -12,8 +12,9 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'question_controller.dart';
 
 class AddQuestionView extends StatelessWidget {
-  final AddQuestionController controller = Get.put(AddQuestionController());
-
+  var controller = Get.isRegistered<AddQuestionController>()
+      ? Get.find<AddQuestionController>()
+      : Get.put(AddQuestionController());
   AddQuestionView({
     super.key,
   });

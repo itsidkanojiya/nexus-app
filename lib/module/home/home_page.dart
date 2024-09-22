@@ -1,10 +1,8 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nexus_app/module/home/book_view.dart';
+import 'package:nexus_app/module/home/book/std_view.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/theme/style.dart';
@@ -21,15 +19,15 @@ class _HomeViewState extends State<HomeView> {
       ? Get.find<HomeController>()
       : Get.put(HomeController());
   bool isSearch = false;
-  final List<String> imageUrls = [
-    "assets/book1.png",
-    "assets/book2.png",
-    "assets/book3.png",
-    "assets/book4.png",
-    "assets/book5.png",
-    "assets/book6.png"
-    // Add more image URLs as needed
+  final List<Map<String, dynamic>> gridItems = [
+    {'icon': 'assets/book1.png', 'title': 'NCERT Books'},
+    {'icon': 'assets/solution.png', 'title': 'NCERT Books Solution'},
+    {'icon': 'assets/book3.png', 'title': 'State Board Book'},
+    {'icon': 'assets/solution1.png', 'title': 'State Board Book Solution'},
+    {'icon': 'assets/paper.png', 'title': 'Create Paper'},
+    {'icon': 'assets/assignment1.png', 'title': 'Create Worksheet'},
   ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -150,76 +148,69 @@ class _HomeViewState extends State<HomeView> {
         ),
         backgroundColor: Style.secondary,
       ),
-      body: Obx(() => (controller.isLoading.value)
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                    child: GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // Number of columns
-                          crossAxisSpacing: 20.0, // Spacing between columns
-                          mainAxisSpacing: 15.0, // Spacing between rows
-                        ),
-                        // itemCount: controller.boardModel?.boards?.length,
-                        itemCount: controller.subjectmodel?.subjects?.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final randomImageUrl =
-                              imageUrls[Random().nextInt(imageUrls.length)];
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(BookView(
-                                Subject: controller
-                                        .subjectmodel?.subjects?[index].name
-                                        .toString() ??
-                                    '',
-                              ));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(randomImageUrl)),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      controller.subjectmodel?.subjects?[index]
-                                              .name ??
-                                          '-',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ]),
-                            ),
-                          );
-                        }),
-                  ),
-                ],
-              ),
-            )),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 10.0,
+            childAspectRatio: 1.0, // Adjust this for the aspect ratio
+          ),
+          itemCount: gridItems.length,
+          itemBuilder: (context, index) {
+            return _buildGridItem(
+              icon: gridItems[index]['icon'],
+              title: gridItems[index]['title'],
+            );
+          },
+        ),
+      ),
     ));
   }
+}
+
+Widget _buildGridItem({required String icon, required String title}) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+    child: InkWell(
+      onTap: () {
+        Get.to(StdView());
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset(
+                icon,
+                height: 80.0,
+                width: 80.0,
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              // Ensures proper sizing
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 class Book {
