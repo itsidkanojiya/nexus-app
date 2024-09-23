@@ -1,25 +1,24 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:nexus_app/module/home/home_controller.dart';
-import 'package:nexus_app/module/profile/profile_page.dart';
-import 'package:nexus_app/module/view_page/view_book_page.dart';
+import 'package:nexus_app/custome_widgets/custom_button_widget.dart';
+import 'package:nexus_app/module/home/book/book_controller.dart';
 import 'package:nexus_app/theme/style.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdfrx/pdfrx.dart';
 
 class BookView extends StatefulWidget {
-  BookView({super.key, required this.Subject});
-  String Subject;
+  final String Subject;
+
+  const BookView({super.key, required this.Subject});
+
   @override
   State<BookView> createState() => _BookViewState();
 }
 
 class _BookViewState extends State<BookView> {
-  var controller = Get.isRegistered<HomeController>()
-      ? Get.find<HomeController>()
-      : Get.put(HomeController());
-  bool isSearch = false;
+  var controller = Get.isRegistered<BookController>()
+      ? Get.find<BookController>()
+      : Get.put(BookController());
 
   @override
   void initState() {
@@ -33,238 +32,106 @@ class _BookViewState extends State<BookView> {
       child: Scaffold(
         backgroundColor: Style.bg_color,
         appBar: AppBar(
-          toolbarHeight: isSearch ? 150 : 80,
-          leading: const SizedBox(),
-          flexibleSpace: Column(children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => const ProfilePage());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 0, top: 2),
-                      child: CircleAvatar(
-                        radius: 22,
-                        backgroundImage: const NetworkImage(
-                          'https://images.unsplash.com/photo-1547721064-da6cfb341d50',
-                        ),
-                        backgroundColor: Colors.grey[300],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 80,
-                    child: Image.asset('assets/logo.png'),
-                  ),
-                  SizedBox(
-                    child: (isSearch == false)
-                        ? IconButton(
-                            padding: const EdgeInsets.all(10),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Style.primary),
-                            ),
-                            icon: const Icon(
-                              Icons.search,
-                              color: Style.secondary,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isSearch = true;
-                              });
-                            },
-                          )
-                        : IconButton(
-                            icon: const Icon(Icons.close),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Style.bg_color),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isSearch = false;
-                              });
-                            },
-                          ),
-                  ),
-                ],
-              ),
-            ),
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-              (isSearch == true)
-                  ? Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                              color: Style.bg_color,
-                            ),
-                            child: const TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                prefixIcon: Icon(Icons.search),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 50.0, vertical: 10.0),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
-                                width: MediaQuery.of(context).size.width * 0.28,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  // color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  : const SizedBox(),
-            ]),
-          ]),
-          elevation: 9.0,
-          shadowColor: Colors.black,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
-          ),
-          backgroundColor: Style.secondary,
+          title: const Text('Books'),
         ),
-        body: Obx(() => (controller.isBookLoading == true)
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Stack(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20.0, left: 10, right: 10),
-                    child: GridView.builder(
-                      itemCount: controller.bookmodel?.books?.length,
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisExtent: 330,
-                        crossAxisCount: 2, // Number of columns
-                        crossAxisSpacing: 20.0, // Spacing between columns
-                        mainAxisSpacing: 15.0, // Spacing between rows
+        body: Obx(() {
+          if (controller.isBookLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: controller.bookmodel?.books?.length ?? 0,
+              itemBuilder: (context, index) {
+                var book = controller.bookmodel!.books![index];
+                String pdfUrl = book.pdfLink ?? '';
+                String fileName = 'book_${book.id}.pdf';
+
+                return Card(
+                  color: Style.card,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(book.chapterName ?? 'Unknown Chapter'),
+                        subtitle: Text('Chapter: ${book.chapterNo}'),
                       ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(ViewBookPage(
-                                docPath: controller
-                                        .bookmodel?.books?[index].pdfLink ??
-                                    '',
-                                docName: controller
-                                        .bookmodel?.books?[index].chapterName ??
-                                    ''));
-                          },
-                          child: Card(
-                            elevation: 5,
-                            child: SizedBox(
-                                child: Stack(
-                              children: [
-                                Positioned(
-                                    child: Column(
+                      Obx(() {
+                        // Show download progress if downloading
+                        if (controller.downloadProgress.containsKey(pdfUrl)) {
+                          return LinearProgressIndicator(
+                            value: controller.downloadProgress[pdfUrl]! / 100,
+                          );
+                        } else {
+                          return FutureBuilder<bool>(
+                            future: controller.isFileDownloaded(fileName),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.data == true) {
+                                // If the file is downloaded, show "Open PDF" and "Delete" buttons
+                                return Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 10, 10, 10),
-                                      child: SizedBox(
-                                        height: 230,
-                                        child: Image.network(
-                                          controller.bookmodel?.books?[index]
-                                                  .coverLink ??
-                                              '',
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Text(
-                                          controller.bookmodel?.books?[index]
-                                                  .chapterName ??
-                                              '',
-                                          style: Style.tableSubtitle,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                                Positioned(
-                                    top: 0,
-                                    left: 0,
-                                    child: Container(
-                                      height: 23,
-                                      decoration: const BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey,
-                                              blurRadius: 5.0,
+                                    CustomButton(
+                                      text: 'Open PDF',
+                                      onTap: () async {
+                                        await controller.openPDF(fileName);
+                                        final directory =
+                                            await getApplicationDocumentsDirectory();
+                                        final filePath =
+                                            '${directory.path}/$fileName';
+                                        Get.to(
+                                          SafeArea(
+                                            child: Scaffold(
+                                              appBar: AppBar(),
+                                              body: PdfViewer.asset(filePath),
                                             ),
-                                          ],
-                                          borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(10.0),
-                                              bottomRight:
-                                                  Radius.circular(10.0)),
-                                          color: Style.primary),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: Text(
-                                            "Chapter No:- ${controller.bookmodel?.books?[index].chapterNo}" ??
-                                                '',
-                                            style: GoogleFonts.nunito(
-                                                fontSize: 12,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600),
                                           ),
-                                        ),
-                                      ),
-                                    )),
-                              ],
-                            )),
-                          ),
-                        );
-                      },
-                    ),
+                                        );
+                                      },
+                                      hight: 35,
+                                      startColor: Style.primary,
+                                      endColor: Style.primary,
+                                    ),
+                                    CustomButton(
+                                      text: 'Delete PDF',
+                                      onTap: () async {
+                                        await controller.deletePDF(fileName);
+                                        setState(
+                                            () {}); // Refresh UI after deletion
+                                      },
+                                      hight: 35,
+                                      startColor: Colors.red,
+                                      endColor: Colors.red,
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                // If the file is not downloaded, show "Download PDF" button
+                                return CustomButton(
+                                  text: 'Download PDF',
+                                  onTap: () async {
+                                    await controller.downloadPDF(
+                                        pdfUrl, fileName);
+                                    setState(
+                                        () {}); // Refresh UI once downloaded
+                                  },
+                                  hight: 35,
+                                  startColor: Style.primary,
+                                  endColor: Style.primary,
+                                );
+                              }
+                            },
+                          );
+                        }
+                      }),
+                    ],
                   ),
-                ],
-              )),
+                );
+              },
+            );
+          }
+        }),
       ),
     );
   }
-}
-
-class Book {
-  final String title;
-  final String author;
-  final String coverImage;
-
-  Book({
-    required this.title,
-    required this.author,
-    required this.coverImage,
-  });
 }

@@ -8,11 +8,13 @@ class CustomButton extends StatelessWidget {
   final Duration duration;
   final Color startColor;
   final Color endColor;
+  final double hight;
 
   const CustomButton({
     super.key,
     required this.text,
     required this.onTap,
+    this.hight = 50,
     this.duration = const Duration(milliseconds: 1900),
     this.startColor = Style.bg_color,
     this.endColor = const Color.fromARGB(255, 237, 202, 145),
@@ -25,12 +27,12 @@ class CustomButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 50,
+          height: hight,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              gradient: const LinearGradient(colors: [
-                Style.bg_color,
-                Color.fromARGB(255, 237, 202, 145),
+              gradient: LinearGradient(colors: [
+                startColor ?? Style.bg_color,
+                endColor ?? const Color.fromARGB(255, 237, 202, 145),
               ])),
           child: Center(
             child: Text(
