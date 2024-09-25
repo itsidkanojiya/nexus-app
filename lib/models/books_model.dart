@@ -25,21 +25,22 @@ class Books {
   int? id;
   String? name;
   int? std;
-  String? board;
   int? chapterNo;
   String? chapterName;
   String? pdfLink;
   String? coverLink;
   String? createdAt;
   String? updatedAt;
-  String? deletedAt;
+  Null deletedAt;
+  int? boardId;
+  int? subjectId;
   String? boardName;
+  String? subjectName;
 
   Books(
       {this.id,
       this.name,
       this.std,
-      this.board,
       this.chapterNo,
       this.chapterName,
       this.pdfLink,
@@ -47,13 +48,15 @@ class Books {
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
-      this.boardName});
+      this.boardId,
+      this.subjectId,
+      this.boardName,
+      this.subjectName});
 
   Books.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     std = json['std'];
-    board = json['board'];
     chapterNo = json['chapter_no'];
     chapterName = json['chapter_name'];
     pdfLink = json['pdf_link'];
@@ -61,7 +64,10 @@ class Books {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    boardId = json['board_id'];
+    subjectId = json['subject_id'];
     boardName = json['board_name'];
+    subjectName = json['subject_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -69,7 +75,6 @@ class Books {
     data['id'] = id;
     data['name'] = name;
     data['std'] = std;
-    data['board'] = board;
     data['chapter_no'] = chapterNo;
     data['chapter_name'] = chapterName;
     data['pdf_link'] = pdfLink;
@@ -77,41 +82,10 @@ class Books {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['board_id'] = boardId;
+    data['subject_id'] = subjectId;
     data['board_name'] = boardName;
+    data['subject_name'] = subjectName;
     return data;
-  }
-
-    factory Books.fromMap(Map<String, dynamic> map) {
-    return Books(
-      id: map['id'],
-      name: map['name'],
-      std: map['std'],
-      board: map['board'],
-      chapterNo: map['chapter_no'],
-      chapterName: map['chapter_name'],
-      pdfLink: map['pdf_link'],
-      coverLink: map['cover_link'],
-      createdAt: map['created_at'],
-      updatedAt: map['updated_at'],
-      deletedAt: map['deleted_at'],
-      boardName: map['board_name'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'std': std,
-      'board': board,
-      'chapter_no': chapterNo,
-      'chapter_name': chapterName,
-      'pdf_link': pdfLink,
-      'cover_link': coverLink,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'deleted_at': deletedAt,
-      'board_name': boardName,
-    };
   }
 }

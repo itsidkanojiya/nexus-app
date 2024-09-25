@@ -160,6 +160,11 @@ class _HomeViewState extends State<HomeView> {
           itemCount: gridItems.length,
           itemBuilder: (context, index) {
             return _buildGridItem(
+              onTap: () {
+                Get.to(const StdView(
+                  boardId: '4',
+                ));
+              },
               icon: gridItems[index]['icon'],
               title: gridItems[index]['title'],
             );
@@ -170,16 +175,15 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-Widget _buildGridItem({required String icon, required String title}) {
+Widget _buildGridItem(
+    {required String icon, required String title, required Function()? onTap}) {
   return Card(
     elevation: 2,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
     child: InkWell(
-      onTap: () {
-        Get.to(StdView());
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

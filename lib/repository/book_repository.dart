@@ -28,10 +28,12 @@ class BookRepository extends GetConnect {
     return null;
   }
 
-  Future<BookModel?> getBooks(String subject) async {
+  Future<BookModel?> getBooks(
+      String subject, String std, String boardId) async {
     try {
       final response = await http.get(
-          Uri.parse('${Base.api}/books?subject=$subject'),
+          Uri.parse(
+              '${Base.api}/books?subject=$subject&std=$std&boardId=$boardId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UFT-8',
           });

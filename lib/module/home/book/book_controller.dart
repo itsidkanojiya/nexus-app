@@ -8,7 +8,7 @@ import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/services/getStorage_services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 class BookController extends GetxController {
   RxString selected = 'GSEB'.obs;
@@ -30,15 +30,13 @@ class BookController extends GetxController {
   void fetchData() async {
     getStorageServices = GetStorageServices();
     isLoading(true);
-
     subjectmodel = await BookRepository().getSubject();
-
     isLoading(false);
   }
 
-  void getBooks(String subject) async {
+  void getBooks(String subject, String std, String boardId) async {
     isBookLoading(true);
-    bookmodel = await BookRepository().getBooks(subject);
+    bookmodel = await BookRepository().getBooks(subject, std, boardId);
     isBookLoading(false);
   }
 
@@ -79,40 +77,38 @@ class BookController extends GetxController {
 
   // Method to download the PDF file
 
-  Future<void> downloadPDF(String url, String fileName) async {
-    try {
-      // Create a Dio instance
-      Dio dio = Dio();
+  Future<void> downloadPDF(
+      BuildContext context, String url, String fileName) async {
+    ProgressDialog pd = ProgressDialog(context: context);
+    pd.show(
+      max: 100,
+      msg: 'Downloading...',
+      progressType: ProgressType.valuable,
+    );
 
-      // Get the directory where we want to save the file
+    try {
+      Dio dio = Dio();
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName';
 
-      // Download the file and track the download progress
       await dio.download(
         url,
         filePath,
         onReceiveProgress: (receivedBytes, totalBytes) {
           if (totalBytes != -1) {
-            // Update download progress in percentage
-            downloadProgress[url] = (receivedBytes / totalBytes) * 100;
-            //   update(); // To update the UI
+            double progress = (receivedBytes / totalBytes) * 100;
+            downloadProgress[fileName] = progress;
+            pd.update(value: progress.toInt()); // Update progress dialog value
           }
         },
       );
 
-      // downloadProgress[url] = 100; // Download complete
+      pd.close(); // Close the dialog after download completes
       Get.snackbar(
           "Download Complete", "File has been downloaded to $filePath");
-      Get.to(
-        SafeArea(
-          child: Scaffold(
-            appBar: AppBar(),
-            body: SfPdfViewer.file(File(filePath)),
-          ),
-        ),
-      );
+      await openPDF(fileName); // Automatically open after download
     } catch (e) {
+      pd.close(); // Close the dialog if error occurs
       Get.snackbar("Error", "Failed to download file: $e");
     }
   }

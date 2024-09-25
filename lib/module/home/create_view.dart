@@ -176,7 +176,7 @@ class _CreateViewState extends State<CreateView> {
                         onTap: () {
                           Get.to(AddAssignmentDetailsScreen());
                         },
-                        title: 'Assignment',
+                        title: 'Worksheet',
                       )
                     ],
                   ),

@@ -260,7 +260,7 @@ class AddAssignmentDetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(2, 10, 0, 3.0),
                   child: RichText(
                       text: const TextSpan(
-                          text: 'Assignment timing',
+                          text: 'Worksheet timing',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,

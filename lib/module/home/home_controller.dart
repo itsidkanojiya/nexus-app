@@ -29,12 +29,6 @@ class HomeController extends GetxController {
     isLoading(false);
   }
 
-  void getBooks(String subject) async {
-    isBookLoading(true);
-    bookmodel = await BookRepository().getBooks(subject);
-    isBookLoading(false);
-  }
-
   void setSelected(String value) {
     selected.value = value;
   }

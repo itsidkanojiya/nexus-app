@@ -8,8 +8,14 @@ import 'package:pdfrx/pdfrx.dart';
 
 class BookView extends StatefulWidget {
   final String Subject;
+  final String Std;
+  final String boardId;
 
-  const BookView({super.key, required this.Subject});
+  const BookView(
+      {super.key,
+      required this.Subject,
+      required this.Std,
+      required this.boardId});
 
   @override
   State<BookView> createState() => _BookViewState();
@@ -22,7 +28,7 @@ class _BookViewState extends State<BookView> {
 
   @override
   void initState() {
-    controller.getBooks(widget.Subject);
+    controller.getBooks(widget.Subject, widget.Std, widget.boardId);
     super.initState();
   }
 
@@ -51,79 +57,120 @@ class _BookViewState extends State<BookView> {
                   color: Style.card,
                   child: Column(
                     children: [
-                      ListTile(
-                        title: Text(book.chapterName ?? 'Unknown Chapter'),
-                        subtitle: Text('Chapter: ${book.chapterNo}'),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 90,
+                              child: Image.network(
+                                  controller
+                                          .bookmodel?.books?[index].coverLink ??
+                                      '',
+                                  fit: BoxFit.fitHeight),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                book.chapterName ?? 'Unknown Chapter',
+                                style: Style.tableSubtitle,
+                              ),
+                              subtitle: Text(
+                                'Chapter: ${book.chapterNo}',
+                                style: Style.tableSubtitle,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Obx(() {
-                        // Show download progress if downloading
-                        if (controller.downloadProgress.containsKey(pdfUrl)) {
-                          return LinearProgressIndicator(
-                            value: controller.downloadProgress[pdfUrl]! / 100,
-                          );
-                        } else {
-                          return FutureBuilder<bool>(
-                            future: controller.isFileDownloaded(fileName),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                      ConnectionState.done &&
-                                  snapshot.data == true) {
-                                // If the file is downloaded, show "Open PDF" and "Delete" buttons
-                                return Column(
-                                  children: [
-                                    CustomButton(
-                                      text: 'Open PDF',
-                                      onTap: () async {
-                                        await controller.openPDF(fileName);
-                                        final directory =
-                                            await getApplicationDocumentsDirectory();
-                                        final filePath =
-                                            '${directory.path}/$fileName';
-                                        Get.to(
-                                          SafeArea(
-                                            child: Scaffold(
-                                              appBar: AppBar(),
-                                              body: PdfViewer.asset(filePath),
+                      Obx(() =>
+                          // Show download progress if downloading
+                          controller.downloadProgress.containsKey(pdfUrl) &&
+                                  controller.downloadProgress[pdfUrl]! < 10
+                              ? Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: LinearProgressIndicator(
+                                    value:
+                                        controller.downloadProgress[pdfUrl]! /
+                                            100,
+                                  ),
+                                )
+                              : FutureBuilder<bool>(
+                                  future: controller.isFileDownloaded(fileName),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.data == true) {
+                                      // If the file is downloaded, show "Open PDF" and "Delete" buttons
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: CustomButton(
+                                                text: 'Open PDF',
+                                                duration: const Duration(
+                                                    milliseconds: 600),
+                                                onTap: () async {
+                                                  await controller
+                                                      .openPDF(fileName);
+                                                  final directory =
+                                                      await getApplicationDocumentsDirectory();
+                                                  final filePath =
+                                                      '${directory.path}/$fileName';
+                                                  Get.to(
+                                                    SafeArea(
+                                                      child: Scaffold(
+                                                        appBar: AppBar(),
+                                                        body: PdfViewer.file(
+                                                            filePath),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                hight: 35,
+                                                startColor: Style.primary,
+                                                endColor: Style.primary,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      hight: 35,
-                                      startColor: Style.primary,
-                                      endColor: Style.primary,
-                                    ),
-                                    CustomButton(
-                                      text: 'Delete PDF',
-                                      onTap: () async {
-                                        await controller.deletePDF(fileName);
-                                        setState(
-                                            () {}); // Refresh UI after deletion
-                                      },
-                                      hight: 35,
-                                      startColor: Colors.red,
-                                      endColor: Colors.red,
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                // If the file is not downloaded, show "Download PDF" button
-                                return CustomButton(
-                                  text: 'Download PDF',
-                                  onTap: () async {
-                                    await controller.downloadPDF(
-                                        pdfUrl, fileName);
-                                    setState(
-                                        () {}); // Refresh UI once downloaded
+                                            const SizedBox(width: 20),
+                                            Expanded(
+                                              child: CustomButton(
+                                                text: 'Delete PDF',
+                                                duration: const Duration(
+                                                    milliseconds: 600),
+                                                onTap: () async {
+                                                  await controller
+                                                      .deletePDF(fileName);
+                                                  setState(
+                                                      () {}); // Refresh UI after deletion
+                                                },
+                                                hight: 35,
+                                                startColor: Colors.red,
+                                                endColor: Colors.red,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      // If the file is not downloaded, show "Download PDF" button
+                                      return CustomButton(
+                                        text: 'Download PDF',
+                                        duration:
+                                            const Duration(milliseconds: 600),
+                                        onTap: () async {
+                                          await controller.downloadPDF(
+                                              context, pdfUrl, fileName);
+                                        },
+                                        hight: 35,
+                                        startColor: Style.primary,
+                                        endColor: Style.primary,
+                                      );
+                                    }
                                   },
-                                  hight: 35,
-                                  startColor: Style.primary,
-                                  endColor: Style.primary,
-                                );
-                              }
-                            },
-                          );
-                        }
-                      }),
+                                )),
                     ],
                   ),
                 );

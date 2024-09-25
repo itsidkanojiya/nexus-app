@@ -57,7 +57,7 @@ class _ViewAssignmentScreenState extends State<ViewAssignmentScreen> {
                       height: 80,
                       child: Center(
                           child: Text(
-                        'Assignment History',
+                        'Worksheet History',
                         style: GoogleFonts.aBeeZee(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )),
@@ -302,7 +302,7 @@ class _ViewAssignmentScreenState extends State<ViewAssignmentScreen> {
                                                                               height: 80,
                                                                               child: Center(
                                                                                   child: Text(
-                                                                                'Assignment',
+                                                                                'Worksheet',
                                                                                 style: GoogleFonts.aBeeZee(fontSize: 20, fontWeight: FontWeight.bold),
                                                                               )),
                                                                             ),

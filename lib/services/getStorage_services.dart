@@ -9,12 +9,12 @@ class GetStorageServices {
     books.add(book);
     await _getStorage.write(key, books.map((e) => e.toJson()).toList());
     print(book.chapterName.toString());
-    Map<String, dynamic> bookMap = book.toMap();
-    String bookString = bookMap.toString();
+    // Map<String, dynamic> bookMap = book.toMap();
+    // String bookString = bookMap.toString();
     // List<Books>? books = _getStorage.read(key);
     // books?.add(book);
-    await _getStorage.write(key, bookString);
-    print(bookString);
+    // await _getStorage.write(key, bookString);
+    // print(bookString);
   }
 
   List<Books> getBookList(String key) {

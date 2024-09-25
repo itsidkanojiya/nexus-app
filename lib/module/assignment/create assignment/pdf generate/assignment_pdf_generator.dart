@@ -46,74 +46,93 @@ class AssignmentPDFGenerator {
         build: (pw.Context context) {
           int alphabetIndex = 0;
           return [
-            pw.Row(
-              children: [
-                if (logo != null) pw.Image(logo, width: 60, height: 60),
-                pw.SizedBox(width: 80),
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.center,
-                  children: [
-                    pw.Text(
-                      paperHistory.schoolName ?? '',
-                      style: pw.TextStyle(
-                        font: titleFont,
-                        fontSize: 20,
-                        fontWeight: pw.FontWeight.bold,
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(),
+              ),
+              child: pw.Padding(
+                padding: const pw.EdgeInsets.all(20),
+                child: pw.Column(children: [
+                  pw.Row(
+                    children: [
+                      if (logo != null) pw.Image(logo, width: 60, height: 60),
+                      pw.SizedBox(width: 80),
+                      pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                            paperHistory.schoolName ?? '',
+                            style: pw.TextStyle(
+                              font: titleFont,
+                              fontSize: 20,
+                              fontWeight: pw.FontWeight.bold,
+                            ),
+                          ),
+                          pw.Text(
+                            paperHistory.address ?? '',
+                            style: pw.TextStyle(font: font, fontSize: 12),
+                          ),
+                        ],
                       ),
-                    ),
-                    pw.Text(
-                      paperHistory.address ?? '',
-                      style: pw.TextStyle(font: font, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 20),
-            pw.Divider(),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(
-                      'STD: ${paperHistory.std}',
-                      style: pw.TextStyle(font: titleFont, fontSize: 12),
-                    ),
-                    pw.Text(
-                      "DATE: ${paperHistory.date ?? ''} ",
-                      style: pw.TextStyle(font: titleFont, fontSize: 12),
-                    ),
-                  ],
-                ),
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(
-                      'SUBJECT: ${paperHistory.subject}',
-                      style: pw.TextStyle(font: titleFont, fontSize: 12),
-                    ),
-                    pw.Text(
-                      'DIV: ${paperHistory.division}',
-                      style: pw.TextStyle(font: titleFont, fontSize: 12),
-                    ),
-                  ],
-                ),
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(
-                      'DAY: ${paperHistory.day}',
-                      style: pw.TextStyle(font: titleFont, fontSize: 12),
-                    ),
-                    pw.Text(
-                      'TIME: ${paperHistory.timing}',
-                      style: pw.TextStyle(font: titleFont, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  pw.SizedBox(height: 20),
+                  pw.Divider(),
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text(
+                        'Name: ',
+                        style: pw.TextStyle(font: titleFont, fontSize: 12),
+                      ),
+                      pw.SizedBox(height: 10),
+                      pw.Expanded(
+                          child: pw.Padding(
+                              padding:
+                                  const pw.EdgeInsets.only(top: 20, bottom: 10),
+                              child: pw.Container(
+                                  decoration: const pw.BoxDecoration(
+                                border: pw.Border(
+                                  bottom: pw.BorderSide(
+                                    width: 0.5, // Line thickness
+                                  ),
+                                ),
+                              ))))
+                    ],
+                  ),
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                            'STD: ${paperHistory.std}',
+                            style: pw.TextStyle(font: titleFont, fontSize: 12),
+                          ),
+                          pw.Text(
+                            "DATE:_______________  ",
+                            style: pw.TextStyle(font: titleFont, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                            'SUBJECT: ${paperHistory.subject}',
+                            style: pw.TextStyle(font: titleFont, fontSize: 12),
+                          ),
+                          pw.Text(
+                            'DIV: _____________',
+                            style: pw.TextStyle(font: titleFont, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
             ),
             pw.SizedBox(height: 20),
             ...sections.entries.map((entry) {

@@ -5,7 +5,8 @@ import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class StdView extends StatefulWidget {
-  const StdView({super.key});
+  final String boardId;
+  const StdView({super.key, required this.boardId});
 
   @override
   State<StdView> createState() => _StdViewState();
@@ -45,7 +46,9 @@ class _StdViewState extends State<StdView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => const ProfilePage());
+                      Get.to(
+                        () => const ProfilePage(),
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 0, top: 2),
@@ -161,7 +164,12 @@ class _StdViewState extends State<StdView> {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(const SubjectView());
+                  Get.to(
+                    SubjectView(
+                      Std: index.toString(),
+                      boardId: widget.boardId,
+                    ),
+                  );
                 },
                 child: Card(
                   shape: RoundedRectangleBorder(

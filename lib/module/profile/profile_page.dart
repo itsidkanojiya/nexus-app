@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/module/auth/change%20password/chnage_password_page.dart';
+import 'package:nexus_app/module/auth/login/login_view.dart';
 import 'package:nexus_app/module/profile/edit_profile.dart';
 import 'package:nexus_app/module/profile/profile_controller.dart';
+import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -185,7 +187,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         icon: Icons.logout,
                         color: const Color.fromARGB(255, 196, 54, 44),
                         name: 'Logout',
-                        onTap: () {},
+                        onTap: () async {
+                          await AppService.storage.write('token', '');
+                          Get.to(LoginView());
+                        },
                       ),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(20, 20, 15, 0),

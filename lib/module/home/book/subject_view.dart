@@ -8,7 +8,9 @@ import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class SubjectView extends StatefulWidget {
-  const SubjectView({super.key});
+  final String Std;
+  final String boardId;
+  const SubjectView({super.key, required this.Std, required this.boardId});
 
   @override
   State<SubjectView> createState() => _SubjectViewState();
@@ -163,9 +165,13 @@ class _SubjectViewState extends State<SubjectView> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(BookView(
-                          Subject: '4',
-                        ));
+                        Get.to(
+                          BookView(
+                            Subject: '4',
+                            Std: index.toString(),
+                            boardId: widget.boardId,
+                          ),
+                        );
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
