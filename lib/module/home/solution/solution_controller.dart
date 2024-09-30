@@ -10,7 +10,7 @@ import 'package:nexus_app/services/getStorage_services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
-class BookController extends GetxController {
+class SolutionController extends GetxController {
   RxString selected = 'GSEB'.obs;
   BookModel? bookmodel;
   SubjectModel? subjectmodel;
@@ -34,9 +34,9 @@ class BookController extends GetxController {
     isLoading(false);
   }
 
-  void getBooks(String subject, String std) async {
+  void getSolution(String subject, String std, String boardId) async {
     isBookLoading(true);
-    bookmodel = await BookRepository().getBooks(subject, std);
+    bookmodel = await BookRepository().getSolution(subject, std, boardId);
     isBookLoading(false);
   }
 

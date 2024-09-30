@@ -28,12 +28,35 @@ class BookRepository extends GetConnect {
     return null;
   }
 
-  Future<BookModel?> getBooks(
+  Future<BookModel?> getBooks(String subject, String std) async {
+    try {
+      final response = await http.get(
+          Uri.parse('${Base.api}/books?subject=$subject&std=$std'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UFT-8',
+          });
+
+      final body = jsonDecode(response.body);
+      debugPrint('getBooks body: $body');
+
+      if (response.statusCode == 200) {
+        // page++;
+        return BookModel.fromJson(body);
+      }
+    } catch (e) {
+      debugPrint('Error While getBooks() ${e.toString()}');
+      return Future.error(e);
+    }
+
+    return null;
+  }
+
+  Future<BookModel?> getSolution(
       String subject, String std, String boardId) async {
     try {
       final response = await http.get(
           Uri.parse(
-              '${Base.api}/books?subject=$subject&std=$std&boardId=$boardId'),
+              '${Base.api}/solutions?subject=$subject&std=$std&boardId=$boardId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UFT-8',
           });

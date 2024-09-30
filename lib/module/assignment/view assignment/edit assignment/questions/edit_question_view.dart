@@ -25,7 +25,8 @@ class EditQuestionView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Obx(
             () => controller.isLoading.value
-                ? const CircularProgressIndicator()
+                ? SizedBox(
+                    height: 250, child: Lottie.asset('assets/bookloading.json'))
                 : Column(
                     children: [
                       Container(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
 import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/module/assignment/view%20assignment/edit%20assignment/details/edit_assignment_details_controller.dart';
@@ -27,7 +28,11 @@ class EditAssignmentDetailsScreen extends StatelessWidget {
         ),
         body: Obx(
           () => controller.isLoading.value
-              ? const CircularProgressIndicator()
+              ? Center(
+                  child: SizedBox(
+                      height: 250,
+                      child: Lottie.asset('assets/bookloading.json')),
+                )
               : Form(
                   key: formKey,
                   child: Padding(

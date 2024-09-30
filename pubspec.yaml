@@ -58,6 +58,7 @@ dependencies:
   dio: ^5.7.0
   pdfrx: ^1.0.84
   sn_progress_dialog: ^1.1.4
+  translator: ^1.0.0
   
   
   

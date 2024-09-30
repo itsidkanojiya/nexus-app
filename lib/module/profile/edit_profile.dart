@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nexus_app/custome_widgets/text_field_widget.dart';
 import 'package:nexus_app/module/profile/edit_profile_controller.dart';
 import 'package:nexus_app/theme/style.dart';
@@ -37,7 +38,11 @@ class EditProfilePage extends StatelessWidget {
             const Spacer(),
             Obx(() {
               return controller.isLoading.value
-                  ? const CircularProgressIndicator()
+                  ? Center(
+                      child: SizedBox(
+                          height: 250,
+                          child: Lottie.asset('assets/bookloading.json')),
+                    )
                   : GestureDetector(
                       onTap: controller.updateProfile,
                       child: Container(

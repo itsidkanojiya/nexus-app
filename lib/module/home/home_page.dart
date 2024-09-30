@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nexus_app/module/home/book/std_view.dart';
+import 'package:nexus_app/module/assignment/create%20assignment/add%20details/add_assignment_details.dart';
+import 'package:nexus_app/module/home/book/book_std_view.dart';
 import 'package:nexus_app/module/home/home_controller.dart';
+import 'package:nexus_app/module/home/solution/solution_std_view.dart';
+import 'package:nexus_app/module/paper/create%20paper/add%20details/add_paper_details.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/theme/style.dart';
 
@@ -20,12 +23,44 @@ class _HomeViewState extends State<HomeView> {
       : Get.put(HomeController());
   bool isSearch = false;
   final List<Map<String, dynamic>> gridItems = [
-    {'icon': 'assets/book1.png', 'title': 'NCERT Books'},
-    {'icon': 'assets/solution.png', 'title': 'NCERT Books Solution'},
-    {'icon': 'assets/book3.png', 'title': 'State Board Book'},
-    {'icon': 'assets/solution1.png', 'title': 'State Board Book Solution'},
-    {'icon': 'assets/paper.png', 'title': 'Create Paper'},
-    {'icon': 'assets/assignment1.png', 'title': 'Create Worksheet'},
+    {
+      'icon': 'assets/book1.png',
+      'title': 'NCERT Books',
+      'page': const BookStdView(
+        board: 'NCERT',
+      )
+    },
+    {
+      'icon': 'assets/solution.png',
+      'title': 'NCERT Books Solution',
+      'page': const SolutionStdView(
+        board: 'NCERT',
+      )
+    },
+    {
+      'icon': 'assets/book3.png',
+      'title': 'State Board Book',
+      'page': const BookStdView(
+        board: 'STATE BOARD',
+      )
+    },
+    {
+      'icon': 'assets/solution1.png',
+      'title': 'State Board Book Solution',
+      'page': const SolutionStdView(
+        board: 'STATE BOARD',
+      )
+    },
+    {
+      'icon': 'assets/paper.png',
+      'title': 'Create Paper',
+      'page': AddPaperDetailsScreen()
+    },
+    {
+      'icon': 'assets/assignment1.png',
+      'title': 'Create Worksheet',
+      'page': AddAssignmentDetailsScreen()
+    },
   ];
 
   @override
@@ -161,9 +196,7 @@ class _HomeViewState extends State<HomeView> {
           itemBuilder: (context, index) {
             return _buildGridItem(
               onTap: () {
-                Get.to(const StdView(
-                  boardId: '4',
-                ));
+                Get.to(gridItems[index]['page']);
               },
               icon: gridItems[index]['icon'],
               title: gridItems[index]['title'],

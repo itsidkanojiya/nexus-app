@@ -14,8 +14,8 @@ class PDFGenerator {
 
   Future<pw.Document> generatePDF() async {
     final pdf = pw.Document();
-    final font = await PdfGoogleFonts.arimoRegular();
-    final titleFont = await PdfGoogleFonts.arimoBold();
+    final font = await PdfGoogleFonts.notoSansGujaratiBold();
+    final titleFont = await PdfGoogleFonts.notoSansGujaratiBold();
 
     pw.MemoryImage? logo;
     final tickBoxImage = pw.MemoryImage(

@@ -1,35 +1,34 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nexus_app/module/home/book/book_controller.dart';
-import 'package:nexus_app/module/home/book/book_view.dart';
+import 'package:nexus_app/module/home/solution/solution_subject_view.dart';
 import 'package:nexus_app/module/profile/profile_page.dart';
 import 'package:nexus_app/theme/style.dart';
 
-class SubjectView extends StatefulWidget {
-  final String Std;
-  final String boardId;
-  const SubjectView({super.key, required this.Std, required this.boardId});
+class SolutionStdView extends StatefulWidget {
+  final String board;
+  const SolutionStdView({super.key, required this.board});
 
   @override
-  State<SubjectView> createState() => _SubjectViewState();
+  State<SolutionStdView> createState() => _SolutionStdViewState();
 }
 
-class _SubjectViewState extends State<SubjectView> {
+class _SolutionStdViewState extends State<SolutionStdView> {
+  final List<Map<String, dynamic>> classData = [
+    {'classNumber': 12, 'color': Colors.purpleAccent},
+    {'classNumber': 11, 'color': Colors.pinkAccent},
+    {'classNumber': 10, 'color': Colors.orangeAccent},
+    {'classNumber': 9, 'color': Colors.lightBlueAccent},
+    {'classNumber': 8, 'color': Colors.greenAccent},
+    {'classNumber': 7, 'color': Colors.purpleAccent},
+    {'classNumber': 6, 'color': Colors.lightBlueAccent},
+    {'classNumber': 5, 'color': Colors.orangeAccent},
+    {'classNumber': 4, 'color': Colors.purpleAccent},
+    {'classNumber': 3, 'color': Colors.pinkAccent},
+    {'classNumber': 2, 'color': Colors.blueAccent},
+    {'classNumber': 1, 'color': Colors.purpleAccent},
+  ];
+
   bool isSearch = false;
-  var controller = Get.isRegistered<BookController>()
-      ? Get.find<BookController>()
-      : Get.put(BookController());
-  Color getRandomColor() {
-    Random random = Random();
-    return Color.fromARGB(
-      255, // Alpha (opacity)
-      random.nextInt(256), // Red
-      random.nextInt(256), // Green
-      random.nextInt(256), // Blue
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,9 @@ class _SubjectViewState extends State<SubjectView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => const ProfilePage());
+                      Get.to(
+                        () => const ProfilePage(),
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 0, top: 2),
@@ -150,69 +151,61 @@ class _SubjectViewState extends State<SubjectView> {
           ),
           backgroundColor: Style.secondary,
         ),
-        body: Obx(() => controller.isLoading.value
-            ? const CircularProgressIndicator()
-            : Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GridView.builder(
-                  itemCount: controller.subjectmodel?.subjects?.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 2 items per row
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 2, // Adjust the height of each item
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: GridView.builder(
+            itemCount: classData.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // 2 items per row
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 2, // Adjust the height of each item
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(
+                    SolutionSubjectView(
+                      board: widget.board,
+                      std: classData[index]['classNumber'].toString(),
+                    ),
+                  );
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(
-                          BookView(
-                            Subject: '4',
-                            Std: index.toString(),
-                            boardId: widget.boardId,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: classData[index]['color'],
+                        child: Text(
+                          classData[index]['classNumber'].toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: getRandomColor(),
-                              child: Text(
-                                controller.subjectmodel?.subjects![index].name
-                                        ?.substring(0, 1)
-                                        .toString() ??
-                                    '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              controller.subjectmodel?.subjects?[index].name
-                                      .toString() ??
-                                  '',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            // const Text(
-                            //   'Books',
-                            //   style: TextStyle(fontSize: 12),
-                            // ),
-                          ],
                         ),
                       ),
-                    );
-                  },
+                      const SizedBox(height: 8),
+                      Text(
+                        'Class ${classData[index]['classNumber']}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      // const Text(
+                      //   'Books',
+                      //   style: TextStyle(fontSize: 12),
+                      // ),
+                    ],
+                  ),
                 ),
-              )),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

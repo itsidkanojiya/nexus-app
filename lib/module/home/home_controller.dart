@@ -11,7 +11,6 @@ class HomeController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isBookLoading = false.obs;
   var selectedBook = Rx<Books?>(null);
-
   GetStorageServices? getStorageServices;
 
   @override

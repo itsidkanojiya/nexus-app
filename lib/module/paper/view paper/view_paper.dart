@@ -528,7 +528,11 @@ class _ViewPaperScreenState extends State<ViewPaperScreen> {
                       )
                     ],
                   )
-                : const CircularProgressIndicator(),
+                : Center(
+                    child: SizedBox(
+                        height: 250,
+                        child: Lottie.asset('assets/bookloading.json')),
+                  ),
           )),
     );
   }
