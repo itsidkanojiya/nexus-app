@@ -134,83 +134,70 @@ class DownloadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.downloadProgress.containsKey(pdfUrl) &&
-          controller.downloadProgress[pdfUrl]! < 100) {
-        // Display progress bar
-        return const SizedBox();
-        // return Padding(
-        //   padding: const EdgeInsets.all(12.0),
-        //   child: LinearProgressIndicator(
-        //     value: controller.downloadProgress[pdfUrl]! / 100,
-        //   ),
-        // );
-      } else {
-        return FutureBuilder<bool>(
-          future: controller.isFileDownloaded(fileName),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.data == true) {
-              // If file is downloaded, show "Open PDF" and "Delete PDF" buttons
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CustomButton(
-                        text: 'Open PDF',
-                        duration: const Duration(milliseconds: 600),
-                        onTap: () async {
-                          await controller.openPDF(fileName);
-                          final directory =
-                              await getApplicationDocumentsDirectory();
-                          final filePath = '${directory.path}/$fileName';
-                          Get.to(
-                            SafeArea(
-                              child: Scaffold(
-                                appBar: AppBar(),
-                                body: PdfViewer.file(filePath),
-                              ),
-                            ),
-                          );
-                        },
-                        hight: 35,
-                        startColor: Style.primary,
-                        endColor: Style.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: CustomButton(
-                        text: 'Delete PDF',
-                        duration: const Duration(milliseconds: 600),
-                        onTap: () async {
-                          await controller.deletePDF(fileName);
-                        },
-                        hight: 35,
-                        startColor: Colors.red,
-                        endColor: Colors.red,
-                      ),
-                    ),
-                  ],
+    return Obx(
+      () {
+        // Check the file download status reactively using the RxMap
+        bool isDownloaded = controller.downloadedFiles[fileName] ?? false;
+
+        if (isDownloaded) {
+          // If file is downloaded, show "Open PDF" and "Delete PDF" buttons
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    text: 'Open PDF',
+                    duration: const Duration(milliseconds: 600),
+                    onTap: () async {
+                      await controller.openPDF(fileName);
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final filePath = '${directory.path}/$fileName';
+                      Get.to(
+                        SafeArea(
+                          child: Scaffold(
+                            appBar: AppBar(),
+                            body: PdfViewer.file(filePath),
+                          ),
+                        ),
+                      );
+                    },
+                    hight: 35,
+                    startColor: Style.primary,
+                    endColor: Style.primary,
+                  ),
                 ),
-              );
-            } else {
-              // Show "Download PDF" button
-              return CustomButton(
-                text: 'Download PDF',
-                duration: const Duration(milliseconds: 600),
-                onTap: () async {
-                  await controller.downloadPDF(context, pdfUrl, fileName);
-                },
-                hight: 35,
-                startColor: Style.primary,
-                endColor: Style.primary,
-              );
-            }
-          },
-        );
-      }
-    });
+                const SizedBox(width: 20),
+                Expanded(
+                  child: CustomButton(
+                    text: 'Delete PDF',
+                    duration: const Duration(milliseconds: 600),
+                    onTap: () async {
+                      await controller.deletePDF(fileName);
+                    },
+                    hight: 35,
+                    startColor: Colors.red,
+                    endColor: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Show "Download PDF" button
+          return CustomButton(
+            text: 'Download PDF',
+            duration: const Duration(milliseconds: 600),
+            onTap: () async {
+              await controller.downloadPDF(context, pdfUrl, fileName);
+            },
+            hight: 35,
+            startColor: Style.primary,
+            endColor: Style.primary,
+          );
+        }
+      },
+    );
   }
 }

@@ -101,123 +101,125 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Obx(
         () => (controller.isLoading.value == true)
             ? const CircularProgressIndicator()
-            : Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Style.secondary,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              offset: Offset(0.0, 1.0),
-                              blurRadius: 3.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
+            : SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Style.secondary,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0,
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Name
+                              ProfileInfoRow(
+                                label: 'Name',
+                                value: controller.user?.name ?? '',
+                              ),
+                              const SizedBox(height: 10),
+                              // Email
+                              ProfileInfoRow(
+                                label: 'Email',
+                                value: controller.user?.email ?? '',
+                              ),
+                              const SizedBox(height: 10),
+                              // School Name
+                              ProfileInfoRow(
+                                label: 'Mobile Number',
+                                value: controller.user?.number ?? '',
+                              ),
+                              const SizedBox(height: 10),
+                              ProfileInfoRow(
+                                label: 'School Name',
+                                value: controller.user?.school ?? '',
+                              ),
+                              const SizedBox(height: 10),
+                              // Standard
+                              ProfileInfoRow(
+                                label: 'Standard',
+                                value: controller.user?.std.toString() ?? '',
+                              ),
+                            ],
+                          ),
                         ),
-                        padding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Name
-                            ProfileInfoRow(
-                              label: 'Name',
-                              value: controller.user?.name ?? '',
-                            ),
-                            const SizedBox(height: 10),
-                            // Email
-                            ProfileInfoRow(
-                              label: 'Email',
-                              value: controller.user?.email ?? '',
-                            ),
-                            const SizedBox(height: 10),
-                            // School Name
-                            ProfileInfoRow(
-                              label: 'Mobile Number',
-                              value: controller.user?.number ?? '',
-                            ),
-                            const SizedBox(height: 10),
-                            ProfileInfoRow(
-                              label: 'School Name',
-                              value: controller.user?.school ?? '',
-                            ),
-                            const SizedBox(height: 10),
-                            // Standard
-                            ProfileInfoRow(
-                              label: 'Standard',
-                              value: controller.user?.std.toString() ?? '',
-                            ),
-                          ],
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(20, 20, 15, 0),
+                          child: Text('Your Self',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500)),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 20, 15, 0),
-                        child: Text('Your Self',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      const Divider(
-                        endIndent: 15,
-                        indent: 15,
-                        color: Colors.grey,
-                      ),
-                      ProfileOption(
-                        icon: Icons.person_4,
-                        color: Style.primary,
-                        name: 'Edit Profile',
-                        onTap: () {
-                          Get.to(EditProfilePage());
-                        },
-                      ),
-                      ProfileOption(
-                        icon: Icons.lock_outline_rounded,
-                        color: Style.primary,
-                        name: 'Change Password',
-                        onTap: () {
-                          Get.to(ChangePasswordPage());
-                        },
-                      ),
-                      ProfileOption(
-                        icon: Icons.logout,
-                        color: const Color.fromARGB(255, 196, 54, 44),
-                        name: 'Logout',
-                        onTap: () async {
-                          await AppService.storage.write('token', '');
-                          Get.to(LoginView());
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 20, 15, 0),
-                        child: Text('About Us',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      const Divider(
-                        endIndent: 15,
-                        indent: 15,
-                        color: Colors.grey,
-                      ),
-                      ProfileOption(
-                        icon: Icons.people,
-                        color: Style.primary,
-                        name: 'About Us',
-                        onTap: () {},
-                      ),
-                      ProfileOption(
-                        icon: Icons.policy,
-                        color: Style.primary,
-                        name: 'Terms And Policy',
-                        onTap: () {},
-                      ),
-                    ]),
+                        const Divider(
+                          endIndent: 15,
+                          indent: 15,
+                          color: Colors.grey,
+                        ),
+                        ProfileOption(
+                          icon: Icons.person_4,
+                          color: Style.primary,
+                          name: 'Edit Profile',
+                          onTap: () {
+                            Get.to(EditProfilePage());
+                          },
+                        ),
+                        ProfileOption(
+                          icon: Icons.lock_outline_rounded,
+                          color: Style.primary,
+                          name: 'Change Password',
+                          onTap: () {
+                            Get.to(ChangePasswordPage());
+                          },
+                        ),
+                        ProfileOption(
+                          icon: Icons.logout,
+                          color: const Color.fromARGB(255, 196, 54, 44),
+                          name: 'Logout',
+                          onTap: () async {
+                            await AppService.storage.write('token', '');
+                            Get.to(LoginView());
+                          },
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(20, 20, 15, 0),
+                          child: Text('About Us',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        const Divider(
+                          endIndent: 15,
+                          indent: 15,
+                          color: Colors.grey,
+                        ),
+                        ProfileOption(
+                          icon: Icons.people,
+                          color: Style.primary,
+                          name: 'About Us',
+                          onTap: () {},
+                        ),
+                        ProfileOption(
+                          icon: Icons.policy,
+                          color: Style.primary,
+                          name: 'Terms And Policy',
+                          onTap: () {},
+                        ),
+                      ]),
+                ),
               ),
       ),
     ));

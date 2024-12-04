@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_model.dart';
+import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:nexus_app/repository/profile_repository.dart';
 import 'package:nexus_app/services/app_service.dart';
 
 class AddPaperDetailsController extends GetxController {
@@ -22,7 +24,7 @@ class AddPaperDetailsController extends GetxController {
   RxBool isAddEmpty = false.obs;
   RxBool isBoardEmpty = false.obs;
   Rxn<XFile> schoolLogo = Rxn<XFile>(null);
-
+  SubjectModel? subjectModel;
   var selectedStandard = '1'.obs;
   var selectedType = 'MCQ'.obs;
   @override
@@ -69,6 +71,7 @@ class AddPaperDetailsController extends GetxController {
       return DateTime(now.year, now.month, now.day, time.hour, time.minute);
     }
 
+    var user = await ProfileRepository().getUser();
     // Format the timing and date
     String formattedTime =
         timeFormat.format(convertTimeOfDayToDateTime(selectedTime.value));
@@ -82,7 +85,7 @@ class AddPaperDetailsController extends GetxController {
       "day": DateFormat('EEEE').format(dateSelected.value),
       "address": schoolAddressController.text,
       "board": selectedBoard.value?.name.toString(),
-      "subject": 'test',
+      "subject": user?.subject.toString(),
       "uid": AppService.id,
     };
     print(map);

@@ -1,10 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/module/paper/create%20paper/add%20question/add_mark_paper.dart';
-import 'package:nexus_app/module/paper/create%20paper/pdf%20generate/pdf_generator.dart';
 import 'package:nexus_app/services/app_service.dart';
 import 'package:nexus_app/theme/style.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -309,18 +309,14 @@ class AddQuestionView extends StatelessWidget {
                         controller.fetchPaperData(AppService.paper_id ?? 0);
 
                         // Generate PDF
-                        final pdf = await PDFGenerator(
-                                controller.paperData.value.history?[0] ??
-                                    History())
-                            .generatePDF();
-                        final bytes = await pdf.save();
+                        controller.createPdf(controller.paperData.value, false);
                         Get.back();
                         // Navigate to PDF preview screen using Get.to
                         Get.to(
                           Scaffold(
                             appBar: AppBar(title: const Text('Preview PDF')),
                             body: SfPdfViewer.memory(
-                              bytes,
+                              Uint8List.fromList(controller.pdfBytes.value),
                             ),
                           ),
                         );

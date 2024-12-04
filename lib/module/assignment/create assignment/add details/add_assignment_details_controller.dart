@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/repository/assignment_repository.dart';
 import 'package:nexus_app/repository/book_repository.dart';
+import 'package:nexus_app/repository/profile_repository.dart';
 import 'package:nexus_app/services/app_service.dart';
 
 class AddAssignmentDetailsController extends GetxController {
@@ -69,6 +70,7 @@ class AddAssignmentDetailsController extends GetxController {
       return DateTime(now.year, now.month, now.day, time.hour, time.minute);
     }
 
+    var user = await ProfileRepository().getUser();
     // Format the timing and date
     String formattedTime =
         timeFormat.format(convertTimeOfDayToDateTime(selectedTime.value));
@@ -82,7 +84,7 @@ class AddAssignmentDetailsController extends GetxController {
       "day": DateFormat('EEEE').format(dateSelected.value),
       "address": schoolAddressController.text,
       "board": selectedBoard.value?.name.toString(),
-      "subject": 'test',
+      "subject": user?.subject.toString(),
       "uid": AppService.id,
     };
     print(map);

@@ -26,13 +26,6 @@ class EditProfileController extends GetxController {
   }
 
   void updateProfile() async {
-    if (nameController.text.isEmpty ||
-        schoolController.text.isEmpty ||
-        stdController.text.isEmpty) {
-      Get.snackbar("Error", "Please fill all the fields");
-      return;
-    }
-
     isLoading(true);
     Map<String, dynamic> profileData = {
       'name': nameController.text,

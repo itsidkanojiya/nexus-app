@@ -118,7 +118,7 @@ class SignUpController extends GetxController {
     //   "std": '2',
     //   "school": 'sada',
     //   "password": 'sdasd',
-    //   "subject": 'test',
+    //   "subject": user?.subject.toString(),
     // };
     // return AuthRepository().signup(map);
     var map = {

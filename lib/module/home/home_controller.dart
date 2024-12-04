@@ -1,40 +1,51 @@
 import 'package:get/get.dart';
-import 'package:nexus_app/models/books_model.dart';
-import 'package:nexus_app/models/subject_model.dart';
-import 'package:nexus_app/repository/book_repository.dart';
-import 'package:nexus_app/services/getStorage_services.dart';
+import 'package:nexus_app/models/user_model.dart';
+import 'package:nexus_app/module/auth/unauthorized_view.dart';
+import 'package:nexus_app/module/auth/unverified_view.dart';
+import 'package:nexus_app/repository/profile_repository.dart';
 
 class HomeController extends GetxController {
-  RxString selected = 'GSEB'.obs;
-  BookModel? bookmodel;
-  SubjectModel? subjectmodel;
-  RxBool isLoading = false.obs;
-  RxBool isBookLoading = false.obs;
-  var selectedBook = Rx<Books?>(null);
-  GetStorageServices? getStorageServices;
+  final ProfileRepository profileRepository = ProfileRepository();
+  User? user;
 
   @override
   void onInit() {
-    fetchData();
     super.onInit();
+    fetchUser();
   }
 
-  void fetchData() async {
-    getStorageServices = GetStorageServices();
-    isLoading(true);
-
-    subjectmodel = await BookRepository().getSubject();
-
-    isLoading(false);
+  // Fetch user data from the repository
+  void fetchUser() async {
+    try {
+      user = await profileRepository.getUser();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user data: $e');
+    }
   }
 
-  void setSelected(String value) {
-    selected.value = value;
-  }
+  // Check user authorization and navigate accordingly
+  void checkUserAuthorization(Function onAuthorized) {
+    if (user == null) {
+      // Fetch the user if it hasn't been retrieved yet
+      fetchUser();
+    }
 
-  List<String> dropdownValues = [
-    'GSEB',
-    'NCERT',
-    'MSHB',
-  ];
+    if (user != null) {
+      // Check if the user is a student or teacher
+      if (user!.userType == 'student') {
+        // If student, navigate to the Unauthorized page
+        Get.to(() => const UnauthorizedView());
+      } else if (user!.userType == 'teacher') {
+        // If teacher, check if they are verified
+        if (user!.isVerified == 1) {
+          onAuthorized(); // Proceed if teacher is verified
+        } else {
+          // If teacher is not verified, navigate to Unverified page
+          Get.to(() => const UnverifiedView());
+        }
+      } else {
+        Get.snackbar('Error', 'Unknown user type');
+      }
+    }
+  }
 }

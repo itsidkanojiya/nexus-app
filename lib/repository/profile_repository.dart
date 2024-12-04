@@ -59,7 +59,7 @@ class ProfileRepository {
       var res = await response.stream.bytesToString();
       final body = jsonDecode(res);
       debugPrint('editProfile body: $body');
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return true;
       }
     } catch (e) {

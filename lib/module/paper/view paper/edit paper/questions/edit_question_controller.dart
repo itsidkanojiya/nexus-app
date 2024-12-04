@@ -38,7 +38,7 @@ class EditQuestionController extends GetxController {
       paperData.value.history?[0] ?? History(),
       showAnswers: showAnswers.value, // Pass the switch state
     ).generatePDF();
-    pdfBytes.value = await pdf.save();
+    pdfBytes.value = Uint8List.fromList(await pdf.save());
   }
 
   // Call this method to generate the initial PDF

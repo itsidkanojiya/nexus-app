@@ -7,6 +7,7 @@ import 'package:nexus_app/models/books_model.dart';
 import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/services/getStorage_services.dart';
+import 'package:nexus_app/theme/style.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
@@ -17,8 +18,7 @@ class BookController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isBookLoading = false.obs;
   var selectedBook = Rx<Books?>(null);
-  RxMap<String, double> downloadProgress = <String, double>{}.obs;
-
+  var downloadedFiles = <String, bool>{}.obs;
   GetStorageServices? getStorageServices;
 
   @override
@@ -46,7 +46,11 @@ class BookController extends GetxController {
   Future<bool> isFileDownloaded(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/$fileName';
-    return File(filePath).existsSync();
+    bool exists = File(filePath).existsSync();
+
+    // Store the download status
+    downloadedFiles[fileName] = exists;
+    return exists;
   }
 
   // Method to open a downloaded PDF file
@@ -72,6 +76,8 @@ class BookController extends GetxController {
     final file = File(filePath);
     if (file.existsSync()) {
       await file.delete();
+      downloadedFiles[fileName] = false; // Update the downloaded status
+      update(); // Trigger UI update after deletion
     }
   }
 
@@ -81,10 +87,10 @@ class BookController extends GetxController {
       BuildContext context, String url, String fileName) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show(
-      max: 100,
-      msg: 'Downloading...',
-      progressType: ProgressType.valuable,
-    );
+        max: 100,
+        msg: 'Downloading...',
+        progressType: ProgressType.valuable,
+        backgroundColor: Style.primary);
 
     try {
       Dio dio = Dio();
@@ -97,13 +103,15 @@ class BookController extends GetxController {
         onReceiveProgress: (receivedBytes, totalBytes) {
           if (totalBytes != -1) {
             double progress = (receivedBytes / totalBytes) * 100;
-            downloadProgress[fileName] = progress;
             pd.update(value: progress.toInt()); // Update progress dialog value
           }
         },
       );
 
       pd.close(); // Close the dialog after download completes
+      downloadedFiles[fileName] = true; // Update the downloaded status
+      update(); // Trigger UI update after download
+
       Get.snackbar(
           "Download Complete", "File has been downloaded to $filePath");
       await openPDF(fileName); // Automatically open after download

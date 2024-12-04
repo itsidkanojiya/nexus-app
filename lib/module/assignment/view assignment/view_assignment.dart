@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:nexus_app/module/assignment/create%20assignment/pdf%20generate/assignment_pdf_generator.dart';
 import 'package:nexus_app/module/assignment/view%20assignment/edit%20assignment/details/edit_assignment_details.dart';
 import 'package:nexus_app/module/assignment/view%20assignment/edit%20assignment/details/edit_assignment_details_controller.dart';
 import 'package:nexus_app/module/assignment/view%20assignment/view_assignment_controller.dart';
@@ -238,19 +237,18 @@ class _ViewAssignmentScreenState extends State<ViewAssignmentScreen> {
                                                                   ?.history?[
                                                                       index]
                                                                   .id);
-
                                                       controller.fetchPaperData(
                                                           AppService.paper_id ??
                                                               0);
-                                                      final pdf =
-                                                          await AssignmentPDFGenerator(
-                                                                  controller
-                                                                      .paperData
-                                                                      .value)
-                                                              .generatePDF();
-                                                      controller
-                                                              .pdfBytes.value =
-                                                          await pdf.save();
+                                                      await controller
+                                                          .createPdf(
+                                                              controller
+                                                                  .paperData
+                                                                  .value,
+                                                              controller
+                                                                  .showAnswers
+                                                                  .value);
+
                                                       Get.back();
                                                       // Navigate to PDF preview screen using Get.to
                                                       Get.to(

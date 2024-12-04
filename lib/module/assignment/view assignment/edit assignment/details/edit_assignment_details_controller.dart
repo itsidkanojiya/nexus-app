@@ -6,6 +6,7 @@ import 'package:nexus_app/models/boards_model.dart';
 import 'package:nexus_app/models/paper_history.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
+import 'package:nexus_app/repository/profile_repository.dart';
 import 'package:nexus_app/services/app_service.dart';
 
 class EditAssignmentDetailsController extends GetxController {
@@ -98,7 +99,7 @@ class EditAssignmentDetailsController extends GetxController {
   Future<bool> editAssignmentDetails(BuildContext context) async {
     final timeFormat = DateFormat('h:mm'); // For example, 3:00
     final dateFormat = DateFormat('yyyy-MM-dd'); // For example, 2024-05-31
-
+    var user = await ProfileRepository().getUser();
     // Format the timing and date
     String formattedDate = dateFormat.format(selectedDate.value);
     if (schoolLogo.value?.path == null) {
@@ -110,7 +111,7 @@ class EditAssignmentDetailsController extends GetxController {
         "day": DateFormat('EEEE').format(selectedDate.value),
         "address": schoolAddressController.text,
         "board": selectedBoard.value?.name.toString(),
-        "subject": 'test',
+        "subject": user?.subject.toString(),
         "uid": AppService.id,
         "id": AppService.paper_id,
         'logo': initialLogoUrl?.value
@@ -125,7 +126,7 @@ class EditAssignmentDetailsController extends GetxController {
         "day": DateFormat('EEEE').format(selectedDate.value),
         "address": schoolAddressController.text,
         "board": selectedBoard.value?.name.toString(),
-        "subject": 'test',
+        "subject": user?.subject.toString(),
         "uid": AppService.id,
         "id": AppService.paper_id,
       };

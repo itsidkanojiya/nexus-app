@@ -25,12 +25,12 @@ class AuthRepository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (body['is_number_verified'] == 1) {
           Loader().onSuccess(msg: 'Login successfully');
-
           await AppService.storage
               .write('token', body['token']); // Correctly store the token
           await AppService.storage
               .write('id', body['user']['id']); // Correctly store the id
           print("add${AppService.id}");
+          print("add${AppService.token}");
           Get.offAll(() => const NavigationView());
         } else {
           await AppService.storage
@@ -108,7 +108,7 @@ class AuthRepository {
   }
 
   Future<void> verifyToken() async {
-    //   print("add${AuthService.token}");
+    // print("add${AppService.token}");
     try {
       final response = await http.post(Uri.parse('${Base.api}/verify-token'),
           headers: <String, String>{

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +79,38 @@ class PaperRepository {
       return Future.error(e);
     }
     return null;
+  }
+
+  Future<Uint8List> getPaperPdf(Map<String, dynamic> requestData) async {
+    try {
+      final uri =
+          Uri.parse('https://pdfgenerator-1-wnya.onrender.com/generate-pdf');
+
+      final headers = <String, String>{
+        HttpHeaders.authorizationHeader: "Bearer ${AppService.token}",
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+
+      final response = await http.post(
+        uri,
+        headers: headers,
+        body: jsonEncode(requestData), // Passing request data
+      );
+
+      if (response.statusCode == 200) {
+        var pdfBytes = response.bodyBytes;
+
+        // Open or display the PDF (you can use any PDF viewer library)
+        print("PDF received with byte size: ${pdfBytes.length}");
+        return pdfBytes;
+      } else {
+        debugPrint('Failed to get PDF, status code: ${response.statusCode}');
+        return Future.error('Failed to generate PDF');
+      }
+    } catch (e) {
+      debugPrint('Error while getPaperPdf(): ${e.toString()}');
+      return Future.error(e);
+    }
   }
 
   Future<bool> addPaperDetails(

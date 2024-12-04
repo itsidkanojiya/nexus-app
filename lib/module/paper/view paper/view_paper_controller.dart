@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:get/get.dart';
 import 'package:nexus_app/models/paper_history.dart';
-import 'package:nexus_app/module/paper/create%20paper/pdf%20generate/pdf_generator.dart';
 import 'package:nexus_app/repository/paper_repository.dart';
 import 'package:printing/printing.dart';
 
@@ -15,11 +14,9 @@ class ViewPaperoller extends GetxController {
   var pdfBytes = Rx<Uint8List>(Uint8List(0));
 
   Future<void> generateAndShowPDF() async {
-    final pdf = await PDFGenerator(
-      paperData.value ?? History(),
-      showAnswers: showAnswers.value, // Pass the switch state
-    ).generatePDF();
-    pdfBytes.value = await pdf.save();
+    isLoading(true);
+    await createPdf(paperData.value, showAnswers.value);
+    isLoading(false);
   }
 
   // Call this method to generate the initial PDF
@@ -65,6 +62,71 @@ class ViewPaperoller extends GetxController {
           (element) => element.id == paperId,
           orElse: () => History()); // Fetch a single History or null
       paperData(data); // Assign History to paperData
+    } catch (e) {
+      print('Failed to load paper: $e');
+    } finally {}
+  }
+
+  Future<void> createPdf(History history, bool showAnswers) async {
+    try {
+      // Create header details
+      Map<String, dynamic> headerDetails = {
+        "logo": history.logo ??
+            "https://nexuspublication.com/logos/Nexus%20Logo%20png-01.png", // Replace with your logo
+        "school_name": history.schoolName ?? "Example School",
+        "address": history.address ?? "1234 School St, City, Country",
+        "std": history.std.toString(),
+        "day": history.day ?? "Monday",
+        "subject": history.subject ?? "Mathematics",
+        "date": history.date ?? "2024-10-17",
+        "timing": history.timing ?? "10:00 AM - 12:00 PM",
+      };
+
+      // Create questions list dynamically
+      Map<String, dynamic> questionsList = {};
+
+      // List of question types we are handling
+      List<String> questionTypes = [
+        "mcq",
+        "short",
+        "long",
+        "onetwo",
+        "blanks",
+        "true_false"
+      ];
+
+      for (String type in questionTypes) {
+        var questions = history.questions?.toJson()[type]['questions'];
+
+        if (questions != null && questions.isNotEmpty) {
+          List<Map<String, dynamic>> formattedQuestions = [];
+
+          questions.forEach((q) {
+            Map<String, dynamic> formattedQuestion = {
+              "question": q['question'],
+              if (q['options'] != null) "options": q['options'], // For MCQs
+              if (q['answer'] != null && showAnswers)
+                "answer": q['answer'], // Show answer if the flag is true
+              "marks": q['marks'] ?? 0
+            };
+            formattedQuestions.add(formattedQuestion);
+          });
+
+          // Add to questions list
+          questionsList[type] = {
+            "questions": formattedQuestions,
+          };
+        }
+      }
+
+      // Final transformed JSON
+      Map<String, dynamic> transformedJson = {
+        "headerDetails": headerDetails,
+        "questionsList": questionsList,
+        "showAnswers": showAnswers
+      };
+      print(transformedJson);
+      pdfBytes.value = await PaperRepository().getPaperPdf(transformedJson);
     } catch (e) {
       print('Failed to load paper: $e');
     } finally {}
