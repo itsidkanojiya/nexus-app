@@ -18,10 +18,6 @@ class SignUpView extends StatelessWidget {
   final SignUpController controller = Get.put(SignUpController());
   final PageController _pageController = PageController();
 
-  void _onPageChanged(int index) {
-    controller.currentIndex.value = index;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,21 +30,21 @@ class SignUpView extends StatelessWidget {
         }
         return Column(
           children: [
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: _onPageChanged,
-                physics:
-                    const NeverScrollableScrollPhysics(), // Prevent manual swiping
-                children: [
-                  _signupContent(),
-                  _boardContent(),
-                  _standardContent(),
-                  _otpContent(),
-                ],
+            _signupContent(),
+            const Expanded(
+              child: SizedBox(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomButton(
+                text: 'Next',
+                onTap: () async {
+                  controller.signUp();
+                },
+                startColor: Style.bg_color,
+                endColor: const Color.fromARGB(255, 237, 202, 145),
               ),
             ),
-            _buildBottomNavigationBar(),
           ],
         );
       }),
@@ -62,24 +58,7 @@ class SignUpView extends StatelessWidget {
           ? (controller.currentIndex.value != 3)
               ? CustomButton(
                   text: 'Next',
-                  onTap: () async {
-                    if (await controller
-                        .validateStep(controller.currentIndex.value)) {
-                      if (controller.currentIndex.value < 3) {
-                        controller.nextStep();
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (controller.currentIndex.value == 3) {
-                        // Handle sign up logic here
-                      }
-                    } else {
-                      Loader().onError(
-                          msg:
-                              "Please complete the current step before proceeding");
-                    }
-                  },
+                  onTap: () async {},
                   startColor: Style.bg_color,
                   endColor: const Color.fromARGB(255, 237, 202, 145),
                 )
@@ -176,6 +155,155 @@ class SignUpView extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 5),
+            textfieldWidget(
+              controller: controller.school,
+              hinttext: 'School Name',
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your school name';
+                }
+                return null;
+              },
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      AppService.userType.value = 'student';
+                      Get.to(() => SignUpView());
+                    },
+                    child: Container(
+                      height: 170,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Style.bg_color,
+                        border: AppService.userType.value == 'student'
+                            ? Border.all(color: Colors.blue, width: 2)
+                            : null,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 100,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/student.png'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Student',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(right: 18.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      AppService.userType.value = 'teacher';
+                      Get.to(() => SignUpView());
+                    },
+                    child: Container(
+                      height: 170,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Style.bg_color,
+                        border: AppService.userType.value == 'teacher'
+                            ? Border.all(color: Colors.blue, width: 2)
+                            : null,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 100,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/teacher.png'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Teacher',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (AppService.userType.value == 'student')
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      ' Choose Standard:',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Style.textfield_color,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Obx(() => Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: DropdownButtonFormField<int>(
+                              decoration:
+                                  const InputDecoration.collapsed(hintText: ''),
+                              hint: const Text('Select a Standard'),
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select a standard';
+                                }
+                                return null;
+                              },
+                              value: controller.selectedStandard.value,
+                              onChanged: (int? newValue) {
+                                controller.selectedStandard.value =
+                                    newValue ?? 1;
+                              },
+                              items: List.generate(10, (index) {
+                                final standard = index +
+                                    1; // Generate standards from 1 to 10
+                                return DropdownMenuItem<int>(
+                                  value: standard,
+                                  child: Text(standard.toString()),
+                                );
+                              }),
+                            ),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             if (AppService.userType.value == 'teacher')
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,17 +357,6 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(height: 10),
                 ],
               ),
-            const SizedBox(height: 5),
-            textfieldWidget(
-              controller: controller.school,
-              hinttext: 'School Name',
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter your school name';
-                }
-                return null;
-              },
-            ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
@@ -289,151 +406,6 @@ class SignUpView extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _boardContent() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns
-          crossAxisSpacing: 20.0, // Spacing between columns
-          mainAxisSpacing: 15.0, // Spacing between rows
-        ),
-        itemCount: controller.boardModel?.boards?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          return Obx(
-            () => GestureDetector(
-              onTap: () {
-                controller.selectedBoards.value = index;
-              },
-              child: Container(
-                height: 170,
-                width: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: controller.selectedBoards.value == index
-                      ? Colors.green
-                      : Style.bg_color,
-                ),
-                child: Stack(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                controller
-                                        .boardModel?.boards?[index].coverLink ??
-                                    '',
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          controller.boardModel?.boards?[index].name ?? '-',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Obx(() => (controller.selectedBoards.value == index)
-                        ? const Align(
-                            alignment: Alignment.topRight,
-                            child: Icon(
-                              Icons.check_circle,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const SizedBox())
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _standardContent() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns
-          crossAxisSpacing: 20.0, // Spacing between columns
-          mainAxisSpacing: 15.0, // Spacing between rows
-        ),
-        itemCount: controller.standardLevels.length ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          return Obx(
-            () => GestureDetector(
-              onTap: () {
-                controller.selectedStandard.value =
-                    controller.standardLevels[index];
-              },
-              child: Container(
-                height: 170,
-                width: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: controller.selectedStandard.value ==
-                          controller.standardLevels[index]
-                      ? Colors.green
-                      : Style.bg_color,
-                ),
-                child: Stack(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                '',
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          controller.standardLevels[index] ?? '-',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Obx(() => (controller.selectedStandard.value ==
-                            controller.standardLevels[index])
-                        ? const Align(
-                            alignment: Alignment.topRight,
-                            child: Icon(
-                              Icons.check_circle,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const SizedBox())
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -62,6 +61,7 @@ class AuthRepository {
       debugPrint('signIn body: $body');
       if (response.statusCode == 200 || response.statusCode == 201) {
         Loader().onSuccess(msg: 'OTP send successfully');
+
         await AppService.storage
             .write('id', body['id']); // Correctly store the id
 
@@ -88,16 +88,13 @@ class AuthRepository {
       final body = jsonDecode(response.body);
       debugPrint('checkUser body: $body');
       if (response.statusCode == 200) {
-        if (body['exists'] == false) {
-          return true;
-        }
-        if (body['exists'] == true) {
+        return true;
+      } else {
+        if (response.statusCode == 409) {
           Loader().onError(msg: body['message'].toString());
-          return true;
+          return false;
         }
 
-        return false;
-      } else {
         Loader().onError(msg: 'Internal server error');
         return false;
       }

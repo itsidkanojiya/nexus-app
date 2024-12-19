@@ -7,40 +7,37 @@ import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/services/app_service.dart';
 
 class SignUpController extends GetxController {
+  // Models
   SubjectModel? subjectModel;
-  var selectedSubject = Rx<Subjects?>(null);
   BoardModel? boardModel;
-  RxBool isLoading = false.obs;
-  var currentIndex = 0.obs;
-  var name = TextEditingController();
-  var email = TextEditingController();
-  var std = TextEditingController();
-  var school = TextEditingController();
-  var password = TextEditingController();
-  var number = TextEditingController();
-  var subject = TextEditingController();
-  var otp = TextEditingController();
-  RxInt selectedBoards = 0.obs;
-  var isPasswordVisible = false.obs;
-  final formKey = GlobalKey<FormState>();
-  RxString selectedStandard = '1'.obs;
 
-  final List<String> standardLevels = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-  ];
+  // Observables
+  var selectedUserType = ''.obs; // "student" or "teacher"
+  var selectedSubject = Rx<Subjects?>(null);
+  var selectedStandard = 1.obs; // Dynamic selection of standard (1–10)
+  RxBool isLoading = false.obs;
+  RxInt currentIndex = 0.obs;
+  RxInt selectedBoards = 0.obs;
   var isResendButtonEnabled = false.obs;
-  var countdown = 90.obs;
+  var isPasswordVisible = false.obs;
+
+  // Controllers
+  final name = TextEditingController();
+  final email = TextEditingController();
+  final std = TextEditingController();
+  final school = TextEditingController();
+  final password = TextEditingController();
+  final number = TextEditingController();
+  final subject = TextEditingController();
+  final otp = TextEditingController();
+
+  // Form and UI Keys
+  final formKey = GlobalKey<FormState>();
+  final countdown = 90.obs;
+
+  // Data
+  final List<int> standardLevels =
+      List.generate(10, (index) => index + 1); // Standards 1–10
 
   @override
   void onInit() {
@@ -48,6 +45,19 @@ class SignUpController extends GetxController {
     fetchData();
   }
 
+  // Fetch Subjects and Boards
+  void fetchData() async {
+    isLoading.value = true;
+    try {
+      subjectModel = await BookRepository().getSubject();
+
+      boardModel = await BookRepository().getBoards();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Countdown Logic for OTP Resend
   void startCountdown() {
     isResendButtonEnabled.value = false;
     countdown.value = 90;
@@ -70,32 +80,25 @@ class SignUpController extends GetxController {
     }
   }
 
-  void fetchData() async {
-    isLoading.value = true;
-    subjectModel = await BookRepository().getSubject();
-    boardModel = await BookRepository().getBoards();
-    isLoading.value = false;
-  }
-
+  // Validation Flow
   Future<bool> validateStep(int stepIndex) async {
     switch (stepIndex) {
       case 0:
-        //    return true;
         if (formKey.currentState!.validate()) {
-          bool userExists = await checkUser();
-          return userExists;
+          return await checkUser();
         } else {
           return false;
         }
       case 1:
-        return true; // Additional validation for step 1 if needed
+        if (selectedUserType.value == 'teacher') {
+          return selectedSubject.value != null;
+        } else {
+          return selectedStandard.value != null;
+        }
       case 2:
-        bool signup = await signUp();
-        return signup; // Additional validation for step 2 if needed
+        return await signUp();
       case 3:
-        bool verify = await verifyOtp();
-
-        return verify;
+        return await verifyOtp();
       default:
         return false;
     }
@@ -106,45 +109,23 @@ class SignUpController extends GetxController {
       "email": email.text,
       "number": number.text,
     };
-    return AuthRepository().checkUser(map);
+    return await AuthRepository().checkUser(map);
   }
 
   Future<bool> signUp() async {
-    // var map = {
-    //   "name": 'sad',
-    //   "email": 'ac+j272ad@gmail.com',
-    //   "number": "98989789898",
-    //   "user_type": AuthService.userType.value,
-    //   "std": '2',
-    //   "school": 'sada',
-    //   "password": 'sdasd',
-    //   "subject": user?.subject.toString(),
-    // };
-    // return AuthRepository().signup(map);
     var map = {
       "name": name.text,
       "email": email.text,
       "number": number.text,
-      "user_type": AppService.userType.value,
-      "std": selectedStandard.value,
+      "user_type": selectedUserType.value,
+      "std":
+          selectedUserType.value == 'student' ? selectedStandard.value : null,
       "school": school.text,
       "password": password.text,
-      "subject": selectedSubject.value?.name,
+      if (selectedUserType.value == 'teacher')
+        "subject": selectedSubject.value?.name,
     };
-    var map2 = {
-      "name": name.text,
-      "email": email.text,
-      "number": number.text,
-      "user_type": AppService.userType.value,
-      "std": selectedStandard.value,
-      "school": school.text,
-      "password": password.text,
-    };
-    print(map);
-    if (AppService.userType.value == 'teacher') {
-      return AuthRepository().signup(map);
-    }
-    return AuthRepository().signup(map2);
+    return await AuthRepository().signup(map);
   }
 
   Future<bool> verifyOtp() async {
@@ -152,7 +133,7 @@ class SignUpController extends GetxController {
       "email": AppService.id,
       "otp": otp.text,
     };
-    return AuthRepository().verifyOtp(map);
+    return await AuthRepository().verifyOtp(map);
   }
 
   Future<void> nextStep() async {
@@ -163,6 +144,16 @@ class SignUpController extends GetxController {
       if (currentIndex.value == 3) {
         startCountdown();
       }
+    } else {
+      Get.snackbar("Error", "Validation failed for step ${currentIndex.value}");
+    }
+  }
+
+  // Toggle User Type
+  void toggleUserType(String userType) {
+    selectedUserType.value = userType;
+    if (userType == 'teacher') {
+      fetchData(); // Fetch subjects for teachers
     }
   }
 }

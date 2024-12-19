@@ -2,8 +2,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/custome_widgets/custom_button_widget.dart';
+import 'package:nexus_app/module/auth/forgot%20password/forgot_password.dart';
 import 'package:nexus_app/module/auth/login/login_controller.dart';
 import 'package:nexus_app/module/auth/signup/select_user_view.dart';
+import 'package:nexus_app/module/auth/signup/signup_view.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class LoginView extends StatelessWidget {
@@ -142,7 +144,7 @@ class LoginView extends StatelessWidget {
                           const Text("Don't have an account?"),
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => const SelectUserView());
+                              Get.to(() => SignUpView());
                             },
                             child: const Text(
                               " Sign up",
@@ -166,9 +168,14 @@ class LoginView extends StatelessWidget {
                       ),
                       FadeInUp(
                           duration: const Duration(milliseconds: 2000),
-                          child: const Text(
-                            "Forgot Password?",
-                            style: TextStyle(color: Style.primary),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(ForgotPasswordScreen());
+                            },
+                            child: const Text(
+                              "Forgot Password?",
+                              style: TextStyle(color: Style.primary),
+                            ),
                           )),
                     ],
                   ),
