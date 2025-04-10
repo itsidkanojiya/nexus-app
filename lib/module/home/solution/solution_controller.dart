@@ -8,7 +8,7 @@ import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/services/getStorage_services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sn_progress_dialog/progress_dialog.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class SolutionController extends GetxController {
   RxString selected = 'GSEB'.obs;

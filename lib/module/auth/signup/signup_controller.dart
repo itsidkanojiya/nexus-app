@@ -80,30 +80,6 @@ class SignUpController extends GetxController {
     }
   }
 
-  // Validation Flow
-  Future<bool> validateStep(int stepIndex) async {
-    switch (stepIndex) {
-      case 0:
-        if (formKey.currentState!.validate()) {
-          return await checkUser();
-        } else {
-          return false;
-        }
-      case 1:
-        if (selectedUserType.value == 'teacher') {
-          return selectedSubject.value != null;
-        } else {
-          return selectedStandard.value != null;
-        }
-      case 2:
-        return await signUp();
-      case 3:
-        return await verifyOtp();
-      default:
-        return false;
-    }
-  }
-
   Future<bool> checkUser() async {
     var map = {
       "email": email.text,
@@ -134,19 +110,6 @@ class SignUpController extends GetxController {
       "otp": otp.text,
     };
     return await AuthRepository().verifyOtp(map);
-  }
-
-  Future<void> nextStep() async {
-    if (await validateStep(currentIndex.value)) {
-      if (currentIndex.value < 3) {
-        currentIndex.value++;
-      }
-      if (currentIndex.value == 3) {
-        startCountdown();
-      }
-    } else {
-      Get.snackbar("Error", "Validation failed for step ${currentIndex.value}");
-    }
   }
 
   // Toggle User Type

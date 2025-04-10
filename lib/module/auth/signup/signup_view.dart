@@ -7,7 +7,6 @@ import 'package:nexus_app/custome_widgets/custom_button_widget.dart';
 import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/module/auth/signup/signup_controller.dart';
 import 'package:nexus_app/services/app_service.dart';
-import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/theme/style.dart';
 
 class SignUpView extends StatelessWidget {
@@ -24,64 +23,42 @@ class SignUpView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Registration'),
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return Column(
-          children: [
-            _signupContent(),
-            const Expanded(
-              child: SizedBox(),
+      body: Stack(
+        children: [
+          // Main scrollable content
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _signupContent(),
+                const SizedBox(
+                    height:
+                        100), // Add spacing to avoid overlapping with the bottom bar
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+          ),
+          // Fixed Bottom Bar
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+              color: Colors.white, // Background color for the bottom bar
               child: CustomButton(
-                text: 'Next',
+                text: 'Submit',
                 onTap: () async {
-                  controller.signUp();
+                  if (controller.formKey.currentState!.validate()) {
+                    controller.signUp();
+                  }
                 },
                 startColor: Style.bg_color,
                 endColor: const Color.fromARGB(255, 237, 202, 145),
               ),
             ),
-          ],
-        );
-      }),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
-      child: (controller.currentIndex.value != 3)
-          ? (controller.currentIndex.value != 3)
-              ? CustomButton(
-                  text: 'Next',
-                  onTap: () async {},
-                  startColor: Style.bg_color,
-                  endColor: const Color.fromARGB(255, 237, 202, 145),
-                )
-              : const SizedBox()
-          : CustomButton(
-              text: 'Continue',
-              onTap: () async {
-                if (await controller
-                    .validateStep(controller.currentIndex.value)) {
-                  if (controller.currentIndex.value < 3) {
-                    controller.nextStep();
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  } else if (controller.currentIndex.value == 3) {
-                    // Handle sign up logic here
-                  }
-                }
-              },
-              startColor: Style.bg_color,
-              endColor: const Color.fromARGB(255, 237, 202, 145),
-            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -166,197 +143,200 @@ class SignUpView extends StatelessWidget {
                 return null;
               },
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      AppService.userType.value = 'student';
-                      Get.to(() => SignUpView());
-                    },
-                    child: Container(
-                      height: 170,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Style.bg_color,
-                        border: AppService.userType.value == 'student'
-                            ? Border.all(color: Colors.blue, width: 2)
-                            : null,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 100,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/student.png'),
+            Obx(
+              () => Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 18.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        AppService.userType.value =
+                            'student'; // Update the reactive variable
+                      },
+                      child: Container(
+                        height: 170,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Style.bg_color,
+                          border: AppService.userType.value == 'student'
+                              ? Border.all(color: Colors.blue, width: 2)
+                              : null,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 100,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/student.png'),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'Student',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                            const SizedBox(height: 10),
+                            const Text(
+                              'Student',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 18.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      AppService.userType.value = 'teacher';
-                      Get.to(() => SignUpView());
-                    },
-                    child: Container(
-                      height: 170,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Style.bg_color,
-                        border: AppService.userType.value == 'teacher'
-                            ? Border.all(color: Colors.blue, width: 2)
-                            : null,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 100,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/teacher.png'),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 18.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        AppService.userType.value = 'teacher';
+                      },
+                      child: Container(
+                        height: 170,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Style.bg_color,
+                          border: AppService.userType.value == 'teacher'
+                              ? Border.all(color: Colors.blue, width: 2)
+                              : null,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 100,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/teacher.png'),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'Teacher',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                            const SizedBox(height: 10),
+                            const Text(
+                              'Teacher',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: 10),
-            if (AppService.userType.value == 'student')
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      ' Choose Standard:',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Style.textfield_color,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Obx(() => Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: DropdownButtonFormField<int>(
-                              decoration:
-                                  const InputDecoration.collapsed(hintText: ''),
-                              hint: const Text('Select a Standard'),
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Please select a standard';
-                                }
-                                return null;
-                              },
-                              value: controller.selectedStandard.value,
-                              onChanged: (int? newValue) {
-                                controller.selectedStandard.value =
-                                    newValue ?? 1;
-                              },
-                              items: List.generate(10, (index) {
-                                final standard = index +
-                                    1; // Generate standards from 1 to 10
-                                return DropdownMenuItem<int>(
-                                  value: standard,
-                                  child: Text(standard.toString()),
-                                );
-                              }),
+            Obx(
+              () => (AppService.userType.value == 'student')
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            ' Choose Standard:',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Style.textfield_color,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          )),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            if (AppService.userType.value == 'teacher')
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      ' Choose Subject:',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Style.textfield_color,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Obx(() => Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: DropdownButtonFormField<Subjects>(
-                              decoration:
-                                  const InputDecoration.collapsed(hintText: ''),
-                              hint: const Text('Select a Subject'),
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Please select a subject';
-                                }
-                                return null;
-                              },
-                              value: controller.selectedSubject.value,
-                              onChanged: (Subjects? newValue) {
-                                controller.selectedSubject.value = newValue;
-                              },
-                              items: controller.subjectModel?.subjects
-                                      ?.map((board) {
-                                    return DropdownMenuItem<Subjects>(
-                                      value: board,
-                                      child: Text(board.name ?? ''),
-                                    );
-                                  }).toList() ??
-                                  [],
+                            child: Obx(() => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  child: DropdownButtonFormField<int>(
+                                    decoration: const InputDecoration.collapsed(
+                                        hintText: ''),
+                                    hint: const Text('Select a Standard'),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Please select a standard';
+                                      }
+                                      return null;
+                                    },
+                                    value: controller.selectedStandard.value,
+                                    onChanged: (int? newValue) {
+                                      controller.selectedStandard.value =
+                                          newValue ?? 1;
+                                    },
+                                    items: List.generate(10, (index) {
+                                      final standard = index +
+                                          1; // Generate standards from 1 to 10
+                                      return DropdownMenuItem<int>(
+                                        value: standard,
+                                        child: Text(standard.toString()),
+                                      );
+                                    }),
+                                  ),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            ' Choose Subject:',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Style.textfield_color,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          )),
+                            child: Obx(() => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  child: DropdownButtonFormField<Subjects>(
+                                    decoration: const InputDecoration.collapsed(
+                                        hintText: ''),
+                                    hint: const Text('Select a Subject'),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Please select a subject';
+                                      }
+                                      return null;
+                                    },
+                                    value: controller.selectedSubject.value,
+                                    onChanged: (Subjects? newValue) {
+                                      controller.selectedSubject.value =
+                                          newValue;
+                                    },
+                                    items: controller.subjectModel?.subjects
+                                            ?.map((board) {
+                                          return DropdownMenuItem<Subjects>(
+                                            value: board,
+                                            child: Text(board.name ?? ''),
+                                          );
+                                        }).toList() ??
+                                        [],
+                                  ),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
-              ),
+            ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
