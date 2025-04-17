@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nexus_app/models/user_model.dart';
 import 'package:nexus_app/services/app_service.dart';
@@ -9,6 +10,44 @@ import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:nexus_app/utils/Base.dart';
 
 class ProfileRepository {
+  Future<bool> requestSubjectChange({
+    required String newSubject,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse("${Base.api}/request-subject-change"),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${AppService.token}",
+        },
+        body: jsonEncode({
+          "new_subject": newSubject,
+        }),
+      );
+
+      final result = jsonDecode(response.body);
+      debugPrint('Change Subject Response: $result');
+
+      if (response.statusCode == 400) {
+        Loader().onError(msg: "Already requested.");
+
+        return false;
+      } else if (!response.statusCode.toString().startsWith("2")) {
+        Loader().onError(msg: "Request failed.");
+
+        return false;
+      }
+      Loader().onSuccess(msg: "Subject change request submitted!");
+
+      return true;
+    } catch (e) {
+      debugPrint('Error while requesting subject change: $e');
+      Loader().onError(msg: "Something went wrong.");
+
+      return false;
+    }
+  }
+
   Future<User?> getUser() async {
     try {
       final response = await http.get(

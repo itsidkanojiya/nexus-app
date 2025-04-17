@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nexus_app/module/auth/change%20password/chnage_password_page.dart';
+import 'package:lottie/lottie.dart';
+import 'package:nexus_app/module/auth/change%20password/chnage_password_view.dart';
 import 'package:nexus_app/module/auth/login/login_view.dart';
+import 'package:nexus_app/module/profile/change_subject/change_subject_view.dart';
 import 'package:nexus_app/module/profile/edit_profile.dart';
 import 'package:nexus_app/module/profile/profile_controller.dart';
 import 'package:nexus_app/services/app_service.dart';
@@ -100,7 +102,10 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Obx(
         () => (controller.isLoading.value == true)
-            ? const CircularProgressIndicator()
+            ? Center(
+                child: SizedBox(
+                    height: 250,
+                    child: Lottie.asset('assets/bookloading.json')))
             : SingleChildScrollView(
                 child: Padding(
                   padding:
@@ -177,11 +182,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                         ProfileOption(
+                          icon: Icons.change_circle,
+                          color: Style.primary,
+                          name: 'Change Subject Request',
+                          onTap: () {
+                            Get.to(ChangeSubjectView());
+                          },
+                        ),
+                        ProfileOption(
                           icon: Icons.lock_outline_rounded,
                           color: Style.primary,
                           name: 'Change Password',
                           onTap: () {
-                            Get.to(ChangePasswordPage());
+                            Get.to(ChangePassworView());
                           },
                         ),
                         ProfileOption(

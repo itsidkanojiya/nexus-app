@@ -62,8 +62,7 @@ class AssignmentRepository {
 
   Future<Uint8List> getAssignmentPdf(Map<String, dynamic> requestData) async {
     try {
-      final uri = Uri.parse(
-          'https://pdfgenerator-1-wnya.onrender.com/generate-assignment');
+      final uri = Uri.parse('${Base.PDFapi}/generate-assignment');
 
       final headers = <String, String>{
         HttpHeaders.authorizationHeader: "Bearer ${AppService.token}",

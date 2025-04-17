@@ -7,6 +7,7 @@ import 'package:nexus_app/models/books_model.dart';
 import 'package:nexus_app/models/subject_model.dart';
 import 'package:nexus_app/repository/book_repository.dart';
 import 'package:nexus_app/services/getStorage_services.dart';
+import 'package:nexus_app/theme/loaderScreen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
@@ -58,10 +59,10 @@ class SolutionController extends GetxController {
         // await OpenFile.open(
         //     filePath); // Open the PDF using the default PDF viewer
       } else {
-        Get.snackbar("Error", "File not found");
+        Loader().onError(msg: "File not found");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to open file");
+      Loader().onError(msg: "Failed to open file");
     }
   }
 
@@ -104,12 +105,12 @@ class SolutionController extends GetxController {
       );
 
       pd.close(); // Close the dialog after download completes
-      Get.snackbar(
-          "Download Complete", "File has been downloaded to $filePath");
+      Loader().onSuccess(msg: "Download Complete");
+
       await openPDF(fileName); // Automatically open after download
     } catch (e) {
       pd.close(); // Close the dialog if error occurs
-      Get.snackbar("Error", "Failed to download file: $e");
+      Loader().onError(msg: "Failed to download file: $e");
     }
   }
 }

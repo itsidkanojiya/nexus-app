@@ -83,8 +83,7 @@ class PaperRepository {
 
   Future<Uint8List> getPaperPdf(Map<String, dynamic> requestData) async {
     try {
-      final uri =
-          Uri.parse('https://pdfgenerator-1-wnya.onrender.com/generate-pdf');
+      final uri = Uri.parse('${Base.PDFapi}/generate-pdf');
 
       final headers = <String, String>{
         HttpHeaders.authorizationHeader: "Bearer ${AppService.token}",

@@ -57,6 +57,8 @@ dependencies:
   sn_progress_dialog: ^1.1.4
   translator: ^1.0.0
   syncfusion_flutter_pdfviewer: ^29.1.37
+  connectivity_plus: ^6.1.3
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:

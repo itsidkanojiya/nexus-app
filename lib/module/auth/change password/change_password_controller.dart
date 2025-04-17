@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/repository/auth_repository.dart';
+import 'package:nexus_app/theme/loaderScreen.dart';
 
 class ChangePasswordController extends GetxController {
   TextEditingController oldPasswordController = TextEditingController();
@@ -10,7 +11,7 @@ class ChangePasswordController extends GetxController {
 
   void changePassword() async {
     if (newPasswordController.text != confirmPasswordController.text) {
-      Get.snackbar("Error", "Passwords do not match");
+      Loader().onError(msg: "Passwords do not match");
       return;
     }
 
@@ -25,9 +26,9 @@ class ChangePasswordController extends GetxController {
     isLoading(false);
 
     if (result) {
-      Get.snackbar("Success", "Password changed successfully");
+      Loader().onSuccess(msg: "Password changed successfully");
     } else {
-      Get.snackbar("Error", "Failed to change password");
+      Loader().onError(msg: "Failed to change password");
     }
   }
 }

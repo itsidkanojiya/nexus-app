@@ -17,15 +17,28 @@ class NexusApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-        builder: EasyLoading.init(),
-        debugShowCheckedModeBanner: false,
-        title: 'Nexus App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromRGBO(119, 173, 163, 1)),
-          useMaterial3: true,
-        ),
-        home: SplashView());
+    return SafeAreaWrapper(
+      child: GetMaterialApp(
+          builder: EasyLoading.init(),
+          debugShowCheckedModeBanner: false,
+          title: 'Nexus App',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color.fromRGBO(119, 173, 163, 1)),
+            useMaterial3: true,
+          ),
+          home: SplashView()),
+    );
+  }
+}
+
+class SafeAreaWrapper extends StatelessWidget {
+  final Widget child;
+
+  const SafeAreaWrapper({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(child: child);
   }
 }

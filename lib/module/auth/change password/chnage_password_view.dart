@@ -4,11 +4,11 @@ import 'package:nexus_app/custome_widgets/text_field_widget.dart';
 import 'package:nexus_app/module/auth/change%20password/change_password_controller.dart';
 import 'package:nexus_app/theme/style.dart';
 
-class ChangePasswordPage extends StatelessWidget {
+class ChangePassworView extends StatelessWidget {
   final ChangePasswordController controller =
       Get.put(ChangePasswordController());
 
-  ChangePasswordPage({super.key});
+  ChangePassworView({super.key});
 
   @override
   Widget build(BuildContext context) {

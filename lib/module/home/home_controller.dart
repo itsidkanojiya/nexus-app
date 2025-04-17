@@ -3,6 +3,7 @@ import 'package:nexus_app/models/user_model.dart';
 import 'package:nexus_app/module/auth/unauthorized_view.dart';
 import 'package:nexus_app/module/auth/unverified_view.dart';
 import 'package:nexus_app/repository/profile_repository.dart';
+import 'package:nexus_app/theme/loaderScreen.dart';
 
 class HomeController extends GetxController {
   final ProfileRepository profileRepository = ProfileRepository();
@@ -19,7 +20,7 @@ class HomeController extends GetxController {
     try {
       user = await profileRepository.getUser();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch user data: $e');
+      Loader().onError(msg: 'Failed to fetch user data: $e');
     }
   }
 
@@ -44,7 +45,7 @@ class HomeController extends GetxController {
           Get.to(() => const UnverifiedView());
         }
       } else {
-        Get.snackbar('Error', 'Unknown user type');
+        Loader().onError(msg: 'Unknown user type');
       }
     }
   }

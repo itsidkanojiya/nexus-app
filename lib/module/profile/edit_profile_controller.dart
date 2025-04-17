@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nexus_app/repository/profile_repository.dart';
+import 'package:nexus_app/theme/loaderScreen.dart';
 
 class EditProfileController extends GetxController {
   TextEditingController nameController = TextEditingController();
@@ -37,9 +38,9 @@ class EditProfileController extends GetxController {
     isLoading(false);
 
     if (result) {
-      Get.snackbar("Success", "Profile updated successfully");
+      Loader().onSuccess(msg: "Profile updated successfully");
     } else {
-      Get.snackbar("Error", "Failed to update profile");
+      Loader().onError(msg: "Failed to update profile");
     }
   }
 }

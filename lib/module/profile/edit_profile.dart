@@ -30,19 +30,15 @@ class EditProfilePage extends StatelessWidget {
               controller: controller.schoolController,
               hintText: 'Enter School Name',
             ),
-            const SizedBox(height: 15),
-            AppTextField(
-              controller: controller.stdController,
-              hintText: 'Enter Standard',
-            ),
+            // const SizedBox(height: 15),
+            // AppTextField(
+            //   controller: controller.stdController,
+            //   hintText: 'Enter Standard',
+            // ),
             const Spacer(),
             Obx(() {
               return controller.isLoading.value
-                  ? Center(
-                      child: SizedBox(
-                          height: 250,
-                          child: Lottie.asset('assets/bookloading.json')),
-                    )
+                  ? SizedBox()
                   : GestureDetector(
                       onTap: controller.updateProfile,
                       child: Container(
