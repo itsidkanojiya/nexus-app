@@ -13,7 +13,6 @@ void main() async {
 
 class NexusApp extends StatelessWidget {
   NexusApp({super.key});
-
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
 
   @override
